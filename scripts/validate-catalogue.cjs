@@ -25,8 +25,8 @@ if (collections.length !== expected.length || expected.some((id,i)=>collections[
 if (all.length !== 1001) errors.push(`Expected 1001 preserved source prompts, found ${all.length}`);
 const pages = ['index.html','explore.html','builder.html'].map(file => [file,fs.readFileSync(file,'utf8')]);
 for (const [file,html] of pages) {
- if (!html.includes('catalogue-expansion.js?v=20261117-modular-builder1')) errors.push(`${file} has stale catalogue asset version`);
- if (!html.includes('app.js?v=20261117-modular-builder1')) errors.push(`${file} has stale app asset version`);
+ if (!html.includes('catalogue-expansion.js?v=20261117-universal-collections1')) errors.push(`${file} has stale catalogue asset version`);
+ if (!html.includes('app.js?v=20261117-universal-collections1')) errors.push(`${file} has stale app asset version`);
  if (!html.includes('backups/2026-11-17/catalogue-expansion.js')) errors.push(`${file} missing recovery loader`);
 }
 if (!fs.readFileSync('explore.html','utf8').includes('id="category-filter"')) errors.push('Explore collection filter missing');
