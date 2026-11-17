@@ -51,6 +51,21 @@ const BASE = process.env.SITE_URL || 'https://aka30art.github.io/library/';
     check((await page.locator('#builder-selection-count').innerText()).includes('0 selected'),'Builder clear resets selection');
    }
   }
+  const desktop=await browser.newPage({viewport:{width:1440,height:1000}});
+  desktop.on('pageerror',e=>failures.push('Desktop runtime error: '+e.message));
+  for(const path of ['','explore.html','builder.html']){
+   const response=await desktop.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});
+   check(!!response&&response.ok(),'Desktop loads '+(path||'home'));
+   check(await desktop.locator('.desktop-nav').isVisible(),'Desktop navigation visible on '+(path||'home'));
+   check(await desktop.locator('.desktop-nav a').count()>=7,'Desktop navigation links render on '+(path||'home'));
+  }
+  await desktop.goto(BASE+'builder.html',{waitUntil:'networkidle'});
+  await desktop.locator('#focus-search').click();
+  await desktop.waitForURL(/explore\.html#archive/);
+  check(true,'Header search action routes from Builder to Explore');
+  await desktop.goto(BASE+'',{waitUntil:'networkidle'});
+  await desktop.locator('#focus-search').click();
+  check(await desktop.locator('#hero-search').evaluate(el=>document.activeElement===el),'Header search focuses home search');
  }catch(e){failures.push(e.stack||String(e));}
  finally{await browser.close();}
  if(failures.length){console.error('\nSMOKE TEST FAILURES\n'+failures.join('\n'));process.exit(1);}
