@@ -160,7 +160,7 @@ function visualResultMarkup(item){
  const creator=visualEscape(item.creator||"Creator not listed");
  const licence=visualEscape((item.license||"Licence details")+(item.license_version?" "+item.license_version:""));
  const licenceUrl=safeVisualUrl(item.license_url);
- return '<a class="visual-reference-card" href="'+source+'" target="_blank" rel="noopener noreferrer" aria-label="Open image source: '+title+'"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="'+image+'" alt="'+title+'"><span class="visual-reference-caption"><strong>'+title+'</strong><small>'+creator+'</small><small>'+ (licenceUrl?'<a class="visual-license" href="'+licenceUrl+'" target="_blank" rel="noopener noreferrer">'+licence+'</a>':licence)+'</small><em>View source ↗</em></span></a>';
+ return '<div class="visual-reference-card"><a class="visual-reference-image-link" href="'+source+'" target="_blank" rel="noopener noreferrer" aria-label="Open image source: '+title+'"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="'+image+'" alt="'+title+'"></a><span class="visual-reference-caption"><strong>'+title+'</strong><small>'+creator+'</small><small>'+ (licenceUrl?'<a class="visual-license" href="'+licenceUrl+'" target="_blank" rel="noopener noreferrer">'+licence+'</a>':licence)+'</small><a class="visual-reference-source-link" href="'+source+'" target="_blank" rel="noopener noreferrer">View source ↗</a></span></div>';
 }
 function renderVisualReference(p,results,query){
  const root=$("#visual-reference");if(!root||activePrompt?.id!==p.id)return;
