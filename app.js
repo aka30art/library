@@ -287,7 +287,7 @@ const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){c
 const builder=$("#dna-builder");if(builder){
  const groups=[
   {id:"materials",label:"Materials",categories:["materials"],description:"Physical substances, finishes and material behaviour."},
-  {id:"styles",label:"Visual styles",categories:["graphic-design","anime-manga","surrealism","animation-toy-worlds"],description:"Visual languages, art movements and stylistic treatments."},
+  {id:"styles",label:"Visual styles",categories:["graphic-design"],description:"Visual languages, art movements and stylistic treatments."},
   {id:"effects",label:"Effects & optics",categories:["filter-effects","typography-effects","motion"],description:"Optical, photographic, digital and surface effects."},
   {id:"textures",label:"Textures & surfaces",categories:["materials"],description:"Surface qualities, grain, relief and tactile detail."},
   {id:"lighting",label:"Lighting",categories:["photography"],description:"Lighting setups, atmosphere and illumination behaviour."},
@@ -299,7 +299,7 @@ const builder=$("#dna-builder");if(builder){
  const byId=new Map(prompts.map(p=>[String(p.id),p]));
  const universal=groups.flatMap(g=>g.categories).reduce((s,c)=>s.add(c),new Set());
  const uniquePrompts=[...new Map(prompts.filter(p=>universal.has(p.category)).map(p=>[String(p.id),p])).values()];
- const groupItems=(g)=>uniquePrompts.filter(p=>g.categories.includes(p.category)).sort((a,b)=>a.title.localeCompare(b.title));
+ const groupItems=(g)=>uniquePrompts.filter(p=>g.categories.includes(p.category)&&(g.id==="textures"?/texture|surface|grain|weave|patina|pores|finish|roughness|relief|fib(er|re)|pattern|tactile/i.test(p.title+" "+p.desc):g.id==="materials"?!/texture|surface|grain|weave|patina|pores|finish|roughness|relief|fib(er|re)|pattern|tactile/i.test(p.title+" "+p.desc):true)).sort((a,b)=>a.title.localeCompare(b.title));
  const esc=(v)=>String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
  const renderGroups=()=>{
   $("#builder-modules").innerHTML=groups.map(g=>{
