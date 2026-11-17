@@ -211,7 +211,7 @@ if(catalogueAudit.incomplete.length)console.error("AI Prompt Library catalogue i
 const $=s=>document.querySelector(s);
 const collectionName=id=>collections.find(c=>c.id===id)?.name||id;
 const promptGrid=$("#prompt-grid");
-let activePrompt=null,showingAll=false;
+let activePrompt=null,showingAll=document.body.dataset.page==="explore";
 function collectionCard(c){return `<a class="collection-card" data-tone="${c.tone}" href="#archive" data-category="${c.id}" style="--card-bg:${c.bg}"><span class="collection-icon">${c.icon}</span><span class="collection-meta"><strong>${c.name}</strong><small>${c.count} prompts · ${c.count>=50?"complete":"catalogue incomplete"}</small></span><span class="collection-arrow">→</span></a>`}
 function thumb(p){return `<div class="prompt-thumb" data-kind="${p.kind}" style="--thumb-bg:${p.bg};--thumb-art:${p.art};--thumb-glow:${p.glow}"><div class="thumb-art"></div><button class="bookmark" aria-label="Save ${p.title}" title="Save prompt">♧</button></div>`}
 function promptCard(p){return `<article class="prompt-card" data-id="${p.id}" tabindex="0" role="button" aria-label="Open ${p.title}">${thumb(p)}<div class="prompt-info"><h3>${p.title}</h3><div class="prompt-meta"><span class="pill">${collectionName(p.category)}</span><small>${difficulty(p)} ↗</small></div></div></article>`}
