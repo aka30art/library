@@ -32,7 +32,7 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue currently contains 181 authored prompt records across the original nine populated collections, with ten additional specialist collections added as expansion targets. The planned library structure now contains 19 categories. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
+The catalogue currently contains 951 authored prompt records across the original nine populated collections, with ten additional specialist collections added as expansion targets. The planned library structure now contains 19 categories. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
 
 ### Prompt design and research basis
 
@@ -62,3 +62,8 @@ Research references:
 ## Deployment
 
 A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to publish the static site to GitHub Pages on pushes to `main`. GitHub Pages must be configured to use GitHub Actions in repository Settings → Pages. Once configured, each push to `main` triggers deployment. Vercel project creation was blocked by the connected Vercel account permissions, so no Vercel project or deployment was created. No backend secrets or API keys are required for the current prototype.
+
+
+## Catalogue expansion
+
+The catalogue now contains 951 prompts across 19 collections. The original nine collections have been expanded to 50 or 51 entries each; the ten specialist collections have 50 entries each. Expansion content is maintained in `catalogue-expansion.js`, separate from the original prompt records. Each generated entry includes a distinct subject brief, category-specific production guidance, a negative prompt, model compatibility and searchable tags. Collection totals are calculated from the loaded records at runtime.
