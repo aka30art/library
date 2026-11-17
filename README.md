@@ -79,3 +79,8 @@ The catalogue contains 950 prompts across ten collections. Materials contains 15
 - A full pre-maintenance snapshot is stored under `backups/2026-11-17/`; a separate Git branch `safety/pre-reliability-audit-2026-11-17` preserves the prior site state.
 
 To restore the full snapshot, copy the files from `backups/2026-11-17/` back to the repository root and commit the restoration. To restore only the catalogue expansion, copy `backups/2026-11-17/catalogue-expansion.js` to the root as `catalogue-expansion.js`.
+
+
+## Visual examples
+
+Every prompt includes an on-demand visual-reference panel. It searches Openverse for openly licensed image examples relevant to the prompt category and title, displays creator and licence information, and links to the original source. Results are cached in the visitor's browser to reduce repeat searches. The panel is available from prompt detail views and from each item in the Builder. Visual references illustrate the material, texture, style, process, screen world or collectible; they are reference examples, not generated outputs of the prompt.
