@@ -32,13 +32,13 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue contains 1,150 prompt records across ten collections. Nine collections contain 125 prompts each: Materials, Styles, Textures, Lighting, Effects, Composition, Rendering, Colour & Atmosphere, and Films & Shows. Films & Shows is divided into five distinct subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 25 prompts in each. Toys & Collectibles contains 25 prompts. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
+The catalogue contains 350 prompt records across ten collections. The eight universal visual collections each contain 25 complete, category-specific prompts. Films & Shows contains 125 prompts across five subcategories, and Toys & Collectibles contains 25 prompts. Films & Shows is divided into five distinct subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 25 prompts in each. Toys & Collectibles contains 25 prompts. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
 
-The Prompt DNA Builder now includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. Each architecture defines its own transformation logic and works with the existing independent visual modules and source-preservation controls.
+The Prompt DNA Builder includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. The universal collections use one integrated prompt per element rather than splitting each element into facet-specific variants.
 
 ### Prompt design and research basis
 
-Prompts specify visible outcomes and relevant technical behaviour instead of relying on generic quality adjectives. Material entries distinguish base appearance, microtexture, roughness, metallic response, anisotropic reflection, transmission, refraction and lighting. Effect entries distinguish optical phenomena from post-production treatments and constrain intensity, subject preservation and edge behaviour. Mockup entries define product geometry, view angle, material response, blank artwork zones, lighting and commercial presentation constraints.
+Each universal collection entry is a complete, category-specific treatment prompt. Material prompts describe the requested material transformation as one unified visual outcome; they do not split the treatment into surface, finish, behaviour or detail specifications. The same integrated-prompt principle applies to styles, textures, lighting, effects, composition, rendering, and colour & atmosphere.
 
 Research references:
 - OpenAI, Image prompting: https://developers.openai.com/api/docs/guides/image-prompting
@@ -68,13 +68,13 @@ A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to pub
 
 ## Catalogue expansion
 
-The catalogue contains 1,150 prompts across ten collections. Nine collections contain 125 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 25 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
+The catalogue contains 350 prompts across ten collections. Nine collections contain 125 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 25 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
 
 ## Reliability and recovery
 
 - All three pages use synchronized, versioned shared assets.
 - Each page attempts to load the primary catalogue expansion and falls back to the verified snapshot at `backups/2026-11-17/catalogue-expansion.js` if the primary script fails to expose its data.
-- `scripts/validate-catalogue.cjs` checks expected prompt and collection totals, minimum collection sizes, unique IDs, required prompt fields, category references and synchronized page asset versions.
+- `scripts/validate-catalogue.cjs` checks expected prompt and collection totals, collection-specific sizes, unique IDs, required prompt fields, category references and synchronized page asset versions.
 - GitHub Pages deployment is gated on that validation passing.
 - A full pre-maintenance snapshot is stored under `backups/2026-11-17/`; a separate Git branch `safety/pre-reliability-audit-2026-11-17` preserves the prior site state.
 
