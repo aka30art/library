@@ -9,9 +9,13 @@ The interface follows the approved hybrid direction: functional archive and sear
 ## Included
 
 - Responsive homepage and navigation
-- Nine collection entry points
+- Nineteen collection entry points
 - Prompt archive with text search, collection filter, model filter and sorting
-- Prompt detail dialog with copy-ready positive and negative prompts
+- Prompt detail dialog with Standard and universal ART DNA MASTER PROMPT modes
+- Prompt DNA Builder for combining a base prompt with visual style, lighting and composition
+- Prompt difficulty labels: Foundation, Advanced and Professional
+- Daily featured prompt
+- Visual-trait filtering
 - Session-only bookmark interaction
 - Newsletter interface with explicit integration placeholder
 - Reduced-motion support and keyboard-accessible controls
@@ -28,7 +32,7 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue now contains 181 authored prompt records across all nine collections. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
+The catalogue currently contains 181 authored prompt records across the original nine populated collections, with ten additional specialist collections added as expansion targets. The planned library structure now contains 19 categories. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
 
 ### Prompt design and research basis
 
