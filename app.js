@@ -2,7 +2,7 @@ const collections = [
 {id:"materials",name:"Materials",count:0,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"},
 {id:"styles",name:"Styles",count:0,icon:"✦",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"},
 {id:"textures",name:"Textures",count:0,icon:"▤",tone:"blue",bg:"linear-gradient(135deg,#26394b,#8b6b50 52%,#121923)"},
-{id:"lighting",name:"Lighting",count:0,icon:"☼",tone:"orange",bg:"linear-gradient(135deg,#b5a58b,#46505a 48%,#151a22)"},
+{id:"lighting",name:"Photography Post-Edits",count:0,icon:"☼",tone:"orange",bg:"linear-gradient(135deg,#b5a58b,#46505a 48%,#151a22)"},
 {id:"effects",name:"Effects",count:0,icon:"◉",tone:"violet",bg:"linear-gradient(130deg,#ffb52e,#e85d37 48%,#30245e)"},
 {id:"composition",name:"Composition",count:0,icon:"▦",tone:"green",bg:"linear-gradient(130deg,#173c35,#111820)"},
 {id:"rendering",name:"Rendering",count:0,icon:"⬡",tone:"blue",bg:"linear-gradient(135deg,#b6c0c2,#343d46 55%,#111820)"},
@@ -153,7 +153,7 @@ const builder=$("#builder-type");if(builder){
   {id:"materials",label:"Materials",categories:["materials"],description:"Complete material transformations for any subject."},
   {id:"styles",label:"Styles",categories:["styles"],description:"Visual languages, art movements and rendering aesthetics."},
   {id:"textures",label:"Textures",categories:["textures"],description:"Surface structure, tactility, grain and microdetail."},
-  {id:"lighting",label:"Lighting",categories:["lighting"],description:"Illumination, light direction, contrast and atmosphere."},
+  {id:"lighting",label:"Photography Post-Edits",categories:["lighting"],description:"Photographic colour grading, film emulations, darkroom processes, retouching and experimental image finishing."},
   {id:"effects",label:"Effects",categories:["effects"],description:"Optical, photographic and post-production treatments."},
   {id:"composition",label:"Composition",categories:["composition"],description:"Visual hierarchy, balance, spatial relationships and framing."},
   {id:"rendering",label:"Rendering",categories:["rendering"],description:"Rendering methods, material response and image fidelity."},
@@ -163,7 +163,7 @@ const builder=$("#builder-type");if(builder){
   {id:"films-shows-films",label:"Films & Shows / Films",categories:["films-shows"],subcategory:"Films",description:"Transform subjects into cinematic film visual identities."},
   {id:"films-shows-anime",label:"Films & Shows / Anime",categories:["films-shows"],subcategory:"Anime",description:"Transform subjects into anime visual languages."},
   {id:"films-shows-other",label:"Films & Shows / Other Screen Worlds",categories:["films-shows"],subcategory:"Other Screen Worlds",description:"Transform subjects into other screen-based formats."},
-  {id:"toys-collectibles",label:"Toys & Collectibles",categories:["toys-collectibles"],description:"Transform supplied subjects into 25 recognisable toy, figure, model and collectible formats, including LEGO and Funko Pop."}
+  {id:"toys-collectibles",label:"Toys & Collectibles",categories:["toys-collectibles"],description:"Transform supplied subjects into 56 mainstream toy, figure, model and trading-card collectible formats, including LEGO, Hot Wheels, Barbie and major TCG designs."}
  ];
  const selected=new Set();
  const builderPrompts=window.AI_PROMPT_BUILDER_CATALOGUE||prompts;
