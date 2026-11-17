@@ -74,6 +74,42 @@ Maintain internal consistency between subject, scale, materials, lighting, persp
 `;
 }
 function universalTransformationPrompt(p){
+if(p.category==="films-shows"){
+return `UNIVERSAL TRANSFORMATION PROMPT — COMPLETE SCREEN-UNIVERSE RE-CREATION
+
+SOURCE INPUT:
+Use the supplied image as the sole source of the original subject's identity and defining characteristics. Do not replace the source with a newly invented person, character or object.
+
+TARGET UNIVERSE:
+${p.title}
+
+TRANSFORMATION OBJECTIVE:
+Transform the original subject so they look as though they genuinely belong inside the specific visual universe of ${p.title}. Recreate both the subject's presentation and the surrounding world. This must be a complete character/object, costume, environment and art-direction transformation — not simply a colour filter, rendering overlay or generic style imitation.
+
+SUBJECT AND CHARACTER DESIGN:
+Preserve the original subject's recognisable identity, face or defining geometry, core proportions and characteristic features. Reimagine their visible styling to fit the target universe. If the source is a person or character, redesign their clothing, costume, footwear, accessories, hairstyle or headwear using the target universe's wardrobe, silhouettes, materials and character-design conventions. They should look like a character who belongs in that world, while still being recognisable as the original person. Do not retain incompatible source clothing merely for the sake of preservation. If the source is an object, redesign its construction, materials, detailing and surface language so it looks native to that universe. Adapt animals and creatures in the same way while retaining their recognisable identity.
+
+ENVIRONMENT AND WORLD-BUILDING:
+Transform the surroundings to match the selected universe. Adapt or replace the original background with fitting architecture, interiors, streets, landscapes, technology, props, set dressing and atmospheric details. Use recognisable visual cues from the selected production's world and production design. The environment must feel like a believable location from that specific show, film, cartoon or anime, not an unchanged photograph with a new filter.
+
+UNIFIED VISUAL LANGUAGE:
+Apply the target universe consistently to subject design, costume, materials, environment, props, lighting, colour grading, atmosphere, camera language, perspective, linework, shading, rendering and overall production finish. Reproduce the distinctive aesthetic and visual grammar of the selected title rather than relying on generic genre conventions. Aim for the result to read as an authentic frame, cinematic still or key visual from that universe.
+
+SOURCE PRESERVATION AND CREATIVE PERMISSION:
+Keep the original subject recognisable. Preserve defining facial characteristics or object geometry, essential proportions and key identity cues. Permit substantial changes to clothing, styling, background, props, lighting and composition whenever needed to make the transformation convincing. Do not substitute the source subject with an existing named franchise character. Do not add unrelated main characters, logos, watermarks or captions.
+
+SCENE CONTROL:
+[OPTIONAL SCENE / LOCATION / ACTION — IF LEFT BLANK, CREATE A NATURAL SCENE THAT FITS THE TARGET UNIVERSE.]
+
+TARGET-SPECIFIC VISUAL DIRECTION:
+${p.prompt}
+
+FINAL REQUIREMENT:
+The finished image must unmistakably combine the original subject's identity with the complete visual world of ${p.title}. The subject must look as though they belong in that universe, and the environment must reinforce the same universe. Avoid a superficial style transfer.
+
+Avoid: ${p.negative}
+`;
+}
 return `UNIVERSAL TRANSFORMATION PROMPT
 
 Transform the supplied image by applying the visual treatment of ${p.title}. Use the existing image as the source and preserve its subject.
@@ -151,7 +187,8 @@ const builder=$("#builder-type");if(builder){
   const frame=$("#builder-frame").value.trim();
   const source=$("#builder-source").value.trim();
   const sections=chosen.map(p=>p.title+"\n"+p.prompt).join("\n\n");
-  const treatment=type==="transformation"?"Apply the selected visual modules to the supplied source image. Preserve the source subject, identity, defining features, proportions, pose and essential composition; change only the requested visual treatment.":type==="art-dna"?"Create a cohesive ART DNA system from the selected visual modules. Resolve conflicts intelligently, establish a clear hierarchy and apply consistent visual logic throughout.":"Create a coherent image using the selected visual modules as independent, compatible art-direction instructions.";
+  const hasScreenWorld=chosen.some(p=>p.category==="films-shows");
+  const treatment=type==="transformation"?(hasScreenWorld?"Transform the supplied source into the selected screen universe as a complete subject-and-world re-creation. Preserve the original subject's recognisable identity, but allow costume, clothing, hairstyle, accessories, props, environment, background, lighting, colour, composition and rendering to change so the subject genuinely belongs in the selected show, film, cartoon or anime. Do not substitute the subject with an existing franchise character.":"Apply the selected visual modules to the supplied source image. Preserve the source subject's identity and defining structure while changing the requested visual treatment.") :type==="art-dna"?"Create a cohesive ART DNA system from the selected visual modules. Resolve conflicts intelligently, establish a clear hierarchy and apply consistent visual logic throughout.":"Create a coherent image using the selected visual modules as independent, compatible art-direction instructions.";
   const output=["PROMPT DNA — MODULAR VISUAL SYSTEM",treatment,source?"SOURCE / SUBJECT:\n"+source:"",sections?"SELECTED VISUAL MODULES:\n"+sections:"SELECT AT LEAST ONE VISUAL MODULE TO BEGIN.", "ADDITIONAL ART DIRECTION:\nVisual style: "+(style||"No additional style specified")+".\nLighting: "+(light||"No additional lighting specified")+".\nComposition: "+(frame||"No additional composition specified")+".","INTEGRATION RULES:\nTreat each selected module as an independent instruction. Combine them without allowing one module to replace or contradict the others. Preserve subject identity, visual coherence, controlled detail, clear focal hierarchy and professional image quality. Avoid unrelated objects, arbitrary decoration, visual clutter and contradictory treatment."].filter(Boolean).join("\n\n");
   $("#builder-output").textContent=output;
   $("#builder-selection-count").textContent=chosen.length+" selected";
