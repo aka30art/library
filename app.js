@@ -1,11 +1,12 @@
 const collections = [
-  {id:"materials",name:"Materials",count:0,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"},
-  {id:"styles",name:"Styles",count:0,icon:"✦",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"},
-  {id:"effects",name:"Effects",count:0,icon:"◉",tone:"blue",bg:"linear-gradient(135deg,#061b65,#5524b7 45%,#ff7b1a 75%,#0b1934)"},
-  {id:"lighting",name:"Lighting",count:0,icon:"☼",tone:"orange",bg:"radial-gradient(circle at 80% 20%,#ff8a13,transparent 30%),linear-gradient(130deg,#252d36,#080b10)"},
-  {id:"composition",name:"Composition",count:0,icon:"⌗",tone:"blue",bg:"linear-gradient(130deg,#f16c12 0 38%,#111721 39% 70%,#8c939a 71%)"},
-  {id:"rendering",name:"Rendering",count:0,icon:"⬢",tone:"violet",bg:"radial-gradient(circle at 70% 20%,#ff8a1a,transparent 30%),linear-gradient(130deg,#121d3a,#080c16)"},
-  {id:"transformations",name:"Transformations",count:0,icon:"▱",tone:"violet",bg:"linear-gradient(130deg,#17122c,#7447bc 50%,#12151e)"}
+  {id:"toys-collectibles",name:"Toys & Collectibles",count:0,icon:"▣",tone:"violet",bg:"linear-gradient(130deg,#ffb52e,#e85d37 48%,#30245e)"},
+  {id:"objects-products",name:"Objects & Products",count:0,icon:"⬡",tone:"orange",bg:"linear-gradient(135deg,#b6c0c2,#343d46 55%,#111820)"},
+  {id:"characters-creatures",name:"Characters & Creatures",count:0,icon:"♙",tone:"blue",bg:"radial-gradient(ellipse at 65% 40%,#87a89b,transparent 27%),linear-gradient(130deg,#132c30,#10151e)"},
+  {id:"fashion-accessories",name:"Fashion & Accessories",count:0,icon:"♢",tone:"orange",bg:"linear-gradient(120deg,#b5a69a,#3a3031 52%,#15191e)"},
+  {id:"architecture-spaces",name:"Architecture & Spaces",count:0,icon:"⌂",tone:"blue",bg:"linear-gradient(130deg,#b5a58b,#46505a 48%,#151a22)"},
+  {id:"nature-organic",name:"Nature & Organic Forms",count:0,icon:"❋",tone:"green",bg:"radial-gradient(circle at 65% 30%,#a8c18b,transparent 27%),linear-gradient(130deg,#173c35,#111820)"},
+  {id:"art-illustration",name:"Art & Illustration",count:0,icon:"✦",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"},
+  {id:"materials",name:"Materials",count:0,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"}
 ];
 let prompts = [
   {id:1,title:"Aged Concrete — Surface Texture",category:"materials",desc:"A high-fidelity aged concrete surface with fine pores, subtle mineral variation, realistic weathering and natural tonal depth.",prompt:"Aged concrete surface texture, fine irregular pores, subtle mineral deposits, realistic weathering, nuanced cool grey tonal variation, soft directional studio lighting, physically accurate roughness and micro-detail, seamless material study, neutral background, ultra-detailed, photorealistic.",negative:"Plastic appearance, repeating patterns, excessive cracks, artificial gloss, low resolution, text, watermark.",kind:"material",bg:"#45494b",art:"linear-gradient(135deg,#aaa,#494e52,#d1d0c8)",glow:"#747b7c",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:["Texture","Photorealistic","Surface study"]},
@@ -191,18 +192,21 @@ let prompts = [
 {"id":181,"title":"Grid Interruption — One Deliberate Misalignment","category":"composition","desc":"A disciplined grid disrupted by a single controlled element.","prompt":"Build a precise modular grid composition with repeated aligned elements, consistent gutters and stable margins. Interrupt the system exactly once with one offset block or oversized form that breaks alignment while retaining overall balance. The interruption should become the focal event; all remaining elements obey the grid. Restrained palette, crisp edges and deliberate negative space.","negative":"Multiple misalignments, accidental tangencies, uneven gutters, random scatter, competing focal points, text, watermark.","kind":"composition","bg":"#18232d","art":"linear-gradient(135deg,#26394b,#8b6b50 52%,#121923)","glow":"#67839a","model":["Midjourney","DALL·E","Stable Diffusion","Flux"],"tags":["Grid","Disruption","Graphic design"]}
 ];
 prompts.push(...(window.AI_PROMPT_EXPANSION||[]));
-const universalCategoryMap={
- materials:"materials",
- "filter-effects":"effects","typography-effects":"effects",motion:"effects",
- "graphic-design":"styles",surrealism:"styles",
- photography:"lighting",composition:"composition","3d-rendering":"rendering",transformations:"transformations"
-};
 const originalCatalogue=prompts;
-const specialistArchive=originalCatalogue.filter(p=>!universalCategoryMap[p.category]);
-prompts=originalCatalogue.filter(p=>universalCategoryMap[p.category]).map(p=>({...p,sourceCategory:p.category,category:universalCategoryMap[p.category]}));
-window.AI_PROMPT_LIBRARY_ARCHIVE=specialistArchive;
+const coreCategoryMap={
+ "animation-toy-worlds":"toys-collectibles",
+ mockups:"objects-products","product-design":"objects-products",
+ characters:"characters-creatures",creatures:"characters-creatures",
+ fashion:"fashion-accessories",architecture:"architecture-spaces",environments:"architecture-spaces",
+ nature:"nature-organic","graphic-design":"art-illustration",surrealism:"art-illustration","anime-manga":"art-illustration",
+ materials:"materials"
+};
+const builderOnlyCategories=new Set(["filter-effects","3d-rendering","photography","transformations","composition","typography-effects","motion"]);
+prompts=originalCatalogue.filter(p=>coreCategoryMap[p.category]).map(p=>({...p,sourceCategory:p.category,category:coreCategoryMap[p.category]}));
+window.AI_PROMPT_LIBRARY_ARCHIVE=originalCatalogue.filter(p=>!coreCategoryMap[p.category]);
+window.AI_PROMPT_BUILDER_CATALOGUE=originalCatalogue;
 collections.forEach(c=>c.count=prompts.filter(p=>p.category===c.id).length);
-const catalogueAudit={total:originalCatalogue.length,visible:prompts.length,archived:specialistArchive.length,collections:collections.length};
+const catalogueAudit={total:originalCatalogue.length,visible:prompts.length,builderElements:originalCatalogue.filter(p=>builderOnlyCategories.has(p.category)).length,collections:collections.length};
 window.AI_PROMPT_LIBRARY_AUDIT=catalogueAudit;
 const $=s=>document.querySelector(s);
 const collectionName=id=>collections.find(c=>c.id===id)?.name||id;
@@ -282,18 +286,19 @@ if($("#collection-grid"))renderCollections();if($("#prompt-grid"))filterPrompts(
 const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){const pod=$("#prompt-of-day");if(pod){pod.innerHTML=`<span class="eyebrow">PROMPT OF THE DAY</span><strong>${promptOfDay.title}</strong><p>${promptOfDay.desc}</p><button class="button button-orange" id="open-pod">Explore prompt →</button>`;$("#open-pod").addEventListener("click",()=>openPrompt(promptOfDay.id));}}
 const builder=$("#dna-builder");if(builder){
  const groups=[
-  {id:"materials",label:"Materials",categories:["materials"],description:"Materials, finishes and surface behaviour."},
-  {id:"styles",label:"Styles",categories:["styles"],description:"Visual languages and stylistic treatments."},
-  {id:"effects",label:"Effects",categories:["effects"],description:"Optical, photographic and digital effects."},
-  {id:"lighting",label:"Lighting",categories:["lighting"],description:"Lighting setups and illumination."},
-  {id:"composition",label:"Composition",categories:["composition"],description:"Visual hierarchy, framing and spatial organisation."},
-  {id:"rendering",label:"Rendering",categories:["rendering"],description:"Rendering methods and image finish."},
-  {id:"transformation",label:"Transformations",categories:["transformations"],description:"Apply a visual treatment to an existing source image."}
+  {id:"materials",label:"Materials",categories:["materials"],description:"Material types, finishes and surface treatments."},
+  {id:"styles",label:"Styles",categories:["graphic-design","surrealism","anime-manga","animation-toy-worlds"],description:"Visual styles and art languages."},
+  {id:"effects",label:"Effects",categories:["filter-effects","typography-effects","motion"],description:"Optical, graphic and motion effects."},
+  {id:"lighting",label:"Lighting",categories:["photography"],description:"Lighting systems and photographic illumination."},
+  {id:"composition",label:"Composition",categories:["composition"],description:"Framing, viewpoint, orientation and spatial arrangement."},
+  {id:"rendering",label:"Rendering",categories:["3d-rendering"],description:"Rendering methods, image fidelity and finish."},
+  {id:"transformation",label:"Transformations",categories:["transformations"],description:"Apply a visual treatment to a source image."}
  ];
  const selected=new Set();
- const byId=new Map(prompts.map(p=>[String(p.id),p]));
+ const builderPrompts=window.AI_PROMPT_BUILDER_CATALOGUE||prompts;
+ const byId=new Map(builderPrompts.map(p=>[String(p.id),p]));
  const universal=groups.flatMap(g=>g.categories).reduce((s,c)=>s.add(c),new Set());
- const uniquePrompts=[...new Map(prompts.filter(p=>universal.has(p.category)).map(p=>[String(p.id),p])).values()];
+ const uniquePrompts=[...new Map(builderPrompts.filter(p=>groups.some(g=>g.categories.includes(p.category))).map(p=>[String(p.id),p])).values()];
  const groupItems=(g)=>uniquePrompts.filter(p=>g.categories.includes(p.category)).sort((a,b)=>a.title.localeCompare(b.title));
  const esc=(v)=>String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
  const renderGroups=()=>{
