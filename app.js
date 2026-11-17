@@ -283,7 +283,35 @@ async function copyText(text){try{await navigator.clipboard.writeText(text);show
 let toastTimer;function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);}
 renderCollections();filterPrompts();
 const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){const pod=$("#prompt-of-day");if(pod){pod.innerHTML=`<span class="eyebrow">PROMPT OF THE DAY</span><strong>${promptOfDay.title}</strong><p>${promptOfDay.desc}</p><button class="button button-orange" id="open-pod">Explore prompt →</button>`;$("#open-pod").addEventListener("click",()=>openPrompt(promptOfDay.id));}}
-const builder=$("#dna-builder");if(builder){const compose=()=>{const p=prompts.find(x=>x.id===Number($("#builder-base").value));const light=$("#builder-light").value,style=$("#builder-style").value,frame=$("#builder-frame").value;$("#builder-output").textContent=p?`${p.prompt} Art direction: ${style}. Lighting: ${light}. Composition: ${frame}. Preserve the original subject and all essential technical constraints.`:"Choose a base prompt to begin.";};$("#builder-base").innerHTML=prompts.map(p=>`<option value="${p.id}">${p.title}</option>`).join("");["builder-base","builder-light","builder-style","builder-frame"].forEach(id=>$("#"+id).addEventListener("change",compose));$("#copy-builder").addEventListener("click",()=>copyText($("#builder-output").textContent));compose();}
+const builder=$("#dna-builder");if(builder){
+ const categorySelect=$("#builder-category"),subcategorySelect=$("#builder-subcategory"),promptSelect=$("#builder-base");
+ const categoryPrompts=()=>prompts.filter(p=>p.category===categorySelect.value);
+ const populateSubcategories=()=>{
+  const items=categoryPrompts();
+  const tags=[...new Set(items.flatMap(p=>Array.isArray(p.tags)?p.tags:[]))].sort((a,b)=>a.localeCompare(b));
+  subcategorySelect.innerHTML='<option value="all">All subcategories</option>'+tags.map(t=>`<option value="${t}">${t}</option>`).join("");
+  populatePromptOptions();
+ };
+ const populatePromptOptions=()=>{
+  const tag=subcategorySelect.value;
+  const items=categoryPrompts().filter(p=>tag==="all"||(Array.isArray(p.tags)&&p.tags.includes(tag))).sort((a,b)=>a.title.localeCompare(b.title));
+  promptSelect.innerHTML=items.map(p=>`<option value="${p.id}">${p.title}</option>`).join("");
+  compose();
+ };
+ const compose=()=>{
+  const p=prompts.find(x=>x.id===Number(promptSelect.value));
+  if(!p){$("#builder-output").textContent="No prompts are available for this selection.";return;}
+  const light=$("#builder-light").value,style=$("#builder-style").value,frame=$("#builder-frame").value;
+  $("#builder-output").textContent=`${p.prompt} Art direction: ${style}. Lighting: ${light}. Composition: ${frame}. Preserve the original subject and all essential technical constraints.`;
+ };
+ categorySelect.innerHTML=collections.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
+ categorySelect.addEventListener("change",populateSubcategories);
+ subcategorySelect.addEventListener("change",populatePromptOptions);
+ promptSelect.addEventListener("change",compose);
+ ["builder-light","builder-style","builder-frame"].forEach(id=>$("#"+id).addEventListener("change",compose));
+ $("#copy-builder").addEventListener("click",()=>copyText($("#builder-output").textContent));
+ populateSubcategories();
+}
 ["archive-search","category-filter","model-filter","visual-filter","sort-filter"].forEach(id=>$("#"+id).addEventListener(id==="archive-search"?"input":"change",()=>{showingAll=true;filterPrompts();}));
 const pageType=document.body.dataset.page||"home";
 const params=new URLSearchParams(location.search);
