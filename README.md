@@ -84,3 +84,7 @@ To restore the full snapshot, copy the files from `backups/2026-11-17/` back to 
 ## Visual examples
 
 Every prompt includes an on-demand visual-reference panel. It searches Openverse for openly licensed image examples relevant to the prompt category and title, displays creator and licence information, and links to the original source. Results are cached in the visitor's browser to reduce repeat searches. The panel is available from prompt detail views and from each item in the Builder. Visual references illustrate the material, texture, style, process, screen world or collectible; they are reference examples, not generated outputs of the prompt.
+
+
+### Prompt-card visual examples
+Each prompt card displays one best-matching openly licensed image directly in its thumbnail. Images load on demand as cards approach the viewport and are cached locally; the creator/licence credit links to the original source. Prompt details show the same single-example approach.
