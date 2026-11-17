@@ -33,7 +33,7 @@ for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){
 if(!app.includes('const builder=$("#builder-type")'))errors.push('Builder guard missing');
 for(const page of ['index.html','explore.html','builder.html']){
  const html=fs.readFileSync(page,'utf8');
- for(const asset of ['catalogue-expansion.js?v=20261117-expanded-v5','app.js?v=20261117-expanded-v5','styles.css?v=20261117-expanded-v5'])if(!html.includes(asset))errors.push(page+' stale '+asset);
+ for(const asset of ['catalogue-expansion.js?v=20261117-expanded-v6','app.js?v=20261117-expanded-v6','styles.css?v=20261117-expanded-v6'])if(!html.includes(asset))errors.push(page+' stale '+asset);
  for(const id of ['focus-search','menu-toggle','mobile-menu','prompt-dialog','dialog-content','toast'])if(!html.includes('id="'+id+'"'))errors.push(page+' missing '+id);
  if(html.includes('id="dna-builder"'))errors.push(page+' legacy UI');
  if(page==='explore.html'&&!html.includes('id="subcategory-filter"'))errors.push('Explore Films & Shows filter missing');
@@ -45,7 +45,7 @@ for(const page of ['index.html','explore.html','builder.html']){
 }
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
-if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261117-expanded-v5'))errors.push('Builder transformation system not loaded');
+if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261117-expanded-v6'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
 console.log('PASS: 950 prompts, ten collections, five Films & Shows subcategories ×50, 25 collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
