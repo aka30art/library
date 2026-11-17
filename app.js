@@ -284,7 +284,7 @@ let toastTimer;function showToast(msg){const t=$("#toast");t.textContent=msg;t.c
 renderCollections();filterPrompts();
 const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){const pod=$("#prompt-of-day");if(pod){pod.innerHTML=`<span class="eyebrow">PROMPT OF THE DAY</span><strong>${promptOfDay.title}</strong><p>${promptOfDay.desc}</p><button class="button button-orange" id="open-pod">Explore prompt →</button>`;$("#open-pod").addEventListener("click",()=>openPrompt(promptOfDay.id));}}
 const builder=$("#dna-builder");if(builder){
- const categorySelect=$("#builder-category"),subcategorySelect=$("#builder-subcategory"),promptSelect=$("#builder-base");
+ const typeSelect=$("#builder-type"),categorySelect=$("#builder-category"),subcategorySelect=$("#builder-subcategory"),promptSelect=$("#builder-base");
  const categoryPrompts=()=>prompts.filter(p=>p.category===categorySelect.value);
  const populateSubcategories=()=>{
   const items=categoryPrompts();
@@ -302,9 +302,13 @@ const builder=$("#dna-builder");if(builder){
   const p=prompts.find(x=>x.id===Number(promptSelect.value));
   if(!p){$("#builder-output").textContent="No prompts are available for this selection.";return;}
   const light=$("#builder-light").value,style=$("#builder-style").value,frame=$("#builder-frame").value;
-  $("#builder-output").textContent=`${p.prompt} Art direction: ${style}. Lighting: ${light}. Composition: ${frame}. Preserve the original subject and all essential technical constraints.`;
+  const type=typeSelect.value;
+  const adjustments=`\\n\\nAdditional art direction: ${style}. Lighting: ${light}. Composition: ${frame}.`;
+  const output=type==="art-dna"?masterPrompt(p):type==="transformation"?universalTransformationPrompt(p):p.prompt;
+  $("#builder-output").textContent=output+adjustments;
  };
  categorySelect.innerHTML=collections.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
+ typeSelect.addEventListener("change",compose);
  categorySelect.addEventListener("change",populateSubcategories);
  subcategorySelect.addEventListener("change",populatePromptOptions);
  promptSelect.addEventListener("change",compose);
