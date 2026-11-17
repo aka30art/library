@@ -1,84 +1,21 @@
 const { chromium } = require('playwright');
-const BASE = process.env.SITE_URL || 'https://aka30art.github.io/library/';
+const BASE=process.env.SITE_URL||'https://aka30art.github.io/library/';
 (async()=>{
- const browser=await chromium.launch({headless:true});
- const failures=[];
- const check=(ok,label)=>{if(!ok)failures.push(label);else console.log('PASS '+label);};
+ const browser=await chromium.launch({headless:true}),failures=[],runtimeErrors=[];
+ const check=(ok,label)=>{if(!ok)failures.push('FAIL '+label);else console.log('PASS '+label);};
+ const page=await browser.newPage({viewport:{width:390,height:844},permissions:['clipboard-read','clipboard-write']});
+ page.on('pageerror',e=>runtimeErrors.push('pageerror: '+e.message));
+ page.on('console',m=>{if(m.type()==='error'&&!/favicon\.ico/.test(m.text()))runtimeErrors.push('console: '+m.text());});
+ const go=async(path)=>{const r=await page.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});check(!!r&&r.ok(),'Loads '+(path||'home'));await page.waitForTimeout(100);};
+ const layout=async(w,path)=>{await page.setViewportSize({width:w,height:900});const d=await page.evaluate(()=>{const w=document.documentElement.clientWidth,off=[];for(const s of ['.site-header','.site-header .brand','.site-header .header-actions','.site-header .header-actions button','.desktop-nav','.mobile-menu','.shell','.collection-card','.archive-toolbar','.prompt-card','.builder-panel','.builder-option'])document.querySelectorAll(s).forEach(e=>{const c=getComputedStyle(e),r=e.getBoundingClientRect();if(c.display!=='none'&&c.visibility!=='hidden'&&r.width>0&&(r.left< -1||r.right>w+1))off.push(s+':'+Math.round(r.left)+'..'+Math.round(r.right));});return{scroll:document.documentElement.scrollWidth,client:w,off:off.slice(0,3)};});check(d.scroll<=d.client+1,'No horizontal scroll '+w+'px '+(path||'home'));check(!d.off.length,'Elements inside viewport '+w+'px '+(path||'home')+(d.off.length?' '+d.off.join(',') :''));};
  try{
-  const page=await browser.newPage({viewport:{width:390,height:844},permissions:['clipboard-read','clipboard-write']});
-  page.on('pageerror',e=>failures.push('Browser runtime error: '+e.message));
-  page.on('console',m=>{if(m.type()==='error')failures.push('Console error: '+m.text());});
-  for(const path of ['','explore.html','builder.html']){
-   let loaded=false;
-   for(let attempt=0;attempt<6&&!loaded;attempt++){
-    try{const r=await page.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});loaded=!!r&&r.ok();}catch(e){if(attempt===5)throw e;await page.waitForTimeout(3000);}
-   }
-   check(loaded,'Loads '+(path||'home'));
-   await page.waitForTimeout(300);
-   check(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),'No horizontal overflow on '+(path||'home'));
-   const searchButton=page.locator('#focus-search');
-   await searchButton.click();
-   if(path==='builder.html'){
-    await page.waitForURL(/explore\.html#archive/);
-    check(true,'Mobile header search routes from Builder to Explore');
-    await page.goto(BASE+path,{waitUntil:'networkidle'});
-   }else{
-    const target=path==='explore.html'?'#archive-search':'#hero-search';
-    check(await page.locator(target).evaluate(el=>document.activeElement===el),'Mobile header search focuses '+(path||'home'));
-   }
-   const menu=page.locator('#menu-toggle');
-   await menu.click();
-   check(await menu.getAttribute('aria-expanded')==='true','Mobile menu opens on '+(path||'home'));
-   check(await page.locator('#mobile-menu').evaluate(el=>getComputedStyle(el).display!=='none'),'Mobile menu is visible on '+(path||'home'));
-   await menu.click();
-   check(await menu.getAttribute('aria-expanded')==='false','Mobile menu closes on '+(path||'home'));
-   if(path===''){
-    const search=page.locator('#hero-search');
-    await search.fill('carbon fibre');
-    check(new URL(page.url()).pathname.endsWith('/'),'Home search does not redirect while typing');
-    await search.press('Enter');
-    await page.waitForURL(/explore\.html\?search=carbon(%20|\+)fibre|explore\.html\?search=carbon%20fibre/);
-    check(await page.locator('#archive-search').inputValue()==='carbon fibre','Home search submits query to Explore');
-    check(await page.locator('#prompt-grid .prompt-card').count()>0,'Search returns matching prompt cards');
-   }else if(path==='explore.html'){
-    await page.locator('#archive-search').fill('brushed aluminium');
-    check(await page.locator('#prompt-grid .prompt-card').count()>0,'Explore live search returns results');
-    await page.locator('#category-filter').selectOption('materials');
-    check(await page.locator('#prompt-grid .prompt-card').count()>0,'Collection filter returns results');
-    check(await page.locator('#subcategory-filter option').count()>1,'Subcollection options populate');
-    const first=page.locator('#prompt-grid .prompt-card').first();
-    await first.click();
-    check(await page.locator('#prompt-dialog').evaluate(el=>el.open),'Prompt detail opens');
-    await page.locator('[data-mode="transformation"]').click();
-    check((await page.locator('#detail-prompt').innerText()).includes('UNIVERSAL TRANSFORMATION'),'Prompt mode tabs switch content');
-    await page.locator('#prompt-dialog form button').click();
-   }else{
-    const options=page.locator('#builder-modules input[data-prompt-id]');
-    check(await options.count()>0,'Builder modules load');
-    await options.first().check();
-    check((await page.locator('#builder-selection-count').innerText()).includes('1 selected'),'Builder selection updates count');
-    check((await page.locator('#builder-output').innerText()).includes('SELECTED VISUAL MODULES'),'Builder composes selected module');
-    await page.locator('#builder-clear').click();
-    check((await page.locator('#builder-selection-count').innerText()).includes('0 selected'),'Builder clear resets selection');
-   }
-  }
-  const desktop=await browser.newPage({viewport:{width:1440,height:1000}});
-  desktop.on('pageerror',e=>failures.push('Desktop runtime error: '+e.message));
-  for(const path of ['','explore.html','builder.html']){
-   const response=await desktop.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});
-   check(!!response&&response.ok(),'Desktop loads '+(path||'home'));
-   check(await desktop.locator('.desktop-nav').isVisible(),'Desktop navigation visible on '+(path||'home'));
-   check(await desktop.locator('.desktop-nav a').count()>=7,'Desktop navigation links render on '+(path||'home'));
-  }
-  await desktop.goto(BASE+'builder.html',{waitUntil:'networkidle'});
-  await desktop.locator('#focus-search').click();
-  await desktop.waitForURL(/explore\.html#archive/);
-  check(true,'Header search action routes from Builder to Explore');
-  await desktop.goto(BASE+'',{waitUntil:'networkidle'});
-  await desktop.locator('#focus-search').click();
-  check(await desktop.locator('#hero-search').evaluate(el=>document.activeElement===el),'Header search focuses home search');
- }catch(e){failures.push(e.stack||String(e));}
- finally{await browser.close();}
- if(failures.length){console.error('\nSMOKE TEST FAILURES\n'+failures.join('\n'));process.exit(1);}
- console.log('\nAll responsive website smoke tests passed.');
+ for(const path of ['','explore.html','builder.html']){await go(path);for(const w of [320,360,375,390,414,430,600,768,780,781,800,900,1024,1050,1200,1440])await layout(w,path);await page.setViewportSize({width:390,height:844});const menu=page.locator('#menu-toggle');await menu.click();check(await menu.getAttribute('aria-expanded')==='true'&&await page.locator('#mobile-menu').isVisible(),'Menu opens '+(path||'home'));await page.keyboard.press('Escape');check(await menu.getAttribute('aria-expanded')==='false'&&!await page.locator('#mobile-menu').isVisible(),'Menu closes with Escape '+(path||'home'));await menu.click();await page.locator('main').click({position:{x:10,y:10}});check(await menu.getAttribute('aria-expanded')==='false','Menu closes on outside click '+(path||'home'));await page.locator('#focus-search').click();if(path==='builder.html'){await page.waitForURL(/explore\.html#archive/);check(true,'Header search routes Builder to Explore');}else{const target=path==='explore.html'?'#archive-search':'#hero-search';check(await page.locator(target).evaluate(e=>document.activeElement===e),'Header search focuses '+(path||'home'));}}
+ await go('');await page.setViewportSize({width:390,height:844});await page.locator('#hero-search').fill('brushed aluminium');check(new URL(page.url()).pathname.endsWith('/'),'Home search does not navigate during typing');await page.locator('#hero-search-form button[type=submit]').click();await page.waitForURL(/explore\.html\?search=brushed(%20|\+)aluminium/);check(await page.locator('#archive-search').inputValue()==='brushed aluminium'&&await page.locator('#prompt-grid .prompt-card').count()>0,'Home search button submits and returns results');await go('');await page.locator('#hero-search').fill('chromatic aberration');await page.locator('#hero-search').press('Enter');await page.waitForURL(/explore\.html\?search=chromatic/);check(true,'Home Enter submits search');
+ await go('explore.html');await page.setViewportSize({width:390,height:844});await page.locator('#archive-search').fill('brushed aluminium');check(await page.locator('#prompt-grid .prompt-card').count()>0,'Archive live search works');for(const cat of ['materials','styles','textures','lighting','effects','composition','rendering','colour-atmosphere']){await page.locator('#archive-search').fill('');await page.locator('#category-filter').selectOption(cat);check(await page.locator('#prompt-grid .prompt-card').count()===5,'Collection filter '+cat);}await page.locator('#category-filter').selectOption('all');await page.locator('#model-filter').selectOption('Midjourney');check(await page.locator('#prompt-grid .prompt-card').count()>0,'Model filter works');await page.locator('#model-filter').selectOption('all');await page.locator('#sort-filter').selectOption('az');const titles=await page.locator('#prompt-grid h3').allTextContents();check(titles.length===5&&titles[0].localeCompare(titles[1])<=0,'A–Z sort works');await page.locator('#sort-filter').selectOption('featured');await page.locator('#archive-search').fill('no-such-visual-qa');check(await page.locator('#prompt-grid .prompt-card').count()===0&&await page.locator('#empty-state').isVisible(),'Empty state works');await page.locator('#archive-search').fill('');await page.locator('#show-all').click();check(await page.locator('#prompt-grid .prompt-card').count()===1000,'View all returns all 1,000 entries');await page.locator('.collection-card[data-category=styles]').click();check(await page.locator('#category-filter').inputValue()==='styles'&&await page.locator('#prompt-grid .prompt-card').count()===125,'Collection card selects 125 entries');const mark=page.locator('.bookmark').first();await mark.click();check(await mark.evaluate(e=>e.classList.contains('saved')),'Bookmark saves current session');await mark.click();check(!await mark.evaluate(e=>e.classList.contains('saved')),'Bookmark unsaves');await page.locator('.prompt-card').first().click();check(await page.locator('#prompt-dialog').evaluate(e=>e.open),'Prompt detail opens');for(const [mode,phrase] of [['template','UNIVERSAL TEMPLATE'],['transformation','UNIVERSAL TRANSFORMATION'],['master','UNIVERSAL ART DNA']]){await page.locator('[data-mode='+mode+']').click();check((await page.locator('#detail-prompt').innerText()).includes(phrase),mode+' tab works');}await page.locator('#copy-prompt').click();check((await page.locator('#toast').innerText()).includes('copied'),'Copy prompt action');await page.locator('#copy-negative').click();check((await page.locator('#toast').innerText()).includes('copied'),'Copy negative prompt action');await page.locator('#prompt-dialog .dialog-close').click();check(!await page.locator('#prompt-dialog').evaluate(e=>e.open),'Dialog closes');
+ await go('builder.html');await page.setViewportSize({width:390,height:844});const opts=page.locator('#builder-modules input[data-prompt-id]');check(await opts.count()===1000,'Builder loads all elements');await opts.nth(0).check();await opts.nth(130).check();check((await page.locator('#builder-selection-count').innerText()).includes('2 selected'),'Builder combines cross-group selections');check((await page.locator('#builder-output').innerText()).includes('SELECTED VISUAL MODULES'),'Builder composes selection');await page.locator('#builder-source').fill('ceramic sculpture');check((await page.locator('#builder-output').innerText()).includes('ceramic sculpture'),'Builder source field');await page.locator('#builder-style').selectOption({label:'Cinematic surrealism'});check((await page.locator('#builder-output').innerText()).includes('Cinematic surrealism'),'Builder style field');await page.locator('#builder-light').selectOption({label:'Soft directional studio lighting'});check((await page.locator('#builder-output').innerText()).includes('Soft directional studio lighting'),'Builder lighting field');await page.locator('#builder-frame').selectOption({label:'Dynamic diagonal composition'});check((await page.locator('#builder-output').innerText()).includes('Dynamic diagonal composition'),'Builder composition field');await page.locator('#builder-type').selectOption('transformation');check((await page.locator('#builder-output').innerText()).includes('source image'),'Builder transformation mode');await page.locator('#builder-type').selectOption('art-dna');check((await page.locator('#builder-output').innerText()).includes('ART DNA'),'Builder ART DNA mode');await page.locator('#copy-builder').click();check((await page.locator('#toast').innerText()).includes('copied'),'Builder copy action');await page.locator('#builder-clear').click();check((await page.locator('#builder-selection-count').innerText()).includes('0 selected'),'Builder clear action');check((await page.locator('#builder-output').innerText()).includes('SELECT AT LEAST ONE'),'Builder empty state');
+ await page.locator('#newsletter input[type=email]').fill('qa@example.com');await page.locator('#newsletter button[aria-label=Subscribe]').click();check((await page.locator('#newsletter-message').innerText()).includes('No email has been sent'),'Newsletter states integration is inactive');
+ await page.setViewportSize({width:1440,height:1000});for(const path of ['','explore.html','builder.html']){await go(path);check(await page.locator('.desktop-nav').isVisible()&&await page.locator('.desktop-nav a').count()===7,'Desktop nav '+(path||'home'));check(await page.locator('.header-cta').isVisible(),'Desktop CTA '+(path||'home'));}
+ for(const e of runtimeErrors)failures.push(e);
+ }catch(e){failures.push(e.stack||String(e));}finally{await browser.close();}
+ if(failures.length){console.error('\\nBROWSER QA FAILURES\\n'+failures.join('\\n'));process.exit(1);}console.log('\\nAll full-site browser QA checks passed.');
 })();
