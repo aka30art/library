@@ -107,7 +107,7 @@ async function copyText(text){try{await navigator.clipboard.writeText(text);show
 let toastTimer;function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);}
 if($("#collection-grid"))renderCollections();if($("#prompt-grid"))filterPrompts();
 const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){const pod=$("#prompt-of-day");if(pod){pod.innerHTML=`<span class="eyebrow">PROMPT OF THE DAY</span><strong>${promptOfDay.title}</strong><p>${promptOfDay.desc}</p><button class="button button-orange" id="open-pod">Explore prompt →</button>`;$("#open-pod").addEventListener("click",()=>openPrompt(promptOfDay.id));}}
-const builder=$("#dna-builder");if(builder){
+const builder=$("#builder-type");if(builder){
  const groups=[
   {id:"materials",label:"Materials",categories:["materials"],description:"Material identity, surface response and physical finish."},
   {id:"styles",label:"Styles",categories:["styles"],description:"Visual languages, art movements and rendering aesthetics."},
@@ -171,8 +171,8 @@ if($("#hero-search")){
 if($("#archive-search"))$("#archive-search").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();showingAll=true;filterPrompts();}});
 const focusSearch=$("#focus-search");
 if(focusSearch)focusSearch.addEventListener("click",()=>{
- if(pageType==="home"){const input=$("#hero-search");if(input){input.focus();input.scrollIntoView({behavior:"smooth",block:"center"});}}
- else if(pageType==="explore"){const input=$("#archive-search");if(input){input.focus();input.scrollIntoView({behavior:"smooth",block:"center"});}}
+ const input=pageType==="explore"?$("#archive-search"):pageType==="home"?$("#hero-search"):null;
+ if(input){input.focus();input.scrollIntoView({behavior:"smooth",block:"center"});}
  else location.href="explore.html#archive";
 });
 if($("#show-all"))$("#show-all").addEventListener("click",()=>{showingAll=true;filterPrompts();$("#archive")?.scrollIntoView({behavior:"smooth"});});
