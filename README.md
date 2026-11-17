@@ -89,3 +89,16 @@ Every prompt includes an on-demand visual-reference panel. It searches Openverse
 
 ### Category subcategories
 The Explore archive provides a contextual subcategory filter for each collection. Subcategory labels are collection-specific, and counts are calculated from the current catalogue. Films & Shows retains its five established subcategories.
+
+
+### Trading-card systems and rarity expansion
+The Toys & Collectibles collection now separates Pokémon TCG, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, sports cards, rarity/chase cards, foil/parallels, autographs/memorabilia and card products/accessories. The catalogue includes 28 additional card-treatment prompts. Rarity names are game-specific and should not be treated as one universal cross-game scale.
+
+Research references:
+- Pokémon official card database and rarity filters: https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/663
+- Pokémon official Paradox Rift checklist: https://assets.pokemon.com/assets/cms2-en-uk/pdf/trading-card-game/checklist/par_web_cardlist_en.pdf
+- Yu-Gi-Oh! official rarity guide: https://www.yugioh-card.com/en/about/new-to-ygo/
+- Magic: The Gathering rarity explanation: https://magic.wizards.com/en/news/making-magic/quite-rarity-2018-03-12
+- Disney Lorcana official Fabled rarity announcement: https://www.disneylorcana.com/en-GB/product/fabled
+- One Piece Card Game comprehensive rules: https://en.onepiece-cardgame.com/pdf/rule_comprehensive.pdf
+- Topps collector glossary: https://uk.topps.com/pages/uk-hobby-glossary
