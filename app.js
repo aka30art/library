@@ -109,13 +109,14 @@ if($("#collection-grid"))renderCollections();if($("#prompt-grid"))filterPrompts(
 const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){const pod=$("#prompt-of-day");if(pod){pod.innerHTML=`<span class="eyebrow">PROMPT OF THE DAY</span><strong>${promptOfDay.title}</strong><p>${promptOfDay.desc}</p><button class="button button-orange" id="open-pod">Explore prompt →</button>`;$("#open-pod").addEventListener("click",()=>openPrompt(promptOfDay.id));}}
 const builder=$("#dna-builder");if(builder){
  const groups=[
-  {id:"materials",label:"Materials",categories:["materials"],description:"Material types, finishes and surface treatments."},
-  {id:"styles",label:"Styles",categories:["graphic-design","surrealism","anime-manga","animation-toy-worlds"],description:"Visual styles and art languages."},
-  {id:"effects",label:"Effects",categories:["filter-effects","typography-effects","motion"],description:"Optical, graphic and motion effects."},
-  {id:"lighting",label:"Lighting",categories:["photography"],description:"Lighting systems and photographic illumination."},
-  {id:"composition",label:"Composition",categories:["composition"],description:"Framing, viewpoint, orientation and spatial arrangement."},
-  {id:"rendering",label:"Rendering",categories:["3d-rendering"],description:"Rendering methods, image fidelity and finish."},
-  {id:"transformation",label:"Transformations",categories:["transformations"],description:"Apply a visual treatment to a source image."}
+  {id:"materials",label:"Materials",categories:["materials"],description:"Material identity, surface response and physical finish."},
+  {id:"styles",label:"Styles",categories:["styles"],description:"Visual languages, art movements and rendering aesthetics."},
+  {id:"textures",label:"Textures",categories:["textures"],description:"Surface structure, tactility, grain and microdetail."},
+  {id:"lighting",label:"Lighting",categories:["lighting"],description:"Illumination, light direction, contrast and atmosphere."},
+  {id:"effects",label:"Effects",categories:["effects"],description:"Optical, photographic and post-production treatments."},
+  {id:"composition",label:"Composition",categories:["composition"],description:"Visual hierarchy, balance, spatial relationships and framing."},
+  {id:"rendering",label:"Rendering",categories:["rendering"],description:"Rendering methods, material response and image fidelity."},
+  {id:"colour-atmosphere",label:"Colour & Atmosphere",categories:["colour-atmosphere"],description:"Palette systems, tonal relationships and atmospheric depth."}
  ];
  const selected=new Set();
  const builderPrompts=window.AI_PROMPT_BUILDER_CATALOGUE||prompts;
