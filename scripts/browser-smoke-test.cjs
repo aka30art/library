@@ -32,7 +32,7 @@ const BASE = process.env.SITE_URL || 'https://aka30art.github.io/library/';
    }else if(path==='explore.html'){
     await page.locator('#archive-search').fill('brushed aluminium');
     check(await page.locator('#prompt-grid .prompt-card').count()>0,'Explore live search returns results');
-    await page.locator('#category-filter').selectOption({label:/Materials/});
+    await page.locator('#category-filter').selectOption('materials');
     check(await page.locator('#prompt-grid .prompt-card').count()>0,'Collection filter returns results');
     check(await page.locator('#subcategory-filter option').count()>1,'Subcollection options populate');
     const first=page.locator('#prompt-grid .prompt-card').first();
