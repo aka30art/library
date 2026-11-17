@@ -1,13 +1,13 @@
 const collections = [
-  {id:"materials",name:"Materials",count:7,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"},
-  {id:"filter-effects",name:"Filter Effects",count:6,icon:"◉",tone:"blue",bg:"linear-gradient(135deg,#061b65,#5524b7 45%,#ff7b1a 75%,#0b1934)"},
-  {id:"mockups",name:"Mockups",count:5,icon:"⬡",tone:"violet",bg:"linear-gradient(130deg,#a4a6a6,#343a40 48%,#0e1218)"},
-  {id:"3d-rendering",name:"3D & Rendering",count:4,icon:"⬢",tone:"violet",bg:"radial-gradient(circle at 70% 20%,#ff8a1a,transparent 30%),linear-gradient(130deg,#121d3a,#080c16)"},
-  {id:"environments",name:"Environments",count:4,icon:"△",tone:"blue",bg:"linear-gradient(130deg,#172d42,#7a593c 50%,#0d1725)"},
-  {id:"photography",name:"Photography & Lighting",count:4,icon:"◉",tone:"orange",bg:"radial-gradient(circle at 80% 20%,#ff8a13,transparent 30%),linear-gradient(130deg,#252d36,#080b10)"},
-  {id:"graphic-design",name:"Graphic Design & Typography",count:4,icon:"Aa",tone:"orange",bg:"linear-gradient(110deg,#171b22,#e55b10 70%,#11151c)"},
-  {id:"transformations",name:"Transformations",count:4,icon:"▱",tone:"violet",bg:"linear-gradient(130deg,#17122c,#7447bc 50%,#12151e)"},
-  {id:"composition",name:"Composition & Art Direction",count:4,icon:"⌗",tone:"blue",bg:"linear-gradient(130deg,#f16c12 0 38%,#111721 39% 70%,#8c939a 71%)"}
+  {id:"materials",name:"Materials",count:3,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"},
+  {id:"filter-effects",name:"Filter Effects",count:3,icon:"◉",tone:"blue",bg:"linear-gradient(135deg,#061b65,#5524b7 45%,#ff7b1a 75%,#0b1934)"},
+  {id:"mockups",name:"Mockups",count:2,icon:"⬡",tone:"violet",bg:"linear-gradient(130deg,#a4a6a6,#343a40 48%,#0e1218)"},
+  {id:"3d-rendering",name:"3D & Rendering",count:0,icon:"⬢",tone:"violet",bg:"radial-gradient(circle at 70% 20%,#ff8a1a,transparent 30%),linear-gradient(130deg,#121d3a,#080c16)"},
+  {id:"environments",name:"Environments",count:0,icon:"△",tone:"blue",bg:"linear-gradient(130deg,#172d42,#7a593c 50%,#0d1725)"},
+  {id:"photography",name:"Photography & Lighting",count:0,icon:"◉",tone:"orange",bg:"radial-gradient(circle at 80% 20%,#ff8a13,transparent 30%),linear-gradient(130deg,#252d36,#080b10)"},
+  {id:"graphic-design",name:"Graphic Design & Typography",count:0,icon:"Aa",tone:"orange",bg:"linear-gradient(110deg,#171b22,#e55b10 70%,#11151c)"},
+  {id:"transformations",name:"Transformations",count:0,icon:"▱",tone:"violet",bg:"linear-gradient(130deg,#17122c,#7447bc 50%,#12151e)"},
+  {id:"composition",name:"Composition & Art Direction",count:0,icon:"⌗",tone:"blue",bg:"linear-gradient(130deg,#f16c12 0 38%,#111721 39% 70%,#8c939a 71%)"}
 ];
 const prompts = [
   {id:1,title:"Aged Concrete — Surface Texture",category:"materials",desc:"A high-fidelity aged concrete surface with fine pores, subtle mineral variation, realistic weathering and natural tonal depth.",prompt:"Aged concrete surface texture, fine irregular pores, subtle mineral deposits, realistic weathering, nuanced cool grey tonal variation, soft directional studio lighting, physically accurate roughness and micro-detail, seamless material study, neutral background, ultra-detailed, photorealistic.",negative:"Plastic appearance, repeating patterns, excessive cracks, artificial gloss, low resolution, text, watermark.",kind:"material",bg:"#45494b",art:"linear-gradient(135deg,#aaa,#494e52,#d1d0c8)",glow:"#747b7c",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:["Texture","Photorealistic","Surface study"]},
@@ -23,7 +23,7 @@ const $=s=>document.querySelector(s);
 const collectionName=id=>collections.find(c=>c.id===id)?.name||id;
 const promptGrid=$("#prompt-grid");
 let activePrompt=null,showingAll=false;
-function collectionCard(c){return `<a class="collection-card" data-tone="${c.tone}" href="#archive" data-category="${c.id}" style="--card-bg:${c.bg}"><span class="collection-icon">${c.icon}</span><span class="collection-meta"><strong>${c.name}</strong><small>${String(c.count).padStart(2,"0")} Prompts</small></span><span class="collection-arrow">→</span></a>`}
+function collectionCard(c){return `<a class="collection-card" data-tone="${c.tone}" href="#archive" data-category="${c.id}" style="--card-bg:${c.bg}"><span class="collection-icon">${c.icon}</span><span class="collection-meta"><strong>${c.name}</strong><small>${c.count ? String(c.count).padStart(2,"0")+" sample prompts" : "Planned collection"}</small></span><span class="collection-arrow">→</span></a>`}
 function thumb(p){return `<div class="prompt-thumb" data-kind="${p.kind}" style="--thumb-bg:${p.bg};--thumb-art:${p.art};--thumb-glow:${p.glow}"><div class="thumb-art"></div><button class="bookmark" aria-label="Save ${p.title}" title="Save prompt">♧</button></div>`}
 function promptCard(p){return `<article class="prompt-card" data-id="${p.id}" tabindex="0" role="button" aria-label="Open ${p.title}">${thumb(p)}<div class="prompt-info"><h3>${p.title}</h3><div class="prompt-meta"><span class="pill">${collectionName(p.category)}</span><small>Prompt ↗</small></div></div></article>`}
 function renderCollections(){$("#collection-grid").innerHTML=collections.map(collectionCard).join("");$("#category-filter").innerHTML='<option value="all">All collections</option>'+collections.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");document.querySelectorAll(".collection-card").forEach(el=>el.addEventListener("click",()=>{$("#category-filter").value=el.dataset.category;showingAll=true;filterPrompts();}));}
@@ -38,5 +38,5 @@ $("#focus-search").addEventListener("click",()=>{$("#hero-search").focus();windo
 $("#show-all").addEventListener("click",()=>{showingAll=true;filterPrompts();$("#archive").scrollIntoView({behavior:"smooth"});});
 $("#menu-toggle").addEventListener("click",()=>{const open=$("#mobile-menu").classList.toggle("open");$("#menu-toggle").setAttribute("aria-expanded",String(open));});
 document.querySelectorAll("#mobile-menu a").forEach(a=>a.addEventListener("click",()=>{$("#mobile-menu").classList.remove("open");$("#menu-toggle").setAttribute("aria-expanded","false");}));
-$("#newsletter").addEventListener("submit",e=>{e.preventDefault();$("#newsletter-message").textContent="Thanks — newsletter sign-up needs an email service connection.";e.target.reset();});
+$("#newsletter").addEventListener("submit",e=>{e.preventDefault();$("#newsletter-message").textContent="No email has been sent. Newsletter sign-up will activate when an email service is connected.";});
 document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#hero-search").focus();window.scrollTo({top:0,behavior:"smooth"});}});
