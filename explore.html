@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261117-clean-no-images">
+  <link rel="stylesheet" href="styles.css?v=20261118-subcategories-v1">
 </head>
 <body data-page="explore">
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
@@ -48,7 +48,7 @@
 
     <section class="section shell" id="archive">
       <div class="section-heading"><div><p class="eyebrow">THE PROMPT INDEX</p><h2>Featured prompts</h2></div><p class="section-note">Hand-picked prompts from across the library.</p><a href="explore.html#archive" class="text-link">Open archive <span>→</span></a></div>
-      <div class="archive-toolbar"><label class="search-box archive-search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="archive-search" type="search" placeholder="Search prompts, styles, materials…" autocomplete="off"></label><select id="category-filter" aria-label="Filter by collection"><option value="all">All collections</option></select><select id="subcategory-filter" aria-label="Filter Films & Shows subcategory" hidden><option value="all">All Films & Shows</option><option>TV Shows</option><option>Cartoons</option><option>Films</option><option>Anime</option><option>Other Screen Worlds</option></select><select id="model-filter" aria-label="Filter by model"><option value="all">All models</option><option>Midjourney</option><option>DALL·E</option><option>Stable Diffusion</option><option>Flux</option></select><select id="sort-filter" aria-label="Sort prompts"><option value="featured">Featured</option><option value="az">A–Z</option></select></div>
+      <div class="archive-toolbar"><label class="search-box archive-search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="archive-search" type="search" placeholder="Search prompts, styles, materials…" autocomplete="off"></label><select id="category-filter" aria-label="Filter by collection"><option value="all">All collections</option></select><select id="subcategory-filter" aria-label="Filter by subcategory" hidden><option value="all">All subcategories</option></select><select id="model-filter" aria-label="Filter by model"><option value="all">All models</option><option>Midjourney</option><option>DALL·E</option><option>Stable Diffusion</option><option>Flux</option></select><select id="sort-filter" aria-label="Sort prompts"><option value="featured">Featured</option><option value="az">A–Z</option></select></div>
       <div class="prompt-grid" id="prompt-grid"></div>
       <p class="empty-state" id="empty-state" hidden>No prompts match your search. Try a different term or collection.</p>
       <div class="archive-bottom"><span id="result-count">Showing featured prompts</span><button class="button button-outline" id="show-all">View all prompts <span>→</span></button></div>
@@ -73,12 +73,12 @@
 
   <dialog class="prompt-dialog" id="prompt-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close prompt detail">×</button></form><div id="dialog-content"></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="catalogue-expansion.js?v=20261117-clean-no-images"></script>
+  <script src="catalogue-expansion.js?v=20261118-subcategories-v1"></script>
   <script>
     if (!Array.isArray(window.AI_PROMPT_EXPANSION)) {
       document.write('<script src="backups/2026-11-17/catalogue-expansion.js"><\\/script>');
     }
   </script>
-  <script src="app.js?v=20261117-clean-no-images"></script>
+  <script src="app.js?v=20261118-subcategories-v1"></script>
 </body>
 </html>
