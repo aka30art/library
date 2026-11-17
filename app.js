@@ -285,37 +285,47 @@ let toastTimer;function showToast(msg){const t=$("#toast");t.textContent=msg;t.c
 renderCollections();filterPrompts();
 const promptOfDay=prompts[new Date().getDate()%prompts.length];if(promptOfDay){const pod=$("#prompt-of-day");if(pod){pod.innerHTML=`<span class="eyebrow">PROMPT OF THE DAY</span><strong>${promptOfDay.title}</strong><p>${promptOfDay.desc}</p><button class="button button-orange" id="open-pod">Explore prompt →</button>`;$("#open-pod").addEventListener("click",()=>openPrompt(promptOfDay.id));}}
 const builder=$("#dna-builder");if(builder){
- const typeSelect=$("#builder-type"),categorySelect=$("#builder-category"),subcategorySelect=$("#builder-subcategory"),promptSelect=$("#builder-base");
- const categoryPrompts=()=>prompts.filter(p=>p.category===categorySelect.value);
- const populateSubcategories=()=>{
-  const items=categoryPrompts();
-  const tags=[...new Set(items.flatMap(p=>Array.isArray(p.tags)?p.tags:[]))].sort((a,b)=>a.localeCompare(b));
-  subcategorySelect.innerHTML='<option value="all">All subcategories</option>'+tags.map(t=>`<option value="${t}">${t}</option>`).join("");
-  populatePromptOptions();
- };
- const populatePromptOptions=()=>{
-  const tag=subcategorySelect.value;
-  const items=categoryPrompts().filter(p=>tag==="all"||(Array.isArray(p.tags)&&p.tags.includes(tag))).sort((a,b)=>a.title.localeCompare(b.title));
-  promptSelect.innerHTML=items.map(p=>`<option value="${p.id}">${p.title}</option>`).join("");
-  compose();
+ const groups=[
+  {id:"materials",label:"Materials",categories:["materials"],description:"Physical substances, finishes and material behaviour."},
+  {id:"styles",label:"Visual styles",categories:["graphic-design","anime-manga","surrealism","animation-toy-worlds"],description:"Visual languages, art movements and stylistic treatments."},
+  {id:"effects",label:"Effects & optics",categories:["filter-effects","typography-effects","motion"],description:"Optical, photographic, digital and surface effects."},
+  {id:"textures",label:"Textures & surfaces",categories:["materials"],description:"Surface qualities, grain, relief and tactile detail."},
+  {id:"lighting",label:"Lighting",categories:["photography"],description:"Lighting setups, atmosphere and illumination behaviour."},
+  {id:"composition",label:"Composition & framing",categories:["composition"],description:"Spatial organisation, visual hierarchy and framing."},
+  {id:"rendering",label:"Rendering & image craft",categories:["3d-rendering"],description:"Rendering methods, image fidelity and production finish."},
+  {id:"transformation",label:"Transformations",categories:["transformations"],description:"Transfer a visual treatment onto an existing source image."}
+ ];
+ const selected=new Set();
+ const byId=new Map(prompts.map(p=>[String(p.id),p]));
+ const universal=groups.flatMap(g=>g.categories).reduce((s,c)=>s.add(c),new Set());
+ const uniquePrompts=[...new Map(prompts.filter(p=>universal.has(p.category)).map(p=>[String(p.id),p])).values()];
+ const groupItems=(g)=>uniquePrompts.filter(p=>g.categories.includes(p.category)).sort((a,b)=>a.title.localeCompare(b.title));
+ const esc=(v)=>String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+ const renderGroups=()=>{
+  $("#builder-modules").innerHTML=groups.map(g=>{
+   const items=groupItems(g);
+   return '<section class="builder-module"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span>'+items.length+' elements</span></div><div class="builder-module-grid">'+items.map(p=>'<label class="builder-option"><input type="checkbox" data-prompt-id="'+p.id+'" '+(selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label>').join("")+'</div></section>';
+  }).join("");
+  $("#builder-modules").querySelectorAll('input[data-prompt-id]').forEach(input=>input.addEventListener("change",()=>{const id=input.dataset.promptId;if(input.checked)selected.add(id);else selected.delete(id);compose();}));
  };
  const compose=()=>{
-  const p=prompts.find(x=>x.id===Number(promptSelect.value));
-  if(!p){$("#builder-output").textContent="No prompts are available for this selection.";return;}
-  const light=$("#builder-light").value,style=$("#builder-style").value,frame=$("#builder-frame").value;
-  const type=typeSelect.value;
-  const adjustments=`\\n\\nAdditional art direction: ${style}. Lighting: ${light}. Composition: ${frame}.`;
-  const output=type==="art-dna"?masterPrompt(p):type==="transformation"?universalTransformationPrompt(p):p.prompt;
-  $("#builder-output").textContent=output+adjustments;
+  const chosen=[...selected].map(id=>byId.get(id)).filter(Boolean);
+  const type=$("#builder-type").value;
+  const style=$("#builder-style").value.trim();
+  const light=$("#builder-light").value.trim();
+  const frame=$("#builder-frame").value.trim();
+  const source=$("#builder-source").value.trim();
+  const sections=chosen.map(p=>p.title+"\n"+p.prompt).join("\n\n");
+  const treatment=type==="transformation"?"Apply the selected visual modules to the supplied source image. Preserve the source subject, identity, defining features, proportions, pose and essential composition; change only the requested visual treatment.":type==="art-dna"?"Create a cohesive ART DNA system from the selected visual modules. Resolve conflicts intelligently, establish a clear hierarchy and apply consistent visual logic throughout.":"Create a coherent image using the selected visual modules as independent, compatible art-direction instructions.";
+  const output=["PROMPT DNA — MODULAR VISUAL SYSTEM",treatment,source?"SOURCE / SUBJECT:\n"+source:"",sections?"SELECTED VISUAL MODULES:\n"+sections:"SELECT AT LEAST ONE VISUAL MODULE TO BEGIN.", "ADDITIONAL ART DIRECTION:\nVisual style: "+(style||"No additional style specified")+".\nLighting: "+(light||"No additional lighting specified")+".\nComposition: "+(frame||"No additional composition specified")+".","INTEGRATION RULES:\nTreat each selected module as an independent instruction. Combine them without allowing one module to replace or contradict the others. Preserve material accuracy, visual coherence, controlled detail, clear focal hierarchy and professional image quality. Avoid unrelated objects, arbitrary decoration, visual clutter, inconsistent lighting and conflicting surface behaviour."].filter(Boolean).join("\n\n");
+  $("#builder-output").textContent=output;
+  $("#builder-selection-count").textContent=chosen.length+" selected";
  };
- categorySelect.innerHTML=collections.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
- typeSelect.addEventListener("change",compose);
- categorySelect.addEventListener("change",populateSubcategories);
- subcategorySelect.addEventListener("change",populatePromptOptions);
- promptSelect.addEventListener("change",compose);
- ["builder-light","builder-style","builder-frame"].forEach(id=>$("#"+id).addEventListener("change",compose));
+ $("#builder-type").addEventListener("change",compose);
+ ["builder-style","builder-light","builder-frame","builder-source"].forEach(id=>$("#"+id).addEventListener(id==="builder-source"?"input":"change",compose));
+ $("#builder-clear").addEventListener("click",()=>{selected.clear();renderGroups();compose();});
  $("#copy-builder").addEventListener("click",()=>copyText($("#builder-output").textContent));
- populateSubcategories();
+ renderGroups();compose();
 }
 ["archive-search","category-filter","model-filter","visual-filter","sort-filter"].forEach(id=>$("#"+id).addEventListener(id==="archive-search"?"input":"change",()=>{showingAll=true;filterPrompts();}));
 const pageType=document.body.dataset.page||"home";
