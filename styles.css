@@ -126,3 +126,9 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 .builder-option .builder-visual:hover{border-color:#e87935;background:rgba(232,121,53,.12)}
 @media(max-width:560px){.visual-reference{padding:13px}.visual-reference-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-reference-card img,.visual-reference-loading span{height:118px}.visual-reference-heading h3{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.visual-reference-loading span{animation:none}}
+
+.visual-reference-image-link{display:block;overflow:hidden;background:#202a34}
+.visual-reference-image-link img{transition:transform .25s ease}
+.visual-reference-card:hover .visual-reference-image-link img{transform:scale(1.035)}
+.visual-reference-source-link{color:#ff9a54;font-size:9px;text-decoration:none;margin-top:3px}
+.visual-reference-source-link:hover,.visual-license:hover{text-decoration:underline}
