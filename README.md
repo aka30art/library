@@ -28,7 +28,7 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue now contains 86 authored prompt records across all nine collections: Materials (13), Filters & Effects (13), Mockups (12), 3D & Rendering (8), Environments (8), Photography & Lighting (8), Graphic Design & Typography (8), Transformations (8), and Composition & Art Direction (8). The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
+The catalogue now contains 181 authored prompt records across all nine collections. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
 
 ### Prompt design and research basis
 
