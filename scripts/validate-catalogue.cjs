@@ -20,16 +20,16 @@ for (const p of all) {
   ids.add(String(p.id));
   for (const field of ['title','prompt','negative','tags','model']) if (p[field] == null || (Array.isArray(p[field]) && !p[field].length)) errors.push(`Prompt ${p.id} missing ${field}`);
 }
-const expected = ['materials','styles','effects','lighting','composition','rendering','transformations'];
-if (collections.length !== expected.length || expected.some((id,i)=>collections[i]?.id!==id)) errors.push('Public collections must be the seven agreed universal groups in order');
+const expected = ['toys-collectibles','objects-products','characters-creatures','fashion-accessories','architecture-spaces','nature-organic','art-illustration','materials'];
+if (collections.length !== expected.length || expected.some((id,i)=>collections[i]?.id!==id)) errors.push('Public collections must be the eight neutral core groups in order');
 if (all.length !== 1001) errors.push(`Expected 1001 preserved source prompts, found ${all.length}`);
 const pages = ['index.html','explore.html','builder.html'].map(file => [file,fs.readFileSync(file,'utf8')]);
 for (const [file,html] of pages) {
- if (!html.includes('catalogue-expansion.js?v=20261117-universal-collections1')) errors.push(`${file} has stale catalogue asset version`);
- if (!html.includes('app.js?v=20261117-universal-collections1')) errors.push(`${file} has stale app asset version`);
+ if (!html.includes('catalogue-expansion.js?v=20261117-neutral-core1')) errors.push(`${file} has stale catalogue asset version`);
+ if (!html.includes('app.js?v=20261117-neutral-core1')) errors.push(`${file} has stale app asset version`);
  if (!html.includes('backups/2026-11-17/catalogue-expansion.js')) errors.push(`${file} missing recovery loader`);
 }
 if (!fs.readFileSync('explore.html','utf8').includes('id="category-filter"')) errors.push('Explore collection filter missing');
-if (fs.readFileSync('explore.html','utf8').includes('id="visual-filter"')) errors.push('Narrow visual subfilter should be removed');
+if (fs.readFileSync('explore.html','utf8').includes('id="visual-filter"') || fs.readFileSync('index.html','utf8').includes('id="visual-filter"')) errors.push('Narrow visual subfilter should be removed');
 if (errors.length) { console.error('CATALOGUE VALIDATION FAILED'); errors.forEach(e=>console.error('- '+e)); process.exit(1); }
-console.log(`Validation passed: ${all.length} source prompts preserved, ${collections.length} universal collections, duplicate IDs absent, required fields complete, no narrow visual subfilter, page assets synchronized.`);
+console.log(`Validation passed: ${all.length} source prompts preserved, ${collections.length} neutral core collections, duplicate IDs absent, required fields complete, no visible visual-specification filter, page assets synchronized.`);
