@@ -28,7 +28,19 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The current data file contains a small representative seed catalogue to demonstrate the interface. The project history refers to 36 existing prompts and three active collections, but those source prompt records were not present in the empty GitHub repository at initialisation. The nine collection pathways are represented; the remaining prompt records should be imported from the authoritative prompt library rather than fabricated.
+The current catalogue contains 38 authored prompt records across three populated collections: Materials (13), Filters & Effects (13), and Mockups (12). Six additional collection pathways are scaffolded but remain unpopulated: 3D & Rendering, Environments, Photography & Lighting, Graphic Design & Typography, Transformations, and Composition & Art Direction. The original 36-record source catalogue was not present in the repository at initialisation, so this first expanded set is newly researched and authored rather than represented as an import of those missing records.
+
+### Prompt design and research basis
+
+Prompts specify visible outcomes and relevant technical behaviour instead of relying on generic quality adjectives. Material entries distinguish base appearance, microtexture, roughness, metallic response, anisotropic reflection, transmission, refraction and lighting. Effect entries distinguish optical phenomena from post-production treatments and constrain intensity, subject preservation and edge behaviour. Mockup entries define product geometry, view angle, material response, blank artwork zones, lighting and commercial presentation constraints.
+
+Research references:
+- OpenAI, Image prompting: https://developers.openai.com/api/docs/guides/image-prompting
+- Khronos Group, Physically Based Rendering in glTF: https://www.khronos.org/gltf/pbr/
+- Adobe Substance 3D, OpenPBR FAQ: https://experienceleague.adobe.com/en/docs/substance-3d/general-knowledge/openpbr/openpbr-faq
+- MIT, Computational Photography — lens filters: https://people.csail.mit.edu/fredo/comp-photo-book/02-fundamentals-10-photography-and-camera-101.html
+- GS1, Product Image Specification Standard: https://assets.ctfassets.net/9uypwcnuzbqi/Rk3x9bOpgBMnlPYajw4tT/5a261266d2afba045bd5cc00844056e7/GS1-technical-product-image-specification-standard.pdf
+- GS1 US, Best Practice Guideline for Exchanging Product Images and Attributes: https://www.gs1us.org/content/dam/gs1us/documents/industries-insights/by-industry/apparel-general-merchandise/guideline-toolkit/Guideline-Best-Practice-Guideline-for-Exchanging-Product-Images-and-Attributes.pdf
 
 ## Integrations still required
 
