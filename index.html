@@ -11,12 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page="home">
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="site-header">
-    <a class="brand" href="#home" aria-label="AI Prompt Library home"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a>
+    <a class="brand" href="index.html" aria-label="AI Prompt Library home"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a>
     <nav class="desktop-nav" aria-label="Main navigation">
-      <a class="nav-link active" href="#home">Home</a><a class="nav-link" href="#archive">Prompts</a><a class="nav-link" href="#collections">Collections</a><a class="nav-link" href="#dna-builder">DNA Builder</a><a class="nav-link" href="#guides">Guides</a><a class="nav-link" href="#tools">Tools</a><a class="nav-link" href="#about">About</a>
+      <a class="nav-link active" href="#home">Home</a><a class="nav-link " href="explore.html#archive">Prompts</a><a class="nav-link " href="explore.html#collections">Collections</a><a class="nav-link " href="builder.html">DNA Builder</a><a class="nav-link" href="explore.html#guides">Guides</a><a class="nav-link" href="explore.html#tools">Tools</a><a class="nav-link" href="explore.html#about">About</a>
     </nav>
     <div class="header-actions"><button class="icon-button" id="focus-search" aria-label="Focus search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></button><button class="menu-button" id="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button><a class="button button-small button-orange header-cta" href="#archive">Get started <span>↗</span></a></div>
   </header>
@@ -47,7 +47,7 @@
     </section>
 
     <section class="section shell" id="archive">
-      <div class="section-heading"><div><p class="eyebrow">THE PROMPT INDEX</p><h2>Featured prompts</h2></div><p class="section-note">Hand-picked prompts from across the library.</p><a href="#all-prompts" class="text-link">Open archive <span>→</span></a></div>
+      <div class="section-heading"><div><p class="eyebrow">THE PROMPT INDEX</p><h2>Featured prompts</h2></div><p class="section-note">Hand-picked prompts from across the library.</p><a href="explore.html#archive" class="text-link">Open archive <span>→</span></a></div>
       <div class="archive-toolbar"><label class="search-box archive-search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="archive-search" type="search" placeholder="Search prompts, styles, materials…" autocomplete="off"></label><select id="category-filter" aria-label="Filter by collection"><option value="all">All collections</option></select><select id="model-filter" aria-label="Filter by model"><option value="all">All models</option><option>Midjourney</option><option>DALL·E</option><option>Stable Diffusion</option><option>Flux</option></select><select id="visual-filter" aria-label="Filter by visual quality"><option value="all">All visual traits</option><option value="metal">Metal</option><option value="texture">Texture</option><option value="glass">Glass</option><option value="editorial">Editorial</option><option value="cinematic">Cinematic</option><option value="macro">Macro</option></select><select id="sort-filter" aria-label="Sort prompts"><option value="featured">Featured</option><option value="az">A–Z</option></select></div>
       <div class="prompt-grid" id="prompt-grid"></div>
       <p class="empty-state" id="empty-state" hidden>No prompts match your search. Try a different term or collection.</p>
@@ -73,7 +73,7 @@
 
   <dialog class="prompt-dialog" id="prompt-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close prompt detail">×</button></form><div id="dialog-content"></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="catalogue-expansion.js?v=20261117-962709"></script>
-  <script src="app.js?v=20261117-962709"></script>
+  <script src="catalogue-expansion.js?v=20261117-pages1"></script>
+  <script src="app.js?v=20261117-pages1"></script>
 </body>
 </html>
