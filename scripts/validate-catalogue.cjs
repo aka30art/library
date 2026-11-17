@@ -48,4 +48,4 @@ for(const term of ['material','surface','texture','style-transfer','hybrid'])if(
 if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-subcategories-v1'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
-console.log('PASS: 1,281 prompts, ten collections, category-specific subcategory filters, five Films & Shows subcategories ×70, 56 mainstream collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
+console.log('PASS: 1,281 prompts, ten collections, category-specific subcategory filters, five Films & Shows subcategories ×70, 84 mainstream collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
