@@ -230,9 +230,71 @@ Do not change the core subject, remove essential details, invent unrelated objec
 OUTPUT INTENT:
 ${p.desc}
 Create a resolved, high-quality image with strong visual identity and disciplined execution.`;}
+function universalTemplatePrompt(p){
+return `UNIVERSAL TEMPLATE PROMPT — VARIABLE-BASED GENERATION
+Use this reusable structure to generate a new visual from a defined creative brief. Replace every bracketed field with a precise value; remove any field that is not relevant. Do not leave unresolved placeholders in the final generation.
+
+[PRIMARY SUBJECT]: ${p.title.split(" — ")[0]} / [INSERT SUBJECT OR OBJECT]
+[SUBJECT DESCRIPTION & DISTINCTIVE FEATURES]: [DEFINE FORM, IDENTITY, PROPORTIONS, DETAILS AND REQUIRED CHARACTERISTICS]
+[VISUAL STYLE / ART MOVEMENT]: [INSERT STYLE, REFERENCE LANGUAGE OR ART DIRECTION]
+[MEDIUM / MATERIAL / SURFACE]: [INSERT MATERIALS, FINISHES, TEXTURES OR RENDERING MEDIUM]
+[ENVIRONMENT / BACKGROUND]: [INSERT SETTING, CONTEXT AND ATMOSPHERIC CONDITIONS]
+[COMPOSITION & CAMERA]: [INSERT VIEWPOINT, LENS OR PERSPECTIVE, FRAMING, SCALE, HIERARCHY AND NEGATIVE SPACE]
+[LIGHTING]: [INSERT LIGHT SOURCE, DIRECTION, QUALITY, CONTRAST AND COLOUR TEMPERATURE]
+[COLOUR SYSTEM]: [INSERT PALETTE, TONAL RANGE AND COLOUR RELATIONSHIPS]
+[DETAIL & FIDELITY]: [INSERT REQUIRED MICRO-DETAIL, REALISM LEVEL, EDGE QUALITY AND FINISH]
+[OUTPUT FORMAT / PURPOSE]: [INSERT ASPECT RATIO, RESOLUTION, PRESENTATION OR PRODUCTION USE]
+
+GENERATION BRIEF:
+Create [PRIMARY SUBJECT] as [SUBJECT DESCRIPTION & DISTINCTIVE FEATURES]. Interpret the brief through [VISUAL STYLE / ART MOVEMENT], using [MEDIUM / MATERIAL / SURFACE]. Place the subject within [ENVIRONMENT / BACKGROUND]. Construct the image using [COMPOSITION & CAMERA]. Illuminate it with [LIGHTING] and apply [COLOUR SYSTEM]. Prioritise [DETAIL & FIDELITY]. The final output must satisfy [OUTPUT FORMAT / PURPOSE].
+
+SUBJECT-SPECIFIC CREATIVE DIRECTION:
+Use the following specialist reference as the starting point, adapting it to the completed variables rather than copying it mechanically:
+${p.prompt}
+
+QUALITY CONTROL:
+Maintain internal consistency between subject, scale, materials, lighting, perspective and visual style. Establish one clear focal hierarchy. Avoid generic filler, contradictory instructions, accidental clutter, malformed structure, weak material response and details that do not support the brief.
+
+[NEGATIVE PROMPT / EXCLUSIONS]: ${p.negative}
+`;
+}
+function universalTransformationPrompt(p){
+return `UNIVERSAL TRANSFORMATION PROMPT — SOURCE-BASED VISUAL TRANSFORMATION
+Transform the supplied source image, subject, object or composition. This is an image-to-image / source-led transformation task, not a request to invent an unrelated new image. Treat the supplied source as the ground truth.
+
+[SOURCE INPUT]: [ATTACH OR IDENTIFY THE EXISTING IMAGE, SUBJECT, OBJECT OR COMPOSITION]
+[TRANSFORMATION OBJECTIVE]: [STATE EXACTLY WHAT MUST CHANGE]
+[VISUAL STYLE / ART DIRECTION]: [INSERT TARGET STYLE, ART MOVEMENT OR REFERENCE LANGUAGE]
+[MATERIAL / MEDIUM / SURFACE CHANGE]: [INSERT REQUIRED MATERIAL, TEXTURE, FINISH OR RENDERING TREATMENT]
+[COLOUR & TONAL CHANGE]: [INSERT PALETTE, COLOURWAY OR TONAL TREATMENT]
+[LIGHTING / ATMOSPHERE CHANGE]: [INSERT REQUIRED LIGHTING OR ATMOSPHERIC ADJUSTMENT]
+[COMPOSITIONAL CHANGE]: [SPECIFY ANY PERMITTED CAMERA, CROP, BACKGROUND OR LAYOUT CHANGE; OTHERWISE LOCK IT]
+[DETAILS TO PRESERVE]: [LIST IDENTITY, SHAPE, GEOMETRY, PROPORTIONS, POSE, EXPRESSION, OBJECTS, TEXT, LOGOS, PATTERNS OR OTHER SOURCE FEATURES]
+[OUTPUT REQUIREMENTS]: [INSERT FORMAT, RESOLUTION, ASPECT RATIO AND FINISH]
+
+TRANSFORMATION INSTRUCTION:
+Apply [TRANSFORMATION OBJECTIVE] to the supplied source, translating its appearance into [VISUAL STYLE / ART DIRECTION] and, where specified, [MATERIAL / MEDIUM / SURFACE CHANGE]. Apply [COLOUR & TONAL CHANGE] and [LIGHTING / ATMOSPHERE CHANGE] only to the extent required by the brief. Treat every requested modification as a controlled edit to the existing source rather than permission to redesign the entire image.
+
+SOURCE-PRESERVATION PROTOCOL:
+Preserve the original subject's identity and recognisable characteristics, silhouette, proportions, pose, expression, object geometry, spatial relationships, camera viewpoint, perspective, framing and composition unless a specific change is explicitly requested. Retain all unmentioned elements exactly as they appear. Do not add, remove, replace, reinterpret or relocate objects without instruction. Keep original text, logos, symbols and fine identifying details accurate and undistorted. Maintain continuity of shadows, reflections, contact points and occlusion wherever compatible with the requested transformation.
+
+TRANSFORMATION CONTROL:
+Change only the specified attributes. Confine material, colour, texture, lighting and style changes to the relevant surfaces or regions. Respect existing boundaries and masks; prevent colour spill, texture leakage, geometry drift, identity drift and unintended global effects. If the requested style conflicts with source fidelity, preserve source structure first and apply the style through rendering, surface treatment and controlled visual language.
+
+TARGET VISUAL REFERENCE:
+Use this prompt's original creative intent as the transformation target:
+${p.prompt}
+
+EXCLUSIONS:
+${p.negative}
+Also avoid unrequested composition changes, identity alteration, subject substitution, extra elements, missing source details, warped geometry, accidental cropping, inconsistent perspective and loss of source-specific information.
+
+[OUTPUT REQUIREMENTS]: ${p.desc}
+`;
+}
 function renderCollections(){$("#collection-grid").innerHTML=collections.map(collectionCard).join("");$("#category-filter").innerHTML='<option value="all">All collections</option>'+collections.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");document.querySelectorAll(".collection-card").forEach(el=>el.addEventListener("click",()=>{$("#category-filter").value=el.dataset.category;showingAll=true;filterPrompts();}));}
 function filterPrompts(){const q=$("#archive-search").value.trim().toLowerCase();const cat=$("#category-filter").value;const model=$("#model-filter").value;const visual=$("#visual-filter")?.value||"all";const sort=$("#sort-filter").value;let list=prompts.filter(p=>(cat==="all"||p.category===cat)&&(model==="all"||p.model.includes(model))&&(visual==="all"||(p.tags||[]).some(t=>t.toLowerCase().includes(visual)))&&[p.title,p.desc,p.prompt,p.tags.join(" "),collectionName(p.category)].join(" ").toLowerCase().includes(q));if(!showingAll)list=list.slice(0,5);if(sort==="az")list.sort((a,b)=>a.title.localeCompare(b.title));promptGrid.innerHTML=list.map(promptCard).join("");$("#empty-state").hidden=list.length>0;$("#result-count").textContent=`Showing ${list.length} of ${prompts.length} available sample prompts`;document.querySelectorAll(".prompt-card").forEach(card=>{card.addEventListener("click",e=>{if(e.target.closest(".bookmark"))return;openPrompt(Number(card.dataset.id));});card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPrompt(Number(card.dataset.id));}});});document.querySelectorAll(".bookmark").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();btn.classList.toggle("saved");btn.textContent=btn.classList.contains("saved")?"♥":"♧";showToast(btn.classList.contains("saved")?"Saved to this session":"Removed from saved");}));}
-function openPrompt(id){const p=prompts.find(x=>x.id===id);if(!p)return;activePrompt=p;$("#dialog-content").innerHTML=`<p class="detail-category">${collectionName(p.category)} / PROMPT ${String(p.id).padStart(3,"0")}</p><h2 class="detail-title">${p.title}</h2><p class="detail-desc">${p.desc}</p><div class="detail-tags">${p.model.map(m=>`<span>${m}</span>`).join("")}${p.tags.map(t=>`<span>${t}</span>`).join("")}<span class="difficulty-tag">${difficulty(p)}</span></div><div class="prompt-mode-tabs"><button class="mode-tab active" data-mode="standard">Standard Prompt</button><button class="mode-tab" data-mode="master">MASTER PROMPT · ART DNA</button></div><p class="prompt-label" id="active-prompt-label">STANDARD PROMPT / COPY-READY</p><div class="prompt-code" id="detail-prompt"></div><div class="detail-actions"><button class="button button-orange" id="copy-prompt">▢ Copy selected prompt</button><button class="button button-outline" id="copy-negative">▢ Copy negative prompt</button></div><div class="detail-extra"><details open><summary>Prompt breakdown</summary><p>This prompt is structured around the subject, material or effect, physical characteristics, lighting, composition and output quality. Keep these components intact when adapting the prompt.</p></details><details><summary>Variation ideas</summary><p>Try changing the lighting direction, camera distance, colour temperature or environment while keeping the core concept consistent.</p></details></div>`;let mode="standard";const chosen=()=>mode==="master"?masterPrompt(p):p.prompt;$("#detail-prompt").textContent=chosen();document.querySelectorAll(".mode-tab").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;document.querySelectorAll(".mode-tab").forEach(x=>x.classList.toggle("active",x===b));$("#active-prompt-label").textContent=mode==="master"?"MASTER PROMPT / UNIVERSAL ART DNA":"STANDARD PROMPT / COPY-READY";$("#detail-prompt").textContent=chosen();}));$("#copy-prompt").addEventListener("click",()=>copyText(chosen()));$("#copy-negative").addEventListener("click",()=>copyText(p.negative));$("#prompt-dialog").showModal();}
+function openPrompt(id){const p=prompts.find(x=>x.id===id);if(!p)return;activePrompt=p;$("#dialog-content").innerHTML=`<p class="detail-category">${collectionName(p.category)} / PROMPT ${String(p.id).padStart(3,"0")}</p><h2 class="detail-title">${p.title}</h2><p class="detail-desc">${p.desc}</p><div class="detail-tags">${p.model.map(m=>`<span>${m}</span>`).join("")}${p.tags.map(t=>`<span>${t}</span>`).join("")}<span class="difficulty-tag">${difficulty(p)}</span></div><div class="prompt-mode-tabs"><button class="mode-tab active" data-mode="standard">Standard Prompt</button><button class="mode-tab" data-mode="template">Universal Template</button><button class="mode-tab" data-mode="transformation">Universal Transformation</button><button class="mode-tab" data-mode="master">MASTER PROMPT · ART DNA</button></div><p class="prompt-label" id="active-prompt-label">STANDARD PROMPT / COPY-READY</p><div class="prompt-code" id="detail-prompt"></div><div class="detail-actions"><button class="button button-orange" id="copy-prompt">▢ Copy selected prompt</button><button class="button button-outline" id="copy-negative">▢ Copy negative prompt</button></div><div class="detail-extra"><details open><summary>Prompt breakdown</summary><p>This prompt is structured around the subject, material or effect, physical characteristics, lighting, composition and output quality. Keep these components intact when adapting the prompt.</p></details><details><summary>Variation ideas</summary><p>Try changing the lighting direction, camera distance, colour temperature or environment while keeping the core concept consistent.</p></details></div>`;let mode="standard";const chosen=()=>mode==="master"?masterPrompt(p):mode==="template"?universalTemplatePrompt(p):mode==="transformation"?universalTransformationPrompt(p):p.prompt;$("#detail-prompt").textContent=chosen();document.querySelectorAll(".mode-tab").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;document.querySelectorAll(".mode-tab").forEach(x=>x.classList.toggle("active",x===b));$("#active-prompt-label").textContent=mode==="master"?"MASTER PROMPT / UNIVERSAL ART DNA":mode==="template"?"UNIVERSAL TEMPLATE / VARIABLE-BASED GENERATION":mode==="transformation"?"UNIVERSAL TRANSFORMATION / SOURCE-BASED EDITING":"STANDARD PROMPT / COPY-READY";$("#detail-prompt").textContent=chosen();}));$("#copy-prompt").addEventListener("click",()=>copyText(chosen()));$("#copy-negative").addEventListener("click",()=>copyText(p.negative));$("#prompt-dialog").showModal();}
 async function copyText(text){try{await navigator.clipboard.writeText(text);showToast("Prompt copied to clipboard");}catch{const area=document.createElement("textarea");area.value=text;document.body.append(area);area.select();document.execCommand("copy");area.remove();showToast("Prompt copied");}}
 let toastTimer;function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);}
 renderCollections();filterPrompts();
