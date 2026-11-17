@@ -133,16 +133,3 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 .visual-reference-source-link{color:#ff9a54;font-size:9px;text-decoration:none;margin-top:3px}
 .visual-reference-source-link:hover,.visual-license:hover{text-decoration:underline}
 
-/* One best visual example is shown directly in every prompt card */
-.prompt-thumb-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s ease;z-index:0}
-.prompt-thumb.has-visual .prompt-thumb-image{opacity:1}
-.prompt-thumb.has-visual .thumb-art{display:none}
-.prompt-thumb.has-visual:after{background:linear-gradient(0deg,rgba(0,0,0,.58),transparent 34%)}
-.thumb-credit{position:absolute;z-index:2;left:9px;bottom:7px;max-width:calc(100% - 54px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:4px 6px;border-radius:4px;background:rgba(5,8,12,.72);color:#e5eaf0;font:500 8px/1.2 Inter,sans-serif;text-decoration:none}
-.thumb-credit[hidden]{display:none}
-.thumb-credit:hover{color:#ffb17a;text-decoration:underline}
-.prompt-thumb .bookmark{z-index:3}
-.visual-reference-grid{grid-template-columns:minmax(0,1fr)}
-.visual-reference-card img{height:260px}
-@media(max-width:560px){.visual-reference-card img{height:220px}}
-@media(prefers-reduced-motion:reduce){.prompt-thumb-image{transition:none}}
