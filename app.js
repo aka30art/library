@@ -24,7 +24,7 @@ const collectionName=id=>collections.find(c=>c.id===id)?.name||id;
 const promptGrid=$("#prompt-grid");
 let activePrompt=null,showingAll=document.body.dataset.page==="explore";
 function collectionCard(c){return `<a class="collection-card" data-tone="${c.tone}" href="#archive" data-category="${c.id}" style="--card-bg:${c.bg}"><span class="collection-icon">${c.icon}</span><span class="collection-meta"><strong>${c.name}</strong><small>${c.count} prompts</small></span><span class="collection-arrow">→</span></a>`}
-function thumb(p){return `<div class="prompt-thumb" data-kind="${p.kind}" style="--thumb-bg:${p.bg};--thumb-art:${p.art};--thumb-glow:${p.glow}"><div class="thumb-art"></div><button class="bookmark" aria-label="Save ${p.title}" title="Save prompt">♧</button></div>`}
+function thumb(p){return `<div class="prompt-thumb" data-kind="${p.kind}" data-visual-id="${p.id}" style="--thumb-bg:${p.bg};--thumb-art:${p.art};--thumb-glow:${p.glow}"><div class="thumb-art"></div><img class="prompt-thumb-image" alt="${visualEscape(p.title)} visual example" loading="lazy" decoding="async" referrerpolicy="no-referrer"><a class="thumb-credit" hidden target="_blank" rel="noopener noreferrer" aria-label="Open image source">IMAGE SOURCE ↗</a><button class="bookmark" aria-label="Save ${p.title}" title="Save prompt">♧</button></div>`}
 function promptCard(p){return `<article class="prompt-card" data-id="${p.id}" tabindex="0" role="button" aria-label="Open ${p.title}">${thumb(p)}<div class="prompt-info"><h3>${p.title}</h3><div class="prompt-meta"><span class="pill">${collectionName(p.category)}</span><small>${difficulty(p)} ↗</small></div></div></article>`}
 function difficulty(p){const t=(p.tags||[]).join(" ").toLowerCase();return p.difficulty||((p.prompt.length>520||/technical|optical|physics|procedural|macro/.test(t))?"Professional":p.prompt.length>300?"Advanced":"Foundation");}
 function masterPrompt(p){return `UNIVERSAL ART DNA — MASTER PROMPT
@@ -135,6 +135,7 @@ function filterPrompts(){
  if(!showingAll)list=list.slice(0,5);
  if(sort==="az")list.sort((a,b)=>a.title.localeCompare(b.title));
  promptGrid.innerHTML=list.map(promptCard).join("");
+ initCardVisuals();
  $("#empty-state").hidden=list.length>0;
  $("#result-count").textContent=`Showing ${list.length} of ${prompts.length} prompts across ${collections.length} collections`;
  document.querySelectorAll(".prompt-card").forEach(card=>{
@@ -153,6 +154,42 @@ function visualSearchQuery(p,plain=false){
 }
 function visualCacheRead(key){try{const raw=localStorage.getItem(key);if(!raw)return null;const data=JSON.parse(raw);if(!data.savedAt||Date.now()-data.savedAt>1000*60*60*24*30)return null;return data.results||null;}catch{return null;}}
 function visualCacheWrite(key,results){try{localStorage.setItem(key,JSON.stringify({savedAt:Date.now(),results}));}catch{}}
+const cardVisualLoads=new Map();
+async function fetchBestVisual(p){
+ const query=visualSearchQuery(p),cacheKey="aka-library-visual-v1:"+p.id,cached=visualCacheRead(cacheKey);
+ if(cached?.length)return cached[0];
+ if(cardVisualLoads.has(cacheKey))return cardVisualLoads.get(cacheKey);
+ const task=(async()=>{
+  const request=async(q)=>{const url=new URL("https://api.openverse.org/v1/images/");url.searchParams.set("q",q);url.searchParams.set("page_size","1");url.searchParams.set("license","cc0,pdm,by,by-sa");const response=await fetch(url.toString(),{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("Visual search unavailable");const data=await response.json();return (data.results||[]).filter(x=>x.thumbnail&&(x.foreign_landing_url||x.detail_url)).slice(0,1);};
+  let results=await request(query);
+  if(!results.length){const fallback=visualSearchQuery(p,true);if(fallback!==query)results=await request(fallback);}
+  visualCacheWrite(cacheKey,results);return results[0]||null;
+ })().catch(()=>null).finally(()=>cardVisualLoads.delete(cacheKey));
+ cardVisualLoads.set(cacheKey,task);return task;
+}
+function initCardVisuals(){
+ const cards=[...document.querySelectorAll(".prompt-thumb[data-visual-id]")];
+ if(!cards.length)return;
+ const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  if(!entry.isIntersecting)return;
+  observer.unobserve(entry.target);
+  const el=entry.target,p=prompts.find(x=>String(x.id)===el.dataset.visualId);
+  if(!p)return;
+  fetchBestVisual(p).then(item=>{
+   if(!item||!el.isConnected)return;
+   const img=el.querySelector(".prompt-thumb-image"),credit=el.querySelector(".thumb-credit");
+   const src=safeVisualUrl(item.thumbnail||item.url),source=safeVisualUrl(item.foreign_landing_url||item.detail_url);
+   if(!src||!source)return;
+   img.onload=()=>el.classList.add("has-visual");
+   img.onerror=()=>{img.removeAttribute("src");};
+   img.src=src;credit.href=source;credit.hidden=false;
+   const creator=String(item.creator||"Image creator").replace(/[&<>"']/g,"");
+   credit.textContent=creator+" · "+String(item.license||"CC").toUpperCase()+" ↗";
+   credit.title="Image by "+creator+" — "+String(item.license||"licence")+". Open original source.";
+  });
+ }),{rootMargin:"180px 0px"});
+ cards.forEach(el=>observer.observe(el));
+}
 function visualResultMarkup(item){
  const image=safeVisualUrl(item.thumbnail||item.url),source=safeVisualUrl(item.foreign_landing_url||item.detail_url);
  if(!image||!source)return "";
@@ -164,7 +201,7 @@ function visualResultMarkup(item){
 }
 function renderVisualReference(p,results,query){
  const root=$("#visual-reference");if(!root||activePrompt?.id!==p.id)return;
- const cards=(results||[]).map(visualResultMarkup).filter(Boolean);
+ const cards=(results||[]).slice(0,1).map(visualResultMarkup).filter(Boolean);
  const searchUrl="https://openverse.org/search/image?q="+encodeURIComponent(query||p.title);
  root.innerHTML='<div class="visual-reference-heading"><div><span class="eyebrow">VISUAL EXAMPLE</span><h3>See the reference</h3><p>Openly licensed images related to this prompt.</p></div><span class="visual-reference-provider">OPENVERSE</span></div>'+
  (cards.length?'<div class="visual-reference-grid">'+cards.join("")+'</div>':'<div class="visual-reference-empty">No suitable image surfaced for this exact term. <a href="'+searchUrl+'" target="_blank" rel="noopener noreferrer">Browse visual references on Openverse ↗</a></div>')+
@@ -177,7 +214,7 @@ async function loadVisualReference(p){
  root.innerHTML='<div class="visual-reference-heading"><div><span class="eyebrow">VISUAL EXAMPLE</span><h3>Finding a visual reference…</h3><p>Searching openly licensed image sources for '+visualEscape(p.title)+'.</p></div><span class="visual-reference-provider">OPENVERSE</span></div><div class="visual-reference-loading"><span></span><span></span><span></span></div>';
  const cached=visualCacheRead(cacheKey);
  if(cached){renderVisualReference(p,cached,query);return;}
- const request=async(q)=>{const url=new URL("https://api.openverse.org/v1/images/");url.searchParams.set("q",q);url.searchParams.set("page_size","5");url.searchParams.set("license","cc0,pdm,by,by-sa");const response=await fetch(url.toString(),{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("Image reference search unavailable ("+response.status+")");const data=await response.json();return (data.results||[]).filter(x=>x.thumbnail&&(x.foreign_landing_url||x.detail_url)).slice(0,4);};
+ const request=async(q)=>{const url=new URL("https://api.openverse.org/v1/images/");url.searchParams.set("q",q);url.searchParams.set("page_size","1");url.searchParams.set("license","cc0,pdm,by,by-sa");const response=await fetch(url.toString(),{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("Image reference search unavailable ("+response.status+")");const data=await response.json();return (data.results||[]).filter(x=>x.thumbnail&&(x.foreign_landing_url||x.detail_url)).slice(0,1);};
  try{
   let results=await request(query),usedQuery=query;
   if(!results.length){usedQuery=visualSearchQuery(p,true);if(usedQuery!==query)results=await request(usedQuery);}
