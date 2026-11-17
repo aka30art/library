@@ -29,7 +29,7 @@ for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){
 if(!app.includes('const builder=$("#builder-type")'))errors.push('Builder guard missing');
 for(const page of ['index.html','explore.html','builder.html']){
  const html=fs.readFileSync(page,'utf8');
- for(const asset of ['catalogue-expansion.js?v=20261117-filmtoy-v1','app.js?v=20261117-filmtoy-v1','styles.css?v=20261117-filmtoy-v1'])if(!html.includes(asset))errors.push(page+' stale '+asset);
+ for(const asset of ['catalogue-expansion.js?v=20261117-utp-v1','app.js?v=20261117-utp-v1','styles.css?v=20261117-utp-v1'])if(!html.includes(asset))errors.push(page+' stale '+asset);
  for(const id of ['focus-search','menu-toggle','mobile-menu','prompt-dialog','dialog-content','toast'])if(!html.includes('id="'+id+'"'))errors.push(page+' missing '+id);
  if(html.includes('id="dna-builder"'))errors.push(page+' legacy UI');
  if(page==='explore.html'&&!html.includes('id="subcategory-filter"'))errors.push('Explore Films & Shows filter missing');
