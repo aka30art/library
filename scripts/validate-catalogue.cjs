@@ -8,7 +8,7 @@ vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{tim
 const all=sandbox.window.AI_PROMPT_EXPANSION;
 const expected=['materials','styles','textures','lighting','effects','composition','rendering','colour-atmosphere','films-shows','toys-collectibles'];
 if(collections.length!==10||expected.some((x,i)=>collections[i]?.id!==x))errors.push('Collection taxonomy mismatch');
-if(all.length!==1281)errors.push('Expected 1281 entries, got '+all.length);
+if(all.length!==1309)errors.push('Expected 1309 entries, got '+all.length);
 const ids=new Set(),counts=Object.fromEntries(expected.map(x=>[x,0]));
 for(const p of all){
  if(ids.has(p.id))errors.push('Duplicate ID '+p.id);
@@ -20,7 +20,7 @@ for(const p of all){
 }
 for(const category of expected.slice(0,8)){const target=({materials:200,styles:125,textures:125,lighting:75,effects:125,composition:75,rendering:75,'colour-atmosphere':75})[category];if(counts[category]!==target)errors.push(category+' expected '+target+' entries, got '+counts[category]);}
 if(counts['films-shows']!==350)errors.push('films-shows expected 350 entries, got '+counts['films-shows']);
-if(counts['toys-collectibles']!==56)errors.push('toys-collectibles expected 56 entries, got '+counts['toys-collectibles']);
+if(counts['toys-collectibles']!==84)errors.push('toys-collectibles expected 84 entries, got '+counts['toys-collectibles']);
 const screen=all.filter(p=>p.category==='films-shows');
 for(const p of screen){
  for(const term of ['SUBJECT RE-CREATION','WORLD AND ENVIRONMENT TRANSFORMATION','UNIFIED ART DIRECTION','SCENE CONTROL'])if(!p.prompt.includes(term))errors.push('Incomplete screen-universe transformation prompt '+p.id+' missing '+term);
@@ -48,4 +48,4 @@ for(const term of ['material','surface','texture','style-transfer','hybrid'])if(
 if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-subcategories-v1'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
-console.log('PASS: 1,281 prompts, ten collections, category-specific subcategory filters, five Films & Shows subcategories ×70, 84 mainstream collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
+console.log('PASS: 1,309 prompts, ten collections, category-specific subcategory filters, five Films & Shows subcategories ×70, 84 mainstream collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
