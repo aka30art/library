@@ -39,8 +39,8 @@ if (baseCollections.length !== 20) errors.push(`Expected 20 collections, found $
 
 const pages = ['index.html', 'explore.html', 'builder.html'].map(file => [file, fs.readFileSync(file, 'utf8')]);
 for (const [file, html] of pages) {
-  if (!html.includes('catalogue-expansion.js?v=20261117-reliability1')) errors.push(`${file} does not use the current catalogue asset version`);
-  if (!html.includes('app.js?v=20261117-reliability1')) errors.push(`${file} does not use the current app asset version`);
+  if (!html.includes('catalogue-expansion.js?v=20261117-modular-builder1')) errors.push(`${file} does not use the current catalogue asset version`);
+  if (!html.includes('app.js?v=20261117-modular-builder1')) errors.push(`${file} does not use the current app asset version`);
   if (!html.includes('backups/2026-11-17/catalogue-expansion.js')) errors.push(`${file} is missing the catalogue recovery loader`);
 }
 if (errors.length) {
