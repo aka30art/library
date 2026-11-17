@@ -32,13 +32,13 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue contains 950 prompt records across ten collections. Materials contains 150 prompts; the other seven universal visual collections each contain 75 complete, category-specific prompts. Films & Shows contains 250 prompts across five subcategories, and Toys & Collectibles contains 25 prompts. Films & Shows is divided into five distinct subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 50 prompts in each. Toys & Collectibles contains 25 prompts. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
+The catalogue contains 1,281 prompt records across ten collections. Materials contains 200 prompts; Styles, Textures and Effects contain 125 each; Photography Post-Edits contains 75; Composition, Rendering and Colour & Atmosphere contain 75 each. Films & Shows contains 350 prompts across five subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 70 prompts in each. Toys & Collectibles contains 56 mainstream formats, including major trading-card-game and sports-card designs. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
 
 The Prompt DNA Builder includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. The universal collections use one integrated prompt per element rather than splitting each element into facet-specific variants.
 
 ### Prompt design and research basis
 
-Each universal collection entry is a complete, category-specific treatment prompt. Material prompts describe the requested material transformation as one unified visual outcome; they do not split the treatment into surface, finish, behaviour or detail specifications. The same integrated-prompt principle applies to styles, textures, lighting, effects, composition, rendering, and colour & atmosphere.
+Each universal collection entry is a complete, category-specific treatment prompt. Material prompts describe the requested material transformation as one unified visual outcome; they do not split the treatment into surface, finish, behaviour or detail specifications. Photography Post-Edits treats the supplied photograph as the fixed source and applies a coherent finishing process rather than changing the capture lighting. The same integrated-prompt principle applies to styles, textures, photographic post-edits, effects, composition, rendering, and colour & atmosphere.
 
 Research references:
 - OpenAI, Image prompting: https://developers.openai.com/api/docs/guides/image-prompting
@@ -68,7 +68,7 @@ A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to pub
 
 ## Catalogue expansion
 
-The catalogue contains 950 prompts across ten collections. Materials contains 150 prompts; the other seven universal collections contain 75 each; Films & Shows contains 250 prompts across five subcategories of 50 each; and Toys & Collectibles contains 25 prompts. Counts are calculated from the loaded records and verified by the catalogue validator.
+The catalogue contains 950 prompts across ten collections. Materials contains 150 prompts; the other seven universal collections contain 75 each; Films & Shows contains 350 prompts across five subcategories of 70 each; and Toys & Collectibles contains 56 mainstream toy and TCG collectible formats. Counts are calculated from the loaded records and verified by the catalogue validator.
 
 ## Reliability and recovery
 
