@@ -91,11 +91,11 @@ Avoid: ${p.negative}
 function renderCollections(){
  if($("#collection-grid"))$("#collection-grid").innerHTML=collections.map(collectionCard).join("");
  if($("#category-filter"))$("#category-filter").innerHTML='<option value="all">All collections</option>'+collections.map(c=>'<option value="'+c.id+'">'+c.name+' ('+c.count+')</option>').join("");
- document.querySelectorAll(".collection-card").forEach(el=>el.addEventListener("click",()=>{if($("#category-filter"))$("#category-filter").value=el.dataset.category;showingAll=true;filterPrompts();}));
+ document.querySelectorAll(".collection-card").forEach(el=>el.addEventListener("click",()=>{if($("#category-filter"))$("#category-filter").value=el.dataset.category;if($("#subcategory-filter")){ $("#subcategory-filter").value="all"; $("#subcategory-filter").hidden=el.dataset.category!=="films-shows"; }showingAll=true;filterPrompts();}));
 }
 function filterPrompts(){
- const q=$("#archive-search").value.trim().toLowerCase(),cat=$("#category-filter")?.value||"all",model=$("#model-filter")?.value||"all",sort=$("#sort-filter")?.value||"featured";
- let list=prompts.filter(p=>(cat==="all"||p.category===cat)&&(model==="all"||p.model.includes(model))&&[p.title,p.desc,p.prompt,p.tags.join(" "),collectionName(p.category)].join(" ").toLowerCase().includes(q));
+ const q=$("#archive-search").value.trim().toLowerCase(),cat=$("#category-filter")?.value||"all",subcat=$("#subcategory-filter")?.value||"all",model=$("#model-filter")?.value||"all",sort=$("#sort-filter")?.value||"featured";
+ let list=prompts.filter(p=>(cat==="all"||p.category===cat)&&(subcat==="all"||p.category!=="films-shows"||(p.tags||[]).includes(subcat))&&(model==="all"||p.model.includes(model))&&[p.title,p.desc,p.prompt,p.tags.join(" "),collectionName(p.category)].join(" ").toLowerCase().includes(q));
  if(!showingAll)list=list.slice(0,5);
  if(sort==="az")list.sort((a,b)=>a.title.localeCompare(b.title));
  promptGrid.innerHTML=list.map(promptCard).join("");
@@ -122,7 +122,11 @@ const builder=$("#builder-type");if(builder){
   {id:"composition",label:"Composition",categories:["composition"],description:"Visual hierarchy, balance, spatial relationships and framing."},
   {id:"rendering",label:"Rendering",categories:["rendering"],description:"Rendering methods, material response and image fidelity."},
   {id:"colour-atmosphere",label:"Colour & Atmosphere",categories:["colour-atmosphere"],description:"Palette systems, tonal relationships and atmospheric depth."},
-  {id:"films-shows",label:"Films & Shows",categories:["films-shows"],description:"Transform supplied subjects into screen-based visual identities: 25 TV shows, 25 cartoons, 25 films, 25 anime and 25 other screen worlds."},
+  {id:"films-shows-tv",label:"Films & Shows / TV Shows",categories:["films-shows"],subcategory:"TV Shows",description:"Transform subjects into TV-show visual identities."},
+  {id:"films-shows-cartoon",label:"Films & Shows / Cartoons",categories:["films-shows"],subcategory:"Cartoons",description:"Transform subjects into cartoon visual languages."},
+  {id:"films-shows-films",label:"Films & Shows / Films",categories:["films-shows"],subcategory:"Films",description:"Transform subjects into cinematic film visual identities."},
+  {id:"films-shows-anime",label:"Films & Shows / Anime",categories:["films-shows"],subcategory:"Anime",description:"Transform subjects into anime visual languages."},
+  {id:"films-shows-other",label:"Films & Shows / Other Screen Worlds",categories:["films-shows"],subcategory:"Other Screen Worlds",description:"Transform subjects into other screen-based formats."},
   {id:"toys-collectibles",label:"Toys & Collectibles",categories:["toys-collectibles"],description:"Transform supplied subjects into 25 recognisable toy, figure, model and collectible formats, including LEGO and Funko Pop."}
  ];
  const selected=new Set();
@@ -134,7 +138,7 @@ const builder=$("#builder-type");if(builder){
  const esc=(v)=>String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
  const renderGroups=()=>{
   $("#builder-modules").innerHTML=groups.map(g=>{
-   const items=groupItems(g);
+   const items=groupItems(g).filter(p=>!g.subcategory||(p.tags||[]).includes(g.subcategory));
    return '<section class="builder-module"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span>'+items.length+' elements</span></div><div class="builder-module-grid">'+items.map(p=>'<label class="builder-option"><input type="checkbox" data-prompt-id="'+p.id+'" '+(selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label>').join("")+'</div></section>';
   }).join("");
   $("#builder-modules").querySelectorAll('input[data-prompt-id]').forEach(input=>input.addEventListener("change",()=>{const id=input.dataset.promptId;if(input.checked)selected.add(id);else selected.delete(id);compose();}));
@@ -158,7 +162,7 @@ const builder=$("#builder-type");if(builder){
  $("#copy-builder").addEventListener("click",()=>copyText($("#builder-output").textContent));
  renderGroups();compose();
 }
-["archive-search","category-filter","model-filter","sort-filter"].forEach(id=>{const el=$("#"+id);if(el)el.addEventListener(id==="archive-search"?"input":"change",()=>{showingAll=true;filterPrompts();});});
+["archive-search","category-filter","subcategory-filter","model-filter","sort-filter"].forEach(id=>{const el=$("#"+id);if(el)el.addEventListener(id==="archive-search"?"input":"change",()=>{if(id==="category-filter"&&$("#subcategory-filter")){ $("#subcategory-filter").value="all"; $("#subcategory-filter").hidden=el.value!=="films-shows"; }showingAll=true;filterPrompts();});});
 const pageType=document.body.dataset.page||"home";
 const params=new URLSearchParams(location.search);
 if(pageType==="explore"&&params.has("search")&&$("#archive-search")){$("#archive-search").value=params.get("search");showingAll=true;filterPrompts();}
