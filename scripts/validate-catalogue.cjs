@@ -8,7 +8,7 @@ vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{tim
 const all=sandbox.window.AI_PROMPT_EXPANSION;
 const expected=['materials','styles','textures','lighting','effects','composition','rendering','colour-atmosphere','films-shows','toys-collectibles'];
 if(collections.length!==10||expected.some((x,i)=>collections[i]?.id!==x))errors.push('Collection taxonomy mismatch');
-if(all.length!==550)errors.push('Expected 550 entries, got '+all.length);
+if(all.length!==950)errors.push('Expected 950 entries, got '+all.length);
 const ids=new Set(),counts=Object.fromEntries(expected.map(x=>[x,0]));
 for(const p of all){
  if(ids.has(p.id))errors.push('Duplicate ID '+p.id);
@@ -18,8 +18,8 @@ for(const p of all){
  if(!p.prompt.includes('[SUBJECT]'))errors.push('Missing [SUBJECT] '+p.id);
  if(/yellow-skinned|springfield|new new york|delivery crew|sitcom family|suburban sitcom/i.test(p.title+' '+p.prompt))errors.push('Legacy subject prompt '+p.id);
 }
-for(const category of expected.slice(0,8))if(counts[category]!==50)errors.push(category+' expected 50 entries, got '+counts[category]);
-if(counts['films-shows']!==125)errors.push('films-shows expected 125 entries, got '+counts['films-shows']);
+for(const category of expected.slice(0,8)){const target=category==='materials'?150:75;if(counts[category]!==target)errors.push(category+' expected '+target+' entries, got '+counts[category]);}
+if(counts['films-shows']!==250)errors.push('films-shows expected 250 entries, got '+counts['films-shows']);
 if(counts['toys-collectibles']!==25)errors.push('toys-collectibles expected 25 entries, got '+counts['toys-collectibles']);
 const screen=all.filter(p=>p.category==='films-shows');
 for(const p of screen){
@@ -27,13 +27,13 @@ for(const p of screen){
 }
 for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){
  const n=screen.filter(p=>(p.tags||[]).includes(sub)).length;
- if(n!==25)errors.push(sub+' expected top 25, got '+n);
+ if(n!==50)errors.push(sub+' expected 50, got '+n);
 }
 
 if(!app.includes('const builder=$("#builder-type")'))errors.push('Builder guard missing');
 for(const page of ['index.html','explore.html','builder.html']){
  const html=fs.readFileSync(page,'utf8');
- for(const asset of ['catalogue-expansion.js?v=20261117-screenworld-v4','app.js?v=20261117-screenworld-v4','styles.css?v=20261117-screenworld-v4'])if(!html.includes(asset))errors.push(page+' stale '+asset);
+ for(const asset of ['catalogue-expansion.js?v=20261117-expanded-v5','app.js?v=20261117-expanded-v5','styles.css?v=20261117-expanded-v5'])if(!html.includes(asset))errors.push(page+' stale '+asset);
  for(const id of ['focus-search','menu-toggle','mobile-menu','prompt-dialog','dialog-content','toast'])if(!html.includes('id="'+id+'"'))errors.push(page+' missing '+id);
  if(html.includes('id="dna-builder"'))errors.push(page+' legacy UI');
  if(page==='explore.html'&&!html.includes('id="subcategory-filter"'))errors.push('Explore Films & Shows filter missing');
@@ -45,7 +45,7 @@ for(const page of ['index.html','explore.html','builder.html']){
 }
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
-if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261117-screenworld-v4'))errors.push('Builder transformation system not loaded');
+if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261117-expanded-v5'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
-console.log('PASS: 550 prompts, ten collections, five Films & Shows subcategories ×25, 25 collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
+console.log('PASS: 950 prompts, ten collections, five Films & Shows subcategories ×50, 25 collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
