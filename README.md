@@ -32,7 +32,7 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue contains 1,309 prompt records across ten collections. Materials contains 200 prompts; Styles, Textures and Effects contain 125 each; Photography Post-Edits contains 75; Composition, Rendering and Colour & Atmosphere contain 75 each. Films & Shows contains 350 prompts across five subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 70 prompts in each. Toys & Collectibles contains 56 mainstream formats, including major trading-card-game and sports-card designs. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
+The catalogue contains 1,312 prompt records across ten collections. Materials contains 200 prompts; Styles, Textures and Effects contain 125 each; Photography Post-Edits contains 75; Composition, Rendering and Colour & Atmosphere contain 75 each. Films & Shows contains 350 prompts across five subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 70 prompts in each. Toys & Collectibles contains 56 mainstream formats, including major trading-card-game and sports-card designs. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
 
 The Prompt DNA Builder includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. The universal collections use one integrated prompt per element rather than splitting each element into facet-specific variants.
 
@@ -92,7 +92,7 @@ The Explore archive provides a contextual subcategory filter for each collection
 
 
 ### Trading-card systems and rarity expansion
-The Toys & Collectibles collection now separates Pokémon TCG, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, sports cards, rarity/chase cards, foil/parallels, autographs/memorabilia and card products/accessories. The catalogue includes 28 additional card-treatment prompts, bringing the library to 1,309 prompts and Toys & Collectibles to 84. Rarity names are game-specific and should not be treated as one universal cross-game scale.
+The Toys & Collectibles collection now separates Pokémon TCG, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, sports cards, rarity/chase cards, foil/parallels, autographs/memorabilia and card products/accessories. The catalogue includes 30 additional card-treatment prompts, bringing the library to 1,312 prompts and Toys & Collectibles to 87. Rarity names are game-specific and should not be treated as one universal cross-game scale.
 
 Research references:
 - Pokémon official card database and rarity filters: https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/663
