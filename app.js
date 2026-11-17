@@ -17,7 +17,8 @@ const collections = [
   {id:"anime-manga",name:"Anime, Manga & Illustration",count:0,icon:"✦",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"},
   {id:"nature",name:"Nature & Organic Forms",count:0,icon:"❋",tone:"blue",bg:"radial-gradient(circle at 65% 30%,#a8c18b,transparent 27%),linear-gradient(130deg,#173c35,#111820)"},
   {id:"typography-effects",name:"Typography & Lettering Effects",count:0,icon:"Aa",tone:"orange",bg:"linear-gradient(110deg,#161b25,#e16a2c 55%,#30213c)"},
-  {id:"motion",name:"Motion & Cinemagraphic Effects",count:0,icon:"≫",tone:"blue",bg:"linear-gradient(120deg,#0c3550,#3d3e8a 50%,#10151e)"}
+  {id:"motion",name:"Motion & Cinemagraphic Effects",count:0,icon:"≫",tone:"blue",bg:"linear-gradient(120deg,#0c3550,#3d3e8a 50%,#10151e)"},
+  {id:"animation-toy-worlds",name:"Animation, Cartoon & Toy Worlds",count:0,icon:"▣",tone:"violet",bg:"linear-gradient(130deg,#ffb52e,#e85d37 48%,#30245e)"}
 ];
 const prompts = [
   {id:1,title:"Aged Concrete — Surface Texture",category:"materials",desc:"A high-fidelity aged concrete surface with fine pores, subtle mineral variation, realistic weathering and natural tonal depth.",prompt:"Aged concrete surface texture, fine irregular pores, subtle mineral deposits, realistic weathering, nuanced cool grey tonal variation, soft directional studio lighting, physically accurate roughness and micro-detail, seamless material study, neutral background, ultra-detailed, photorealistic.",negative:"Plastic appearance, repeating patterns, excessive cracks, artificial gloss, low resolution, text, watermark.",kind:"material",bg:"#45494b",art:"linear-gradient(135deg,#aaa,#494e52,#d1d0c8)",glow:"#747b7c",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:["Texture","Photorealistic","Surface study"]},
