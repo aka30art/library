@@ -24,7 +24,7 @@ const collectionName=id=>collections.find(c=>c.id===id)?.name||id;
 const promptGrid=$("#prompt-grid");
 let activePrompt=null,showingAll=document.body.dataset.page==="explore";
 function collectionCard(c){return `<a class="collection-card" data-tone="${c.tone}" href="#archive" data-category="${c.id}" style="--card-bg:${c.bg}"><span class="collection-icon">${c.icon}</span><span class="collection-meta"><strong>${c.name}</strong><small>${c.count} prompts</small></span><span class="collection-arrow">→</span></a>`}
-function thumb(p){return `<div class="prompt-thumb" data-kind="${p.kind}" data-visual-id="${p.id}" style="--thumb-bg:${p.bg};--thumb-art:${p.art};--thumb-glow:${p.glow}"><div class="thumb-art"></div><img class="prompt-thumb-image" alt="${visualEscape(p.title)} visual example" loading="lazy" decoding="async" referrerpolicy="no-referrer"><a class="thumb-credit" hidden target="_blank" rel="noopener noreferrer" aria-label="Open image source">IMAGE SOURCE ↗</a><button class="bookmark" aria-label="Save ${p.title}" title="Save prompt">♧</button></div>`}
+function thumb(p){return `<div class="prompt-thumb" data-kind="${p.kind}" style="--thumb-bg:${p.bg};--thumb-art:${p.art};--thumb-glow:${p.glow}"><div class="thumb-art"></div><button class="bookmark" aria-label="Save ${p.title}" title="Save prompt">♧</button></div>`}
 function promptCard(p){return `<article class="prompt-card" data-id="${p.id}" tabindex="0" role="button" aria-label="Open ${p.title}">${thumb(p)}<div class="prompt-info"><h3>${p.title}</h3><div class="prompt-meta"><span class="pill">${collectionName(p.category)}</span><small>${difficulty(p)} ↗</small></div></div></article>`}
 function difficulty(p){const t=(p.tags||[]).join(" ").toLowerCase();return p.difficulty||((p.prompt.length>520||/technical|optical|physics|procedural|macro/.test(t))?"Professional":p.prompt.length>300?"Advanced":"Foundation");}
 function masterPrompt(p){return `UNIVERSAL ART DNA — MASTER PROMPT
@@ -135,98 +135,16 @@ function filterPrompts(){
  if(!showingAll)list=list.slice(0,5);
  if(sort==="az")list.sort((a,b)=>a.title.localeCompare(b.title));
  promptGrid.innerHTML=list.map(promptCard).join("");
- initCardVisuals();
+
  $("#empty-state").hidden=list.length>0;
  $("#result-count").textContent=`Showing ${list.length} of ${prompts.length} prompts across ${collections.length} collections`;
  document.querySelectorAll(".prompt-card").forEach(card=>{
-  card.addEventListener("click",e=>{if(e.target.closest(".bookmark,.thumb-credit"))return;openPrompt(Number(card.dataset.id));});
+  card.addEventListener("click",e=>{if(e.target.closest(".bookmark"))return;openPrompt(Number(card.dataset.id));});
   card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPrompt(Number(card.dataset.id));}});
  });
  document.querySelectorAll(".bookmark").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();btn.classList.toggle("saved");btn.textContent=btn.classList.contains("saved")?"♥":"♧";showToast(btn.classList.contains("saved")?"Saved to this session":"Removed from saved");}));
 }
-function visualEscape(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
-function safeVisualUrl(value){try{const url=new URL(value);return url.protocol==="https:"||url.protocol==="http:"?url.href:"";}catch{return "";}}
-function visualSearchQuery(p,plain=false){
- const title=String(p.title||"").replace(/[—–]/g," ").replace(/\s+/g," ").trim();
- if(plain)return title;
- const hint={"materials":"material sample","styles":"artwork","textures":"texture close-up","lighting":"photographic print","effects":"visual effect","composition":"composition example","rendering":"rendering example","colour-atmosphere":"colour palette","films-shows":"film television visual","toys-collectibles":"collectible figure card"};
- return (title+" "+(hint[p.category]||"visual reference")).trim();
-}
-function visualCacheRead(key){try{const raw=localStorage.getItem(key);if(!raw)return null;const data=JSON.parse(raw);if(!data.savedAt||Date.now()-data.savedAt>1000*60*60*24*30)return null;return data.results||null;}catch{return null;}}
-function visualCacheWrite(key,results){try{localStorage.setItem(key,JSON.stringify({savedAt:Date.now(),results}));}catch{}}
-const cardVisualLoads=new Map();
-async function fetchBestVisual(p){
- const query=visualSearchQuery(p),cacheKey="aka-library-visual-v1:"+p.id,cached=visualCacheRead(cacheKey);
- if(cached?.length)return cached[0];
- if(cardVisualLoads.has(cacheKey))return cardVisualLoads.get(cacheKey);
- const task=(async()=>{
-  const request=async(q)=>{const url=new URL("https://api.openverse.org/v1/images/");url.searchParams.set("q",q);url.searchParams.set("page_size","1");url.searchParams.set("license","cc0,pdm,by,by-sa");const response=await fetch(url.toString(),{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("Visual search unavailable");const data=await response.json();return (data.results||[]).filter(x=>x.thumbnail&&(x.foreign_landing_url||x.detail_url)).slice(0,1);};
-  let results=await request(query);
-  if(!results.length){const fallback=visualSearchQuery(p,true);if(fallback!==query)results=await request(fallback);}
-  visualCacheWrite(cacheKey,results);return results[0]||null;
- })().catch(()=>null).finally(()=>cardVisualLoads.delete(cacheKey));
- cardVisualLoads.set(cacheKey,task);return task;
-}
-function initCardVisuals(){
- const cards=[...document.querySelectorAll(".prompt-thumb[data-visual-id]")];
- if(!cards.length)return;
- const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
-  if(!entry.isIntersecting)return;
-  observer.unobserve(entry.target);
-  const el=entry.target,p=prompts.find(x=>String(x.id)===el.dataset.visualId);
-  if(!p)return;
-  fetchBestVisual(p).then(item=>{
-   if(!item||!el.isConnected)return;
-   const img=el.querySelector(".prompt-thumb-image"),credit=el.querySelector(".thumb-credit");
-   const src=safeVisualUrl(item.thumbnail||item.url),source=safeVisualUrl(item.foreign_landing_url||item.detail_url);
-   if(!src||!source)return;
-   img.onload=()=>el.classList.add("has-visual");
-   img.onerror=()=>{img.removeAttribute("src");};
-   img.src=src;credit.href=source;credit.hidden=false;
-   const creator=String(item.creator||"Image creator").replace(/[&<>"']/g,"");
-   credit.textContent=creator+" · "+String(item.license||"CC").toUpperCase()+" ↗";
-   credit.title="Image by "+creator+" — "+String(item.license||"licence")+". Open original source.";
-  });
- }),{rootMargin:"180px 0px"});
- cards.forEach(el=>observer.observe(el));
-}
-function visualResultMarkup(item){
- const image=safeVisualUrl(item.thumbnail||item.url),source=safeVisualUrl(item.foreign_landing_url||item.detail_url);
- if(!image||!source)return "";
- const title=visualEscape(item.title||"Visual reference");
- const creator=visualEscape(item.creator||"Creator not listed");
- const licence=visualEscape((item.license||"Licence details")+(item.license_version?" "+item.license_version:""));
- const licenceUrl=safeVisualUrl(item.license_url);
- return '<div class="visual-reference-card"><a class="visual-reference-image-link" href="'+source+'" target="_blank" rel="noopener noreferrer" aria-label="Open image source: '+title+'"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="'+image+'" alt="'+title+'"></a><span class="visual-reference-caption"><strong>'+title+'</strong><small>'+creator+'</small><small>'+ (licenceUrl?'<a class="visual-license" href="'+licenceUrl+'" target="_blank" rel="noopener noreferrer">'+licence+'</a>':licence)+'</small><a class="visual-reference-source-link" href="'+source+'" target="_blank" rel="noopener noreferrer">View source ↗</a></span></div>';
-}
-function renderVisualReference(p,results,query){
- const root=$("#visual-reference");if(!root||activePrompt?.id!==p.id)return;
- const cards=(results||[]).slice(0,1).map(visualResultMarkup).filter(Boolean);
- const searchUrl="https://openverse.org/search/image?q="+encodeURIComponent(query||p.title);
- root.innerHTML='<div class="visual-reference-heading"><div><span class="eyebrow">VISUAL EXAMPLE</span><h3>See the reference</h3><p>Openly licensed images related to this prompt.</p></div><span class="visual-reference-provider">OPENVERSE</span></div>'+
- (cards.length?'<div class="visual-reference-grid">'+cards.join("")+'</div>':'<div class="visual-reference-empty">No suitable image surfaced for this exact term. <a href="'+searchUrl+'" target="_blank" rel="noopener noreferrer">Browse visual references on Openverse ↗</a></div>')+
- '<p class="visual-reference-note">Reference images remain the property of their creators. Check each source and licence before reuse.</p>';
- root.querySelectorAll(".visual-reference-card img").forEach(img=>img.addEventListener("error",()=>{img.closest(".visual-reference-card")?.remove();const grid=root.querySelector(".visual-reference-grid");if(grid&&!grid.querySelector(".visual-reference-card"))renderVisualReference(p,[],query);},{once:true}));
-}
-async function loadVisualReference(p){
- const root=$("#visual-reference");if(!root)return;
- const query=visualSearchQuery(p),cacheKey="aka-library-visual-v1:"+p.id;
- root.innerHTML='<div class="visual-reference-heading"><div><span class="eyebrow">VISUAL EXAMPLE</span><h3>Finding a visual reference…</h3><p>Searching openly licensed image sources for '+visualEscape(p.title)+'.</p></div><span class="visual-reference-provider">OPENVERSE</span></div><div class="visual-reference-loading"><span></span><span></span><span></span></div>';
- const cached=visualCacheRead(cacheKey);
- if(cached){renderVisualReference(p,cached,query);return;}
- const request=async(q)=>{const url=new URL("https://api.openverse.org/v1/images/");url.searchParams.set("q",q);url.searchParams.set("page_size","1");url.searchParams.set("license","cc0,pdm,by,by-sa");const response=await fetch(url.toString(),{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("Image reference search unavailable ("+response.status+")");const data=await response.json();return (data.results||[]).filter(x=>x.thumbnail&&(x.foreign_landing_url||x.detail_url)).slice(0,1);};
- try{
-  let results=await request(query),usedQuery=query;
-  if(!results.length){usedQuery=visualSearchQuery(p,true);if(usedQuery!==query)results=await request(usedQuery);}
-  if(activePrompt?.id!==p.id)return;
-  visualCacheWrite(cacheKey,results);renderVisualReference(p,results,usedQuery);
- }catch(error){
-  if(activePrompt?.id!==p.id)return;
-  const searchUrl="https://openverse.org/search/image?q="+encodeURIComponent(query);
-  root.innerHTML='<div class="visual-reference-heading"><div><span class="eyebrow">VISUAL EXAMPLE</span><h3>Reference search unavailable</h3><p>The prompt is ready; the external image source did not respond.</p></div><span class="visual-reference-provider">OPENVERSE</span></div><div class="visual-reference-empty"><a href="'+searchUrl+'" target="_blank" rel="noopener noreferrer">Search visual references manually ↗</a></div>';
- }
-}
-function openPrompt(id){const p=prompts.find(x=>x.id===id);if(!p)return;activePrompt=p;$("#dialog-content").innerHTML=`<p class="detail-category">${collectionName(p.category)} / PROMPT ${String(p.id).padStart(3,"0")}</p><h2 class="detail-title">${p.title}</h2><p class="detail-desc">${p.desc}</p><div class="detail-tags">${p.model.map(m=>`<span>${m}</span>`).join("")}${p.tags.map(t=>`<span>${t}</span>`).join("")}<span class="difficulty-tag">${difficulty(p)}</span></div><section class="visual-reference" id="visual-reference" aria-live="polite"></section><div class="prompt-mode-tabs"><button class="mode-tab active" data-mode="standard">Standard Prompt</button><button class="mode-tab" data-mode="template">Universal Template</button><button class="mode-tab" data-mode="transformation">Universal Transformation</button><button class="mode-tab" data-mode="master">MASTER PROMPT · ART DNA</button></div><p class="prompt-label" id="active-prompt-label">STANDARD PROMPT / COPY-READY</p><div class="prompt-code" id="detail-prompt"></div><div class="detail-actions"><button class="button button-orange" id="copy-prompt">▢ Copy selected prompt</button><button class="button button-outline" id="copy-negative">▢ Copy negative prompt</button></div><div class="detail-extra"><details open><summary>Prompt breakdown</summary><p>This prompt applies one unified visual treatment to a subject. Keep its central treatment intact when adapting the prompt.</p></details><details><summary>Variation ideas</summary><p>Try changing the lighting direction, camera distance, colour temperature or environment while keeping the core concept consistent.</p></details></div>`;let mode="standard";const chosen=()=>mode==="master"?masterPrompt(p):mode==="template"?universalTemplatePrompt(p):mode==="transformation"?universalTransformationPrompt(p):p.prompt;$("#detail-prompt").textContent=chosen();loadVisualReference(p);document.querySelectorAll(".mode-tab").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;document.querySelectorAll(".mode-tab").forEach(x=>x.classList.toggle("active",x===b));$("#active-prompt-label").textContent=mode==="master"?"MASTER PROMPT / UNIVERSAL ART DNA":mode==="template"?"UNIVERSAL TEMPLATE / VARIABLE-BASED GENERATION":mode==="transformation"?"UNIVERSAL TRANSFORMATION / SOURCE-BASED EDITING":"STANDARD PROMPT / COPY-READY";$("#detail-prompt").textContent=chosen();}));$("#copy-prompt").addEventListener("click",()=>copyText(chosen()));$("#copy-negative").addEventListener("click",()=>copyText(p.negative));$("#prompt-dialog").showModal();}
+function openPrompt(id){const p=prompts.find(x=>x.id===id);if(!p)return;activePrompt=p;$("#dialog-content").innerHTML=`<p class="detail-category">${collectionName(p.category)} / PROMPT ${String(p.id).padStart(3,"0")}</p><h2 class="detail-title">${p.title}</h2><p class="detail-desc">${p.desc}</p><div class="detail-tags">${p.model.map(m=>`<span>${m}</span>`).join("")}${p.tags.map(t=>`<span>${t}</span>`).join("")}<span class="difficulty-tag">${difficulty(p)}</span></div><div class="prompt-mode-tabs"><button class="mode-tab active" data-mode="standard">Standard Prompt</button><button class="mode-tab" data-mode="template">Universal Template</button><button class="mode-tab" data-mode="transformation">Universal Transformation</button><button class="mode-tab" data-mode="master">MASTER PROMPT · ART DNA</button></div><p class="prompt-label" id="active-prompt-label">STANDARD PROMPT / COPY-READY</p><div class="prompt-code" id="detail-prompt"></div><div class="detail-actions"><button class="button button-orange" id="copy-prompt">▢ Copy selected prompt</button><button class="button button-outline" id="copy-negative">▢ Copy negative prompt</button></div><div class="detail-extra"><details open><summary>Prompt breakdown</summary><p>This prompt applies one unified visual treatment to a subject. Keep its central treatment intact when adapting the prompt.</p></details><details><summary>Variation ideas</summary><p>Try changing the lighting direction, camera distance, colour temperature or environment while keeping the core concept consistent.</p></details></div>`;let mode="standard";const chosen=()=>mode==="master"?masterPrompt(p):mode==="template"?universalTemplatePrompt(p):mode==="transformation"?universalTransformationPrompt(p):p.prompt;$("#detail-prompt").textContent=chosen();document.querySelectorAll(".mode-tab").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;document.querySelectorAll(".mode-tab").forEach(x=>x.classList.toggle("active",x===b));$("#active-prompt-label").textContent=mode==="master"?"MASTER PROMPT / UNIVERSAL ART DNA":mode==="template"?"UNIVERSAL TEMPLATE / VARIABLE-BASED GENERATION":mode==="transformation"?"UNIVERSAL TRANSFORMATION / SOURCE-BASED EDITING":"STANDARD PROMPT / COPY-READY";$("#detail-prompt").textContent=chosen();}));$("#copy-prompt").addEventListener("click",()=>copyText(chosen()));$("#copy-negative").addEventListener("click",()=>copyText(p.negative));$("#prompt-dialog").showModal();}
 async function copyText(text){try{await navigator.clipboard.writeText(text);showToast("Prompt copied to clipboard");}catch{const area=document.createElement("textarea");area.value=text;document.body.append(area);area.select();document.execCommand("copy");area.remove();showToast("Prompt copied");}}
 let toastTimer;function showToast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);}
 if($("#collection-grid"))renderCollections();if($("#prompt-grid"))filterPrompts();
@@ -258,10 +176,9 @@ const builder=$("#builder-type");if(builder){
  const renderGroups=()=>{
   $("#builder-modules").innerHTML=groups.map(g=>{
    const items=groupItems(g).filter(p=>!g.subcategory||(p.tags||[]).includes(g.subcategory));
-   return '<section class="builder-module"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span>'+items.length+' elements</span></div><div class="builder-module-grid">'+items.map(p=>'<div class="builder-option"><label><input type="checkbox" data-prompt-id="'+p.id+'" '+(selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label><button class="builder-visual" type="button" data-visual-prompt-id="'+p.id+'" aria-label="View visual example for '+esc(p.title)+'">Visual ↗</button></div>').join("")+'</div></section>';
+   return '<section class="builder-module"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span>'+items.length+' elements</span></div><div class="builder-module-grid">'+items.map(p=>'<div class="builder-option"><label><input type="checkbox" data-prompt-id="'+p.id+'" '+(selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label></div>').join("")+'</div></section>';
   }).join("");
   $("#builder-modules").querySelectorAll('input[data-prompt-id]').forEach(input=>input.addEventListener("change",()=>{const id=input.dataset.promptId;if(input.checked)selected.add(id);else selected.delete(id);compose();}));
-  $("#builder-modules").querySelectorAll(".builder-visual").forEach(button=>button.addEventListener("click",()=>openPrompt(Number(button.dataset.visualPromptId))));
  };
  const compose=()=>{
   const chosen=[...selected].map(id=>byId.get(id)).filter(Boolean);
