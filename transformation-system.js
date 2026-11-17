@@ -47,20 +47,15 @@
     reinterpret:"CONTROLLED REINTERPRETATION: preserve identity anchors and the subject's semantic recognisability. Allow deliberate changes to secondary detail, edge language and local composition only where they directly support the target visual language."
   };
   let rendering=false;
-  function extract(text,label,nextLabel){
-    const start=text.indexOf(label);
-    if(start<0)return "";
-    const from=start+label.length;
-    const end=nextLabel?text.indexOf(nextLabel,from):-1;
-    return text.slice(from,end<0?text.length:end).trim();
-  }
+  const promptById=new Map((window.AI_PROMPT_BUILDER_CATALOGUE||[]).map(p=>[String(p.id),p]));
   function build(){
     if(mode.value!=="transformation"){panel.hidden=true;return;}
     panel.hidden=false;
-    const base=output.textContent||"";
-    const modules=extract(base,"SELECTED VISUAL MODULES:\n","ADDITIONAL ART DIRECTION:");
-    const artDirection=extract(base,"ADDITIONAL ART DIRECTION:\n","INTEGRATION RULES:");
-    const selected=modules&&modules!=="SELECT AT LEAST ONE VISUAL MODULE TO BEGIN."?modules:"No visual modules selected. Use the target treatment as the primary transformation instruction.";
+    const checked=[...document.querySelectorAll("#builder-modules input[data-prompt-id]:checked")];
+    const modules=checked.map(input=>promptById.get(String(input.dataset.promptId))).filter(Boolean).map(p=>p.title+"\n"+p.prompt);
+    const selected=modules.length?modules.join("\n\n"):"No visual modules selected. Use the target treatment as the primary transformation instruction.";
+    const refinements=[["Visual style",document.getElementById("builder-style")?.value],["Lighting",document.getElementById("builder-light")?.value],["Composition",document.getElementById("builder-frame")?.value]].filter(item=>item[1]).map(item=>item[0]+": "+item[1]);
+    const artDirection=refinements.length?refinements.join("\n"):"No additional style, lighting or composition refinement specified.";
     const architectureName=architecture.options[architecture.selectedIndex].text;
     const objective=target.value.trim()||"Apply the selected visual modules as a deliberate target treatment. Resolve the target from the source image rather than substituting the example subject.";
     const subject=source.value.trim()||"[SUPPLY THE SOURCE IMAGE AND, IF NECESSARY, A BRIEF SUBJECT DESCRIPTION]";
@@ -68,7 +63,8 @@
       "UNIVERSAL TRANSFORMATION PROMPT (UTP) — "+architectureName.toUpperCase(),
       "",
       "1. SOURCE INPUT",
-      "Use the supplied image as the sole source of subject identity and structural information.",
+      "Use the supplied source image as the sole source of subject identity and structural information.",
+      "Source image: preserve the original reference as the transformation input; do not replace it with a newly invented scene.",
       "Subject / source description: "+subject,
       "",
       "2. TRANSFORMATION OBJECTIVE",
