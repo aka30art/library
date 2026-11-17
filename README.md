@@ -68,7 +68,7 @@ A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to pub
 
 ## Catalogue expansion
 
-The catalogue contains 350 prompts across ten collections. Nine collections contain 125 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 25 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
+The catalogue contains 350 prompts across ten collections. The eight universal collections contain 25 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 25 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
 
 ## Reliability and recovery
 
