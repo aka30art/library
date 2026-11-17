@@ -6,7 +6,9 @@ const collections = [
 {id:"effects",name:"Effects",count:0,icon:"◉",tone:"violet",bg:"linear-gradient(130deg,#ffb52e,#e85d37 48%,#30245e)"},
 {id:"composition",name:"Composition",count:0,icon:"▦",tone:"green",bg:"linear-gradient(130deg,#173c35,#111820)"},
 {id:"rendering",name:"Rendering",count:0,icon:"⬡",tone:"blue",bg:"linear-gradient(135deg,#b6c0c2,#343d46 55%,#111820)"},
-{id:"colour-atmosphere",name:"Colour & Atmosphere",count:0,icon:"◌",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"}
+{id:"colour-atmosphere",name:"Colour & Atmosphere",count:0,icon:"◌",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"},
+{id:"films-shows",name:"Films & Shows",count:0,icon:"▣",tone:"violet",bg:"linear-gradient(135deg,#34264d,#b94b58 55%,#111820)"},
+{id:"toys-collectibles",name:"Toys & Collectibles",count:0,icon:"✧",tone:"orange",bg:"linear-gradient(135deg,#4b3528,#bd7b45 55%,#111820)"}
 ];
 let prompts = [];
 prompts.push(...(window.AI_PROMPT_EXPANSION||[]));
@@ -119,7 +121,9 @@ const builder=$("#builder-type");if(builder){
   {id:"effects",label:"Effects",categories:["effects"],description:"Optical, photographic and post-production treatments."},
   {id:"composition",label:"Composition",categories:["composition"],description:"Visual hierarchy, balance, spatial relationships and framing."},
   {id:"rendering",label:"Rendering",categories:["rendering"],description:"Rendering methods, material response and image fidelity."},
-  {id:"colour-atmosphere",label:"Colour & Atmosphere",categories:["colour-atmosphere"],description:"Palette systems, tonal relationships and atmospheric depth."}
+  {id:"colour-atmosphere",label:"Colour & Atmosphere",categories:["colour-atmosphere"],description:"Palette systems, tonal relationships and atmospheric depth."},
+  {id:"films-shows",label:"Films & Shows",categories:["films-shows"],description:"Transform supplied subjects into screen-based visual identities: 25 TV shows, 25 cartoons, 25 films, 25 anime and 25 other screen worlds."},
+  {id:"toys-collectibles",label:"Toys & Collectibles",categories:["toys-collectibles"],description:"Transform supplied subjects into 25 recognisable toy, figure, model and collectible formats, including LEGO and Funko Pop."}
  ];
  const selected=new Set();
  const builderPrompts=window.AI_PROMPT_BUILDER_CATALOGUE||prompts;
