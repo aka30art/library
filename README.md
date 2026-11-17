@@ -9,7 +9,7 @@ The interface follows the approved hybrid direction: functional archive and sear
 ## Included
 
 - Responsive homepage and navigation
-- Nineteen collection entry points
+- Twenty collection entry points
 - Prompt archive with text search, collection filter, model filter and sorting
 - Prompt detail dialog with Standard and universal ART DNA MASTER PROMPT modes
 - Prompt DNA Builder for combining a base prompt with visual style, lighting and composition
@@ -32,7 +32,7 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue currently contains 951 authored prompt records across the original nine populated collections, with ten additional specialist collections added as expansion targets. The planned library structure now contains 19 categories. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
+The catalogue contains 1,001 prompt records across 20 populated collections. The planned library structure now contains 19 categories. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
 
 ### Prompt design and research basis
 
