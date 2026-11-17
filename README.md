@@ -85,3 +85,7 @@ To restore the full snapshot, copy the files from `backups/2026-11-17/` back to 
 
 Every prompt includes an on-demand visual-reference panel. It searches Openverse for openly licensed image examples relevant to the prompt category and title, displays creator and licence information, and links to the original source. Results are cached in the visitor's browser to reduce repeat searches. The panel is available from prompt detail views and from each item in the Builder. Visual references illustrate the material, texture, style, process, screen world or collectible; they are reference examples, not generated outputs of the prompt.
 
+
+
+### Category subcategories
+The Explore archive provides a contextual subcategory filter for each collection. Subcategory labels are collection-specific, and counts are calculated from the current catalogue. Films & Shows retains its five established subcategories.
