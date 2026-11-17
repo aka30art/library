@@ -32,7 +32,7 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue contains 550 prompt records across ten collections. The eight universal visual collections each contain 50 complete, category-specific prompts. Films & Shows contains 125 prompts across five subcategories, and Toys & Collectibles contains 25 prompts. Films & Shows is divided into five distinct subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 25 prompts in each. Toys & Collectibles contains 25 prompts. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
+The catalogue contains 950 prompt records across ten collections. Materials contains 150 prompts; the other seven universal visual collections each contain 75 complete, category-specific prompts. Films & Shows contains 250 prompts across five subcategories, and Toys & Collectibles contains 25 prompts. Films & Shows is divided into five distinct subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 50 prompts in each. Toys & Collectibles contains 25 prompts. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
 
 The Prompt DNA Builder includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. The universal collections use one integrated prompt per element rather than splitting each element into facet-specific variants.
 
@@ -68,7 +68,7 @@ A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to pub
 
 ## Catalogue expansion
 
-The catalogue contains 550 prompts across ten collections. The eight universal collections contain 50 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 25 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
+The catalogue contains 975 prompts across ten collections. The eight universal collections contain 50 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 50 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
 
 ## Reliability and recovery
 
