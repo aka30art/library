@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090b10">
-  <meta name="description" content="A curated system of professional prompts for AI image creation. Explore materials, effects, mockups and creative workflows.">
-  <title>AI Prompt Library — The Creative Prompt System</title>
+  <meta name="description" content="Build modular image prompts by combining independent materials, styles, effects, lighting and rendering systems.">
+  <title>Prompt DNA Builder — AI Prompt Library</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,47 +22,23 @@
   </header>
   <div class="mobile-menu" id="mobile-menu"><a href="index.html">Home</a><a href="explore.html#archive">Prompts</a><a href="explore.html#collections">Collections</a><a href="builder.html">DNA Builder</a><a href="explore.html#guides">Guides</a><a href="explore.html#tools">Tools</a><a href="explore.html#about">About</a></div>
 
-  <main id="home">
-    <section class="hero shell">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="eyebrow-line"></span> THE CREATIVE PROMPT SYSTEM</p>
-          <h1>AI PROMPT<br><span>LIBRARY</span></h1>
-          <p class="hero-description">A curated collection of professional prompts for AI image creation.</p>
-          <div class="stats"><div><strong>951</strong><span>Prompts</span></div><div><strong>20</strong><span>Collections</span></div><div><strong>20</strong><span>Categories</span></div></div>
-          <div class="hero-actions"><a href="explore.html#archive" class="button button-orange">Browse prompts <span>→</span></a><a href="explore.html#collections" class="button button-outline">View collections</a></div>
+  <main id="builder-page">
+    <section class="section shell builder-hero">
+      <div class="section-heading"><div><p class="eyebrow">INDEPENDENT VISUAL ATTRIBUTES</p><h1>Prompt DNA Builder</h1></div><p class="section-note">Select any combination of materials, styles, effects and visual systems. Every selection remains independent and can be combined with any other.</p></div>
+      <div class="builder-panel">
+        <div class="builder-controls">
+          <label>Prompt mode<select id="builder-type"><option value="standard">Standard composition</option><option value="transformation">Image transformation</option><option value="art-dna">ART DNA system</option></select></label>
+          <label>Visual style refinement<select id="builder-style"><option value="">No additional style</option><option>Photorealistic editorial</option><option>Cinematic surrealism</option><option>Minimalist brutalism</option><option>Neo-expressionist fine art</option><option>Premium commercial finish</option><option>Japanese contemporary graphic art</option></select></label>
+          <label>Lighting refinement<select id="builder-light"><option value="">No additional lighting</option><option>Soft directional studio lighting</option><option>Dramatic cinematic chiaroscuro</option><option>Diffuse overcast daylight</option><option>Hard specular strip lighting</option><option>Atmospheric volumetric lighting</option><option>Low-key controlled illumination</option></select></label>
+          <label>Composition refinement<select id="builder-frame"><option value="">No additional composition</option><option>Balanced three-quarter composition</option><option>Centered symmetrical composition</option><option>Dynamic diagonal composition</option><option>Layered spatial composition</option><option>Negative-space editorial framing</option><option>Asymmetrical visual balance</option></select></label>
         </div>
-        <div class="hero-art" aria-label="Abstract monochrome sculpture with orange and blue graphic accents">
-          <div class="art-orbit"></div><div class="art-grid"></div><div class="art-sculpture"></div>
-          <div class="art-cross cross-one">+</div><div class="art-cross cross-two">+</div>
-          <div class="hero-index"><span>/ 01 MATERIALS</span><span>/ 02 FILTER EFFECTS</span><span>/ 03 MOCKUPS</span><span>/ 04 3D & RENDERING</span><span>/ 05 ENVIRONMENTS</span><span>/ 06 PHOTOGRAPHY</span><span>/ 07 GRAPHIC DESIGN</span><span>/ 08 TRANSFORMATIONS</span><span>/ 09 COMPOSITION</span></div>
-        </div>
+        <label class="builder-source-label">Subject or source-image description<textarea id="builder-source" rows="3" placeholder="Describe the subject, object or image to which the selected visual modules should be applied…"></textarea></label>
+        <div class="builder-selection-bar"><div><p class="eyebrow">MODULAR LIBRARY</p><h2>Choose independent elements</h2><p>Select multiple elements across any groups. You are not limited to one category.</p></div><div class="builder-selection-actions"><span id="builder-selection-count">0 selected</span><button class="button button-outline" id="builder-clear" type="button">Clear selections</button></div></div>
+        <div id="builder-modules"></div>
+        <div class="builder-output-wrap"><div class="builder-output-heading"><div><p class="eyebrow">COMPOSED OUTPUT</p><h2>Your generated prompt</h2></div></div><pre class="prompt-code builder-output" id="builder-output" aria-live="polite"></pre><button class="button button-orange" id="copy-builder" type="button">Copy composed prompt</button></div>
       </div>
-      <div class="hero-search-row"><label class="search-box"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="hero-search" type="search" placeholder="Search prompts, styles, materials, effects, mockups…" autocomplete="off"><kbd>⌘ K</kbd></label><a href="explore.html#archive" class="button button-orange browse-button">Browse library <span>→</span></a></div>
     </section>
-
-    <section class="section shell" id="collections">
-      <div class="section-heading"><div><p class="eyebrow">BUILT FOR CREATIVE WORKFLOWS</p><h2>Explore the collections</h2></div><p class="section-note">Twenty specialist libraries, each with fifty curated prompts.</p><a href="explore.html#archive" class="text-link">View all collections <span>→</span></a></div>
-      <div class="collection-grid" id="collection-grid"></div>
-    </section>
-
-    <section class="section shell" id="archive">
-      <div class="section-heading"><div><p class="eyebrow">THE PROMPT INDEX</p><h2>Featured prompts</h2></div><p class="section-note">Hand-picked prompts from across the library.</p><a href="explore.html#archive" class="text-link">Open archive <span>→</span></a></div>
-      <div class="archive-toolbar"><label class="search-box archive-search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg><input id="archive-search" type="search" placeholder="Search prompts, styles, materials…" autocomplete="off"></label><select id="category-filter" aria-label="Filter by collection"><option value="all">All collections</option></select><select id="model-filter" aria-label="Filter by model"><option value="all">All models</option><option>Midjourney</option><option>DALL·E</option><option>Stable Diffusion</option><option>Flux</option></select><select id="visual-filter" aria-label="Filter by visual quality"><option value="all">All visual traits</option><option value="metal">Metal</option><option value="texture">Texture</option><option value="glass">Glass</option><option value="editorial">Editorial</option><option value="cinematic">Cinematic</option><option value="macro">Macro</option></select><select id="sort-filter" aria-label="Sort prompts"><option value="featured">Featured</option><option value="az">A–Z</option></select></div>
-      <div class="prompt-grid" id="prompt-grid"></div>
-      <p class="empty-state" id="empty-state" hidden>No prompts match your search. Try a different term or collection.</p>
-      <div class="archive-bottom"><span id="result-count">Showing featured prompts</span><button class="button button-outline" id="show-all">View all prompts <span>→</span></button></div>
-    </section>
-
-    <section class="section shell" id="dna-builder"><div class="section-heading"><div><p class="eyebrow">BUILD A COMPOSITE PROMPT</p><h2>Prompt DNA Builder</h2></div><p class="section-note">Combine a specialist prompt with art direction choices.</p></div><div class="builder-panel"><label>Prompt type<select id="builder-type"><option value="standard">Standard</option><option value="transformation">Transformation</option><option value="art-dna">ART DNA</option></select></label><label>Category<select id="builder-category"></select></label><label>Subcategory<select id="builder-subcategory"></select></label><label>Prompt<select id="builder-base"></select></label><label>Visual style<select id="builder-style"><option>Photorealistic editorial</option><option>Cinematic surrealism</option><option>Minimalist brutalism</option><option>Neo-expressionist fine art</option><option>Premium commercial product</option></select></label><label>Lighting<select id="builder-light"><option>Soft directional studio lighting</option><option>Dramatic cinematic chiaroscuro</option><option>Diffuse overcast daylight</option><option>Hard specular strip lighting</option><option>Atmospheric volumetric lighting</option></select></label><label>Composition<select id="builder-frame"><option>Balanced three-quarter composition</option><option>Centered symmetrical composition</option><option>Dynamic diagonal composition</option><option>Macro detail with shallow depth</option><option>Negative-space editorial framing</option></select></label><div class="prompt-code builder-output" id="builder-output"></div><button class="button button-orange" id="copy-builder">Copy composed prompt</button></div></section>
-
-    <section class="manifesto-band shell" id="about">
-      <div class="manifesto-title">Build better<br><span>AI prompts.</span></div><div class="manifesto-divider"></div><p class="manifesto-copy">Discover, copy and customise professional prompts to create higher-quality, more consistent AI images.</p>
-      <div class="principle"><span class="principle-icon">▱</span><strong>Curated & considered</strong><small>Purpose-built prompt systems for creative work.</small></div><div class="principle"><span class="principle-icon">↗</span><strong>Flexible by design</strong><small>Adapt prompts to your own workflow.</small></div><div class="principle"><span class="principle-icon">◎</span><strong>Creative control</strong><small>Build more consistent, distinctive results.</small></div>
-    </section>
-    <section class="section shell guide-strip" id="guides"><div><p class="eyebrow">LEARN THE METHOD</p><h2>Better inputs. More intentional outputs.</h2></div><p>Explore practical guidance for structuring prompts, describing materials, controlling visual effects and building repeatable image workflows.</p><a class="button button-outline" href="explore.html#archive">Explore the library <span>→</span></a></section>
   </main>
-
   <footer class="site-footer shell" id="tools"><div class="footer-main">
     <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a><p>A curated collection of professional prompts for AI image creation.</p></div>
     <div class="footer-col"><strong>Library</strong><a href="explore.html#archive">All prompts</a><a href="explore.html#collections">Collections</a><a href="explore.html#archive">Featured</a><a href="explore.html#archive">New releases</a></div>
