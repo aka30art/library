@@ -263,15 +263,15 @@ Maintain internal consistency between subject, scale, materials, lighting, persp
 }
 function universalTransformationPrompt(p){
 return `UNIVERSAL TRANSFORMATION PROMPT
-Transform the supplied source image into the visual treatment of ${p.title}.
 
-Apply the complete artistic direction, visual language, materials, textures, colour, lighting, atmosphere and rendering characteristics described below to the existing source:
+Transform the supplied image by applying the visual treatment of ${p.title}. Use the existing image as the source and preserve its subject.
 
+Apply this complete visual treatment to the source image:
 ${p.prompt}
 
-Preserve the source subject's identity, defining features, silhouette, proportions, pose, expression, geometry, perspective and composition. Change only what is necessary to achieve the specified transformation. Keep all unrelated details intact. Do not introduce new subjects, remove existing elements or redesign the composition unless the target treatment explicitly requires it.
+Interpret the treatment above as the target style, material, surface, effect or rendering direction. Transfer its relevant visual characteristics onto the existing subject; do not recreate or substitute the example subject described in the treatment prompt.
 
-The result should faithfully combine the original source with the intended visual treatment: ${p.desc}
+Preserve the source subject's identity, defining features, shape, proportions, pose, expression, objects and composition. Modify only its visual treatment as needed to achieve the result. Keep all unrelated details unchanged.
 
 Avoid: ${p.negative}
 `;
