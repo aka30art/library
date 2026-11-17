@@ -102,3 +102,7 @@ Research references:
 - Disney Lorcana official Fabled rarity announcement: https://www.disneylorcana.com/en-GB/product/fabled
 - One Piece Card Game comprehensive rules: https://en.onepiece-cardgame.com/pdf/rule_comprehensive.pdf
 - Topps collector glossary: https://uk.topps.com/pages/uk-hobby-glossary
+
+
+### TCG subcategory consolidation
+All trading-card-game, sports-card, rarity, foil/parallel, autograph/memorabilia and card-product prompts in Toys & Collectibles are grouped under one archive subcategory: **TCG**. Other collectible formats retain their own subcategories.
