@@ -5,6 +5,7 @@ const BASE=process.env.SITE_URL||'https://aka30art.github.io/library/';
  const check=(ok,label)=>{if(!ok)failures.push('FAIL '+label);else console.log('PASS '+label);};
  const page=await browser.newPage({viewport:{width:390,height:844},permissions:['clipboard-read','clipboard-write']});
  await page.route('**/v1/images/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({results:[{id:'visual-test-1',title:'Tennis ball felt close-up',creator:'Example creator',license:'cc0',license_version:'1.0',license_url:'https://creativecommons.org/publicdomain/zero/1.0/',thumbnail:'https://example.com/tennis-felt.jpg',foreign_landing_url:'https://example.com/tennis-felt'}]})}));
+ await page.route('https://example.com/tennis-felt.jpg',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" fill="#777"/></svg>'}));
  page.on('pageerror',e=>runtimeErrors.push('pageerror: '+e.message));
  page.on('console',m=>{if(m.type()==='error'&&!/favicon\.ico/.test(m.text()))runtimeErrors.push('console: '+m.text());});
  const go=async(path)=>{const r=await page.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});check(!!r&&r.ok(),'Loads '+(path||'home'));await page.waitForTimeout(100);};
