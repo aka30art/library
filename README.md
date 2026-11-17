@@ -66,4 +66,14 @@ A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to pub
 
 ## Catalogue expansion
 
-The catalogue now contains 951 prompts across 19 collections. The original nine collections have been expanded to 50 or 51 entries each; the ten specialist collections have 50 entries each. Expansion content is maintained in `catalogue-expansion.js`, separate from the original prompt records. Each generated entry includes a distinct subject brief, category-specific production guidance, a negative prompt, model compatibility and searchable tags. Collection totals are calculated from the loaded records at runtime.
+The catalogue contains 1,001 prompts across 20 populated collections. The base prompt records and specialist expansion records are loaded as one unified catalogue at runtime. Collection totals are calculated from the loaded records rather than hard-coded display values.
+
+## Reliability and recovery
+
+- All three pages use synchronized, versioned shared assets.
+- Each page attempts to load the primary catalogue expansion and falls back to the verified snapshot at `backups/2026-11-17/catalogue-expansion.js` if the primary script fails to expose its data.
+- `scripts/validate-catalogue.cjs` checks expected prompt and collection totals, minimum collection sizes, unique IDs, required prompt fields, category references and synchronized page asset versions.
+- GitHub Pages deployment is gated on that validation passing.
+- A full pre-maintenance snapshot is stored under `backups/2026-11-17/`; a separate Git branch `safety/pre-reliability-audit-2026-11-17` preserves the prior site state.
+
+To restore the full snapshot, copy the files from `backups/2026-11-17/` back to the repository root and commit the restoration. To restore only the catalogue expansion, copy `backups/2026-11-17/catalogue-expansion.js` to the root as `catalogue-expansion.js`.
