@@ -1,15 +1,20 @@
 #!/usr/bin/env node
 const fs=require('node:fs'),vm=require('node:vm'),errors=[],app=fs.readFileSync('app.js','utf8');
-const m=app.match(/const collections = (\[[\s\S]*?\n\]);\nlet prompts =/);if(!m)throw Error('Cannot parse collections');
+const m=app.match(/const collections = (\[[\s\S]*?
+\]);
+let prompts =/);if(!m)throw Error('Cannot parse collections');
 const collections=vm.runInNewContext(m[1]),sandbox={window:{}};vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{timeout:5000});
 const all=sandbox.window.AI_PROMPT_EXPANSION,expected=['materials','styles','textures','lighting','effects','composition','rendering','colour-atmosphere','films-shows','toys-collectibles'];
 if(collections.length!==10||expected.some((x,i)=>collections[i]?.id!==x))errors.push('Collection taxonomy mismatch');
 if(all.length!==1150)errors.push('Expected 1150 entries, got '+all.length);
 const ids=new Set(),counts=Object.fromEntries(expected.map(x=>[x,0]));
 for(const p of all){if(ids.has(p.id))errors.push('Duplicate ID '+p.id);ids.add(p.id);for(const k of ['title','desc','prompt','negative','tags','model'])if(p[k]==null||(Array.isArray(p[k])&&!p[k].length))errors.push('Missing '+k+' on '+p.id);if(!expected.includes(p.category))errors.push('Unexpected category '+p.category);else counts[p.category]++;if(!p.prompt.includes('[SUBJECT]'))errors.push('Missing [SUBJECT] '+p.id);if(/yellow-skinned|springfield|new new york|delivery crew|sitcom family|suburban sitcom/i.test(p.title+' '+p.prompt))errors.push('Legacy subject prompt '+p.id);}
-for(const c of expected.slice(0,9))if(counts[c]!==125)errors.push(c+' expected 125 entries, got '+counts[c]);\nif(counts['toys-collectibles']!==25)errors.push('toys-collectibles expected 25 entries, got '+counts['toys-collectibles']);\nconst screen=all.filter(p=>p.category==='films-shows');for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){const n=screen.filter(p=>(p.tags||[]).includes(sub)).length;if(n!==25)errors.push(sub+' expected top 25, got '+n);}
+for(const c of expected.slice(0,9))if(counts[c]!==125)errors.push(c+' expected 125 entries, got '+counts[c]);
+if(counts['toys-collectibles']!==25)errors.push('toys-collectibles expected 25 entries, got '+counts['toys-collectibles']);
+const screen=all.filter(p=>p.category==='films-shows');for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){const n=screen.filter(p=>(p.tags||[]).includes(sub)).length;if(n!==25)errors.push(sub+' expected top 25, got '+n);}
 if(/populateSubcategoryFilter|subcategory-filter|coreCategoryMap|builderOnlyCategories|coreSubcategoryLabels/.test(app))errors.push('Legacy subcategory logic remains');
 if(!app.includes('const builder=$("#builder-type")'))errors.push('Builder guard missing');
 for(const page of ['index.html','explore.html','builder.html']){const h=fs.readFileSync(page,'utf8');for(const x of ['catalogue-expansion.js?v=20261117-filmtoy-v1','app.js?v=20261117-filmtoy-v1','styles.css?v=20261117-filmtoy-v1'])if(!h.includes(x))errors.push(page+' stale '+x);for(const id of ['focus-search','menu-toggle','mobile-menu','prompt-dialog','dialog-content','toast'])if(!h.includes('id="'+id+'"'))errors.push(page+' missing '+id);if(h.includes('id="dna-builder"')||h.includes('id="subcategory-filter"'))errors.push(page+' legacy UI');const ids=[...h.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);for(const id of new Set(ids))if(ids.filter(x=>x===id).length>1)errors.push(page+' duplicate id '+id);if(page!=='builder.html'&&(!h.includes('id="hero-search-form"')||!h.includes('id="hero-search"')||!h.includes('id="archive-search"')))errors.push(page+' search markup missing');if(page==='builder.html')for(const id of ['builder-type','builder-source','builder-modules','builder-output','builder-clear','copy-builder'])if(!h.includes('id="'+id+'"'))errors.push('builder missing '+id);}
 if(fs.readFileSync('explore.html','utf8').includes('Twenty specialist libraries'))errors.push('Stale collection count text');
-if(errors.length){console.error(errors.join('\n'));process.exit(1);}console.log('PASS: 1,150 prompts, ten collections, 125 screen prompts across five subcategories ×25, 25 collectible styles, unique IDs, subject variables and page wiring.');
+if(errors.length){console.error(errors.join('
+'));process.exit(1);}console.log('PASS: 1,150 prompts, ten collections, 125 screen prompts across five subcategories ×25, 25 collectible styles, unique IDs, subject variables and page wiring.');
