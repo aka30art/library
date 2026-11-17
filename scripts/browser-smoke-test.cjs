@@ -15,6 +15,17 @@ const BASE = process.env.SITE_URL || 'https://aka30art.github.io/library/';
    }
    check(loaded,'Loads '+(path||'home'));
    await page.waitForTimeout(300);
+   check(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),'No horizontal overflow on '+(path||'home'));
+   const searchButton=page.locator('#focus-search');
+   await searchButton.click();
+   if(path==='builder.html'){
+    await page.waitForURL(/explore\.html#archive/);
+    check(true,'Mobile header search routes from Builder to Explore');
+    await page.goto(BASE+path,{waitUntil:'networkidle'});
+   }else{
+    const target=path==='explore.html'?'#archive-search':'#hero-search';
+    check(await page.locator(target).evaluate(el=>document.activeElement===el),'Mobile header search focuses '+(path||'home'));
+   }
    const menu=page.locator('#menu-toggle');
    await menu.click();
    check(await menu.getAttribute('aria-expanded')==='true','Mobile menu opens on '+(path||'home'));
