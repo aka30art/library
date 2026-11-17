@@ -352,10 +352,34 @@ const builder=$("#dna-builder");if(builder){
 const pageType=document.body.dataset.page||"home";
 const params=new URLSearchParams(location.search);
 if(pageType==="explore"&&params.has("search")&&$("#archive-search")){$("#archive-search").value=params.get("search");showingAll=true;filterPrompts();}
-if($("#hero-search"))$("#hero-search").addEventListener("input",e=>{const value=e.target.value;if(value){location.href="explore.html?search="+encodeURIComponent(value)+"#archive";}});
-$("#focus-search").addEventListener("click",()=>{if(pageType==="home"){$("#hero-search").focus();window.scrollTo({top:0,behavior:"smooth"});}else if(pageType==="explore"){$("#archive-search").focus();$("#archive-search").scrollIntoView({behavior:"smooth",block:"center"});}else{location.href="explore.html#archive";}});
-if($("#show-all"))$("#show-all").addEventListener("click",()=>{showingAll=true;filterPrompts();$("#archive").scrollIntoView({behavior:"smooth"});});
-$("#menu-toggle").addEventListener("click",()=>{const open=$("#mobile-menu").classList.toggle("open");$("#menu-toggle").setAttribute("aria-expanded",String(open));});
-document.querySelectorAll("#mobile-menu a").forEach(a=>a.addEventListener("click",()=>{$("#mobile-menu").classList.remove("open");$("#menu-toggle").setAttribute("aria-expanded","false");}));
+function runSearch(value){
+ const query=String(value||"").trim();
+ if(!query)return;
+ if(pageType==="explore"){
+  const input=$("#archive-search");
+  if(input){input.value=query;showingAll=true;filterPrompts();history.replaceState(null,"", "explore.html?search="+encodeURIComponent(query)+"#archive");$("#archive").scrollIntoView({behavior:"smooth",block:"start"});}
+ }else location.href="explore.html?search="+encodeURIComponent(query)+"#archive";
+}
+if($("#hero-search")){
+ $("#hero-search").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runSearch(e.currentTarget.value);}});
+ const heroForm=$("#hero-search").closest("form");
+ if(heroForm)heroForm.addEventListener("submit",e=>{e.preventDefault();runSearch($("#hero-search").value);});
+}
+if($("#archive-search"))$("#archive-search").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();showingAll=true;filterPrompts();}});
+const focusSearch=$("#focus-search");
+if(focusSearch)focusSearch.addEventListener("click",()=>{
+ if(pageType==="home"){const input=$("#hero-search");if(input){input.focus();input.scrollIntoView({behavior:"smooth",block:"center"});}}
+ else if(pageType==="explore"){const input=$("#archive-search");if(input){input.focus();input.scrollIntoView({behavior:"smooth",block:"center"});}}
+ else location.href="explore.html#archive";
+});
+if($("#show-all"))$("#show-all").addEventListener("click",()=>{showingAll=true;filterPrompts();$("#archive")?.scrollIntoView({behavior:"smooth"});});
+const menuButton=$("#menu-toggle"),mobileMenu=$("#mobile-menu");
+if(menuButton&&mobileMenu){
+ const closeMenu=()=>{mobileMenu.classList.remove("open");menuButton.setAttribute("aria-expanded","false");menuButton.setAttribute("aria-label","Open menu");};
+ menuButton.addEventListener("click",e=>{e.preventDefault();const open=!mobileMenu.classList.contains("open");mobileMenu.classList.toggle("open",open);menuButton.setAttribute("aria-expanded",String(open));menuButton.setAttribute("aria-label",open?"Close menu":"Open menu");});
+ mobileMenu.querySelectorAll("a").forEach(link=>link.addEventListener("click",closeMenu));
+ document.addEventListener("click",e=>{if(mobileMenu.classList.contains("open")&&!mobileMenu.contains(e.target)&&!menuButton.contains(e.target))closeMenu();});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu();});
+}
 if($("#newsletter"))$("#newsletter").addEventListener("submit",e=>{e.preventDefault();$("#newsletter-message").textContent="No email has been sent. Newsletter sign-up will activate when an email service is connected.";});
-document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#hero-search").focus();window.scrollTo({top:0,behavior:"smooth"});}});
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();const target=pageType==="explore"?$("#archive-search"):$("#hero-search");if(target){target.focus();target.scrollIntoView({behavior:"smooth",block:"center"});}else location.href="explore.html#archive";}});
