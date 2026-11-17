@@ -32,7 +32,9 @@ Then open http://localhost:8000.
 
 ## Content status
 
-The catalogue contains 1,001 prompt records across 20 populated collections. The planned library structure now contains 19 categories. Every collection contains at least 20 prompts: Materials (20), Filters & Effects (20), Mockups (21), 3D & Rendering (20), Environments (20), Photography & Lighting (20), Graphic Design & Typography (20), Transformations (20), and Composition & Art Direction (20). The catalogue has been expanded with specialist material studies, optical and post-production effects, product mockups, physically based rendering, environments, lighting setups, graphic systems, image transformations and composition strategies. The original 36-record source catalogue was not present in the repository at initialisation, so these entries are researched and authored catalogue content rather than a claimed recovery of those missing records.
+The catalogue contains 1,150 prompt records across ten collections. Nine collections contain 125 prompts each: Materials, Styles, Textures, Lighting, Effects, Composition, Rendering, Colour & Atmosphere, and Films & Shows. Films & Shows is divided into five distinct subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 25 prompts in each. Toys & Collectibles contains 25 prompts. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
+
+The Prompt DNA Builder now includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. Each architecture defines its own transformation logic and works with the existing independent visual modules and source-preservation controls.
 
 ### Prompt design and research basis
 
@@ -66,7 +68,7 @@ A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to pub
 
 ## Catalogue expansion
 
-The catalogue contains 1,001 prompts across 20 populated collections. The base prompt records and specialist expansion records are loaded as one unified catalogue at runtime. Collection totals are calculated from the loaded records rather than hard-coded display values.
+The catalogue contains 1,150 prompts across ten collections. Nine collections contain 125 entries each and Toys & Collectibles contains 25. The five Films & Shows subcategories each contain exactly 25 entries. Counts are calculated from the loaded records and verified by the catalogue validator.
 
 ## Reliability and recovery
 

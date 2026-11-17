@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261117-filmtoy-v1">
+  <link rel="stylesheet" href="styles.css?v=20261117-utp-v1">
 </head>
 <body data-page="builder">
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
@@ -32,6 +32,17 @@
           <label>Lighting refinement<select id="builder-light"><option value="">No additional lighting</option><option>Soft directional studio lighting</option><option>Dramatic cinematic chiaroscuro</option><option>Diffuse overcast daylight</option><option>Hard specular strip lighting</option><option>Atmospheric volumetric lighting</option><option>Low-key controlled illumination</option></select></label>
           <label>Composition refinement<select id="builder-frame"><option value="">No additional composition</option><option>Balanced three-quarter composition</option><option>Centered symmetrical composition</option><option>Dynamic diagonal composition</option><option>Layered spatial composition</option><option>Negative-space editorial framing</option><option>Asymmetrical visual balance</option></select></label>
         </div>
+        <section class="transformation-controls" id="transformation-controls" hidden aria-labelledby="transformation-heading">
+          <div class="transformation-controls-heading"><p class="eyebrow">SPECIALIST TRANSFORMATION ARCHITECTURE</p><h2 id="transformation-heading">Define how the source changes</h2><p>Choose the transformation logic independently from the subject. The generated UTP will preserve the source according to your selected preservation contract.</p></div>
+          <label>Transformation architecture<select id="transformation-architecture">
+            <option value="material">Material transformation</option><option value="surface">Surface transformation</option><option value="texture">Texture transformation</option><option value="style-transfer">Style transfer</option><option value="hybrid">Hybrid transformation</option>
+          </select></label>
+          <label>Target treatment / visual objective<textarea id="transformation-target" rows="3" placeholder="e.g. Transform the supplied ceramic vase into translucent smoked glass with a satin-polished finish…"></textarea></label>
+          <label>Source preservation contract<select id="transformation-preservation">
+            <option value="strict">Strict identity and composition lock</option><option value="structural">Preserve subject structure and composition</option><option value="reinterpret">Preserve identity anchors; allow controlled reinterpretation</option>
+          </select></label>
+          <p class="transformation-note">The five architectures separate material identity, surface treatment, microtexture, visual-language transfer and multi-treatment orchestration. They do not replace your selected visual modules.</p>
+        </section>
         <label class="builder-source-label">Subject or source-image description<textarea id="builder-source" rows="3" placeholder="Describe the subject, object or image to which the selected visual modules should be applied…"></textarea></label>
         <div class="builder-selection-bar"><div><p class="eyebrow">MODULAR LIBRARY</p><h2>Choose independent elements</h2><p>Select multiple elements across any groups. You are not limited to one category.</p></div><div class="builder-selection-actions"><span id="builder-selection-count">0 selected</span><button class="button button-outline" id="builder-clear" type="button">Clear selections</button></div></div>
         <div id="builder-modules"></div>
@@ -40,7 +51,7 @@
     </section>
   </main>
   <footer class="site-footer shell" id="tools"><div class="footer-main">
-    <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a><p>A visual transformation library spanning 1,250 prompts, including universal visual elements, screen worlds and collectible formats.</p></div>
+    <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a><p>A visual transformation library spanning 1,150 prompts, including universal visual elements, screen worlds and collectible formats.</p></div>
     <div class="footer-col"><strong>Library</strong><a href="explore.html#archive">All prompts</a><a href="explore.html#collections">Collections</a><a href="explore.html#archive">Featured</a><a href="explore.html#archive">New releases</a></div>
     <div class="footer-col"><strong>Resources</strong><a href="explore.html#guides">Guides</a><a href="explore.html#tools">Tools</a><a href="explore.html#guides">Prompt tips</a><a href="explore.html#guides">Workflow ideas</a></div>
     <div class="footer-col"><strong>About</strong><a href="explore.html#about">About the project</a><a href="explore.html#about">Updates</a><a href="explore.html#about">Changelog</a><a href="explore.html#about">Contact information pending</a></div>
@@ -49,12 +60,13 @@
 
   <dialog class="prompt-dialog" id="prompt-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close prompt detail">×</button></form><div id="dialog-content"></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="catalogue-expansion.js?v=20261117-filmtoy-v1"></script>
+  <script src="catalogue-expansion.js?v=20261117-utp-v1"></script>
   <script>
     if (!Array.isArray(window.AI_PROMPT_EXPANSION)) {
       document.write('<script src="backups/2026-11-17/catalogue-expansion.js"><\\/script>');
     }
   </script>
-  <script src="app.js?v=20261117-filmtoy-v1"></script>
+  <script src="app.js?v=20261117-utp-v1"></script>
+  <script src="transformation-system.js?v=20261117-utp-v1"></script>
 </body>
 </html>
