@@ -1,7 +1,9 @@
-name: Deploy static site to GitHub Pages
+name: Validate and deploy AI Prompt Library
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -15,7 +17,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    name: Validate catalogue and page wiring
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify catalogue integrity
+        run: node scripts/validate-catalogue.cjs
+
   deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
