@@ -194,7 +194,7 @@ prompts.push(...(window.AI_PROMPT_EXPANSION||[]));
 const universalCategoryMap={
  materials:"materials",
  "filter-effects":"effects","typography-effects":"effects",motion:"effects",
- "graphic-design":"styles",surrealism:"styles","anime-manga":"styles","animation-toy-worlds":"styles",
+ "graphic-design":"styles",surrealism:"styles",
  photography:"lighting",composition:"composition","3d-rendering":"rendering",transformations:"transformations"
 };
 const originalCatalogue=prompts;
