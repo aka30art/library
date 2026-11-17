@@ -52,7 +52,7 @@ let id=182;
 for(const [category,target,label,raw] of sets){
  const recipe=recipes[category],items=raw.split("|");
  const already=category==="materials"||category==="filter-effects"||category==="mockups"||category==="3d-rendering"||category==="environments"||category==="photography"||category==="graphic-design"||category==="transformations"||category==="composition"?20:0;
- const needed=target-already;
+ const needed=items.length;
  for(let i=0;i<needed;i++){
   const subject=items[i];
   const light=lights[i%lights.length],frame=frames[(i*3)%frames.length];
