@@ -139,7 +139,7 @@ function filterPrompts(){
  $("#empty-state").hidden=list.length>0;
  $("#result-count").textContent=`Showing ${list.length} of ${prompts.length} prompts across ${collections.length} collections`;
  document.querySelectorAll(".prompt-card").forEach(card=>{
-  card.addEventListener("click",e=>{if(e.target.closest(".bookmark"))return;openPrompt(Number(card.dataset.id));});
+  card.addEventListener("click",e=>{if(e.target.closest(".bookmark,.thumb-credit"))return;openPrompt(Number(card.dataset.id));});
   card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPrompt(Number(card.dataset.id));}});
  });
  document.querySelectorAll(".bookmark").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();btn.classList.toggle("saved");btn.textContent=btn.classList.contains("saved")?"♥":"♧";showToast(btn.classList.contains("saved")?"Saved to this session":"Removed from saved");}));
