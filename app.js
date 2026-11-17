@@ -262,37 +262,18 @@ Maintain internal consistency between subject, scale, materials, lighting, persp
 `;
 }
 function universalTransformationPrompt(p){
-return `UNIVERSAL TRANSFORMATION PROMPT — SOURCE-BASED VISUAL TRANSFORMATION
-Transform the supplied source image, subject, object or composition. This is an image-to-image / source-led transformation task, not a request to invent an unrelated new image. Treat the supplied source as the ground truth.
+return `UNIVERSAL TRANSFORMATION PROMPT
+Transform the supplied source image into the visual treatment of ${p.title}.
 
-[SOURCE INPUT]: [ATTACH OR IDENTIFY THE EXISTING IMAGE, SUBJECT, OBJECT OR COMPOSITION]
-[TRANSFORMATION OBJECTIVE]: [STATE EXACTLY WHAT MUST CHANGE]
-[VISUAL STYLE / ART DIRECTION]: [INSERT TARGET STYLE, ART MOVEMENT OR REFERENCE LANGUAGE]
-[MATERIAL / MEDIUM / SURFACE CHANGE]: [INSERT REQUIRED MATERIAL, TEXTURE, FINISH OR RENDERING TREATMENT]
-[COLOUR & TONAL CHANGE]: [INSERT PALETTE, COLOURWAY OR TONAL TREATMENT]
-[LIGHTING / ATMOSPHERE CHANGE]: [INSERT REQUIRED LIGHTING OR ATMOSPHERIC ADJUSTMENT]
-[COMPOSITIONAL CHANGE]: [SPECIFY ANY PERMITTED CAMERA, CROP, BACKGROUND OR LAYOUT CHANGE; OTHERWISE LOCK IT]
-[DETAILS TO PRESERVE]: [LIST IDENTITY, SHAPE, GEOMETRY, PROPORTIONS, POSE, EXPRESSION, OBJECTS, TEXT, LOGOS, PATTERNS OR OTHER SOURCE FEATURES]
-[OUTPUT REQUIREMENTS]: [INSERT FORMAT, RESOLUTION, ASPECT RATIO AND FINISH]
+Apply the complete artistic direction, visual language, materials, textures, colour, lighting, atmosphere and rendering characteristics described below to the existing source:
 
-TRANSFORMATION INSTRUCTION:
-Apply [TRANSFORMATION OBJECTIVE] to the supplied source, translating its appearance into [VISUAL STYLE / ART DIRECTION] and, where specified, [MATERIAL / MEDIUM / SURFACE CHANGE]. Apply [COLOUR & TONAL CHANGE] and [LIGHTING / ATMOSPHERE CHANGE] only to the extent required by the brief. Treat every requested modification as a controlled edit to the existing source rather than permission to redesign the entire image.
-
-SOURCE-PRESERVATION PROTOCOL:
-Preserve the original subject's identity and recognisable characteristics, silhouette, proportions, pose, expression, object geometry, spatial relationships, camera viewpoint, perspective, framing and composition unless a specific change is explicitly requested. Retain all unmentioned elements exactly as they appear. Do not add, remove, replace, reinterpret or relocate objects without instruction. Keep original text, logos, symbols and fine identifying details accurate and undistorted. Maintain continuity of shadows, reflections, contact points and occlusion wherever compatible with the requested transformation.
-
-TRANSFORMATION CONTROL:
-Change only the specified attributes. Confine material, colour, texture, lighting and style changes to the relevant surfaces or regions. Respect existing boundaries and masks; prevent colour spill, texture leakage, geometry drift, identity drift and unintended global effects. If the requested style conflicts with source fidelity, preserve source structure first and apply the style through rendering, surface treatment and controlled visual language.
-
-TARGET VISUAL REFERENCE:
-Use this prompt's original creative intent as the transformation target:
 ${p.prompt}
 
-EXCLUSIONS:
-${p.negative}
-Also avoid unrequested composition changes, identity alteration, subject substitution, extra elements, missing source details, warped geometry, accidental cropping, inconsistent perspective and loss of source-specific information.
+Preserve the source subject's identity, defining features, silhouette, proportions, pose, expression, geometry, perspective and composition. Change only what is necessary to achieve the specified transformation. Keep all unrelated details intact. Do not introduce new subjects, remove existing elements or redesign the composition unless the target treatment explicitly requires it.
 
-[OUTPUT REQUIREMENTS]: ${p.desc}
+The result should faithfully combine the original source with the intended visual treatment: ${p.desc}
+
+Avoid: ${p.negative}
 `;
 }
 function renderCollections(){$("#collection-grid").innerHTML=collections.map(collectionCard).join("");$("#category-filter").innerHTML='<option value="all">All collections</option>'+collections.map(c=>`<option value="${c.id}">${c.name} (${c.count})</option>`).join("");document.querySelectorAll(".collection-card").forEach(el=>el.addEventListener("click",()=>{$("#category-filter").value=el.dataset.category;showingAll=true;filterPrompts();}));}
