@@ -1,7 +1,7 @@
 const collections = [
-  {id:"materials",name:"Materials",count:12,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"},
-  {id:"filter-effects",name:"Filter Effects",count:12,icon:"◉",tone:"blue",bg:"linear-gradient(135deg,#061b65,#5524b7 45%,#ff7b1a 75%,#0b1934)"},
-  {id:"mockups",name:"Mockups",count:14,icon:"⬡",tone:"violet",bg:"linear-gradient(130deg,#a4a6a6,#343a40 48%,#0e1218)"},
+  {id:"materials",name:"Materials",count:13,icon:"▧",tone:"orange",bg:"linear-gradient(120deg,#42474b,#15191e 54%,#8b8c88)"},
+  {id:"filter-effects",name:"Filter Effects",count:13,icon:"◉",tone:"blue",bg:"linear-gradient(135deg,#061b65,#5524b7 45%,#ff7b1a 75%,#0b1934)"},
+  {id:"mockups",name:"Mockups",count:12,icon:"⬡",tone:"violet",bg:"linear-gradient(130deg,#a4a6a6,#343a40 48%,#0e1218)"},
   {id:"3d-rendering",name:"3D & Rendering",count:0,icon:"⬢",tone:"violet",bg:"radial-gradient(circle at 70% 20%,#ff8a1a,transparent 30%),linear-gradient(130deg,#121d3a,#080c16)"},
   {id:"environments",name:"Environments",count:0,icon:"△",tone:"blue",bg:"linear-gradient(130deg,#172d42,#7a593c 50%,#0d1725)"},
   {id:"photography",name:"Photography & Lighting",count:0,icon:"◉",tone:"orange",bg:"radial-gradient(circle at 80% 20%,#ff8a13,transparent 30%),linear-gradient(130deg,#252d36,#080b10)"},
