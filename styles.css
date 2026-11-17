@@ -11,3 +11,27 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 /* Library expansion features */
 .prompt-mode-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px}.mode-tab{border:1px solid #485563;background:#151e29;color:#c7d0da;border-radius:7px;padding:10px 14px;font:600 11px 'Space Grotesk';cursor:pointer}.mode-tab.active{background:#f16c12;border-color:#f16c12;color:#10151c}.difficulty-tag{border:1px solid #d58a4b!important;color:#ffc18c!important}.builder-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:20px;border:1px solid #394653;border-radius:12px;background:#111821}.builder-panel label{display:flex;flex-direction:column;gap:8px;color:#aeb9c4;font-size:11px}.builder-panel select{height:42px;background:#0b1118;border:1px solid #465360;color:#eef2f5;border-radius:7px;padding:0 10px;font:inherit}.builder-output{grid-column:1/-1;min-height:110px}.builder-panel>.button{justify-self:start}.prompt-of-day{padding:24px;border:1px solid #465360;border-radius:12px;background:linear-gradient(110deg,#1b2734,#10161e 65%,#33241d);display:grid;gap:10px}.prompt-of-day .eyebrow{color:#ff9a54;font-size:10px;letter-spacing:1.2px}.prompt-of-day strong{font:600 22px 'Space Grotesk'}.prompt-of-day p{color:#b7c2cd;font-size:12px;max-width:650px;line-height:1.6;margin:0}.collection-card{background-size:cover;background-position:center}.collection-card:before{filter:saturate(1.1)}@media(max-width:780px){.builder-panel{grid-template-columns:1fr}.builder-output{grid-column:1}.builder-panel>.button{width:100%}}
+
+/* Separate page layouts */
+body[data-page="home"] #collections,
+body[data-page="home"] #archive,
+body[data-page="home"] #dna-builder,
+body[data-page="home"] .prompt-of-day,
+body[data-page="home"] .manifesto-band,
+body[data-page="home"] .guide-strip,
+body[data-page="home"] .site-footer{display:none!important}
+body[data-page="explore"] #home>.hero,
+body[data-page="explore"] #dna-builder,
+body[data-page="explore"] .prompt-of-day,
+body[data-page="explore"] .manifesto-band,
+body[data-page="explore"] .guide-strip{display:none!important}
+body[data-page="builder"] #home>.hero,
+body[data-page="builder"] #collections,
+body[data-page="builder"] #archive,
+body[data-page="builder"] .prompt-of-day,
+body[data-page="builder"] .manifesto-band,
+body[data-page="builder"] .guide-strip,
+body[data-page="builder"] .site-footer{display:none!important}
+body[data-page="explore"] #collections{padding-top:42px}
+body[data-page="explore"] #archive{padding-top:34px}
+body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 150px)}
