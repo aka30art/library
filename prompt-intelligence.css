@@ -18,3 +18,11 @@
 .compat-warning{color:#ffb27a;font-size:12px;margin:8px 0 0}
 .compat-note{font-size:12px;color:var(--muted);margin:8px 0 0}
 @media(max-width:700px){.intelligence-profile .profile-grid{grid-template-columns:1fr}.intelligence-filter{width:100%;min-width:0}}
+
+/* Randomiser: present a single synthesized prompt, not stacked source modules */
+.randomiser-composed{padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.randomiser-composed-label{margin:0 0 12px;color:var(--orange);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.randomiser-composed-text{margin:0;line-height:1.8;color:var(--text);white-space:pre-wrap}
+.randomiser-source-elements{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.randomiser-source-elements>span{width:100%;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.randomiser-source-elements small{display:inline-block;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px}
