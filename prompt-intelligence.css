@@ -142,3 +142,11 @@
 #randomiser-page .randomiser-composed-text[hidden]{display:none!important}
 #randomiser-page .randomiser-composed-text{margin-top:12px;padding:14px;border:1px solid var(--line);border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;background:rgba(0,0,0,.12)}
 @media(max-width:700px){#randomiser-page .randomiser-mode-selector{grid-template-columns:1fr!important}#randomiser-page .randomiser-mode-option{width:100%!important}#randomiser-page .randomiser-category{min-height:56px}#randomiser-page .randomiser-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}#randomiser-page .randomiser-actions button{width:100%;min-height:50px}}
+
+/* v5: enforce Randomiser mode visibility and collapsed output on mobile */
+#randomiser-page .randomiser-mode-selector{display:grid!important;grid-template-columns:1fr 1fr!important}
+#randomiser-page .randomiser-mode-option{display:flex!important;visibility:visible!important;opacity:1!important}
+#randomiser-page .randomiser-prompt-toggle{display:flex!important}
+#randomiser-page .randomiser-composed-text[hidden]{display:none!important;visibility:hidden!important}
+#randomiser-page .randomiser-source-details:not([open]) .randomiser-source-list{display:none!important}
+@media(max-width:600px){#randomiser-page .randomiser-mode-selector{grid-template-columns:1fr!important}}
