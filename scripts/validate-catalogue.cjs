@@ -56,5 +56,20 @@ const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
 if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-tcg-single-subcategory-v1'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
+const specialistTaxonomy={
+ 'architecture-spaces':['Urban Architecture','Residential Architecture','Interior Architecture','Civic & Institutional','Sacred & Contemplative'],
+ 'sculpture-3d-objects':['Monolithic Form','Assembled Sculpture','Kinetic Sculpture','Biomorphic Sculpture','Public Monument'],
+ 'graphic-design-layout':['Editorial Systems','Poster Composition','Typographic Experiment','Brand Applications','Print & Production'],
+ 'photography-camera':['Lens & Perspective','Exposure & Capture','Photographic Genres','Camera Movement','Focus & Depth'],
+ 'product-design':['Industrial Objects','Consumer Electronics','Furniture & Lighting','Packaging & Containers','Concept Products']
+};
+if(!app.includes('const exact=(p.tags||[])'))errors.push('Exact-tag subcategory routing missing');
+for(const [category,subs] of Object.entries(specialistTaxonomy)){
+ if(!app.includes('"'+category+'":'))errors.push('Missing subcategory taxonomy '+category);
+ for(const sub of subs){
+  const n=all.filter(p=>p.category===category&&(p.tags||[]).includes(sub)).length;
+  if(n!==10)errors.push(category+'/'+sub+' expected 10 prompts, got '+n);
+ }
+}
 if(errors.length){console.error(errors.join('\\n'));process.exit(1);}
 console.log('PASS: 1,562 prompts, fifteen collections (five new collections with 50 modules each), category-specific subcategory filters, five Films & Shows subcategories ×70, 87 collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
