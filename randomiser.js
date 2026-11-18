@@ -12,21 +12,64 @@
   function sample(){const a=[];cats.filter(c=>picked.has(c[0])).forEach(c=>{let pool=options(c).slice(),n=Math.min(picked.get(c[0]),pool.length);while(n>0&&pool.length){n--;a.push({cat:c,prompt:pool.splice(Math.floor(Math.random()*pool.length),1)[0]});}});return a;}
   function smartSample(){let best=[],max=-Infinity;for(let t=0;t<30;t++){const trial=sample();let total=0,pairs=0;if(window.PromptIntelligence&&trial.length>1){for(let i=0;i<trial.length;i++)for(let j=i+1;j<trial.length;j++){const score=window.PromptIntelligence.compatibility(trial[i].prompt,trial[j].prompt).score;total+=Number(score)||0;pairs++;}}else total=100;const score=pairs?total/pairs:total;if(score>max){best=trial;max=score;}}return best;}
   function compose(a){
-    const selected=a.map(x=>({category:x.cat[1],title:x.prompt.title,body:String(x.prompt.prompt||x.prompt.desc||"").trim()}));
-    const order=["Materials","Styles","Textures","Photography Post-Edits","Effects","Composition","Rendering","Colour & Atmosphere","Films & Shows — TV Shows","Films & Shows — Cartoons","Films & Shows — Films","Films & Shows — Anime","Films & Shows — Other Screen Worlds","Toys & Collectibles"];
-    const sections=[];
-    sections.push("RANDOMISED VISUAL PROMPT — "+(mode==="smart"?"SMART SYNTHESIS":"EXPERIMENTAL SYNTHESIS"));
-    sections.push("SOURCE SUBJECT: [SUBJECT / SUPPLIED IMAGE]. Create ONE image. Preserve the source subject's defining identity and silhouette unless a selected module explicitly requires transformation. Do not create a collage, panels, or multiple separate outputs.");
-    sections.push(mode==="smart"?"ART-DIRECTION LOGIC: Treat all selected modules as instructions for one visual system. Material defines physical behaviour; style defines visual language; texture adds surface detail; colour and atmosphere unify mood; lighting defines illumination; composition controls framing; effects are integrated rather than pasted on; rendering resolves the final fidelity. Resolve conflicts in favour of subject clarity, coherent material/light behaviour, and compatible visual intent. Remove redundant instructions.":"ART-DIRECTION LOGIC: Combine the selected modules without compatibility filtering. Contradictions and collisions may become intentional creative tension, but still resolve them into one legible, deliberately art-directed image—not a collage or unrelated layers.");
-    order.forEach(category=>{
-      const entries=selected.filter(x=>x.category===category);
-      if(entries.length){
-        sections.push("\n"+category.toUpperCase()+" — INTEGRATED DIRECTION");
-        entries.forEach(e=>sections.push("• "+e.title+": "+e.body));
-      }
-    });
-    sections.push(mode==="smart"?"FINAL SYNTHESIS: Integrate all instructions into one unified image. Maintain a clear focal point, believable spatial relationships, consistent perspective, intentional hierarchy and cohesive colour/lighting. Avoid duplication, uncontrolled clutter and contradictory rendering.":"FINAL SYNTHESIS: Let the chosen contrasts remain expressive, but make the image feel intentional, singular and visually resolved. Preserve focal hierarchy, spatial logic and legibility.");
-    return sections.join("\n\n");
+    const chosen=a.map(x=>({category:x.cat[1],title:String(x.prompt.title||"").trim(),body:String(x.prompt.prompt||x.prompt.desc||"").trim()}));
+    const buckets={materials:[],styles:[],textures:[],lighting:[],effects:[],composition:[],rendering:[],colour:[],world:[],objects:[]};
+    const mapRole=category=>{
+      if(category==="Materials")return "materials";
+      if(category==="Styles")return "styles";
+      if(category==="Textures")return "textures";
+      if(category==="Photography Post-Edits")return "lighting";
+      if(category==="Effects")return "effects";
+      if(category==="Composition")return "composition";
+      if(category==="Rendering")return "rendering";
+      if(category==="Colour & Atmosphere")return "colour";
+      if(category.startsWith("Films & Shows"))return "world";
+      if(category==="Toys & Collectibles")return "objects";
+      return "styles";
+    };
+    chosen.forEach(x=>buckets[mapRole(x.category)].push(x));
+    const clean=s=>String(s||"").replace(/\\s+/g," ").replace(/^[•*\\-]+\\s*/,"").replace(/[.\\s]+$/,"").trim();
+    const compact=x=>{
+      const body=clean(x.body);
+      const sentences=body.split(/(?<=[.!?])\\s+/).filter(Boolean);
+      let parts=sentences.length?sentences.slice(0,2):[body];
+      if(parts.join(" ").length>330)parts=[parts[0]];
+      return parts.join(" ").slice(0,380);
+    };
+    const directives=role=>buckets[role].map(x=>({name:x.title,text:compact(x)})).filter(x=>x.text);
+    const join=arr=>arr.map(x=>x.text).filter(Boolean).join("; ");
+    const named=arr=>arr.map(x=>x.name).filter(Boolean).join(", ");
+    const subjectWorld=join(directives("world"));
+    const form=join(directives("objects"));
+    const material=join(directives("materials"));
+    const style=join(directives("styles"));
+    const surface=join(directives("textures"));
+    const framing=join(directives("composition"));
+    const light=join(directives("lighting"));
+    const effect=join(directives("effects"));
+    const palette=join(directives("colour"));
+    const render=join(directives("rendering"));
+    const allNames=chosen.map(x=>x.title).filter(Boolean);
+    const mood=mode==="smart"?"SMART / COHERENT":"EXPERIMENTAL / CREATIVE COLLISION";
+    const textParts=[
+      "MASTER IMAGE PROMPT — "+mood,
+      "Create one fully resolved, high-end image from the following creative brief. Treat it as a single artwork or photograph, not a collage, moodboard, multi-panel layout, or collection of separate effects.",
+      "CREATIVE THESIS: Establish one clear visual idea and a deliberate focal subject. The image should communicate a distinct concept immediately, with every secondary decision reinforcing that concept rather than competing for attention.",
+      "SUBJECT & SCENE: [Insert subject or reference image]."+(subjectWorld?" Shape its setting and world through this direction: "+subjectWorld+".":"")+" Preserve the subject's defining form, identity, proportions and recognisable features unless transformation is explicitly part of the brief. Give the subject a believable relationship to the environment and a clear reason to occupy the frame.",
+      (form?"OBJECT / FORM LANGUAGE: "+form+".":""),
+      (style?"VISUAL LANGUAGE: Apply "+style+". Treat this as the overarching art-direction grammar—shape language, level of abstraction, detail, finish and visual character—not as a collection of independent styles.":""),
+      (material?"MATERIAL & PHYSICALITY: "+material+". Assign materials according to the object's form and function; make surface qualities, weight, translucency, reflectivity and edge behaviour visually credible.":""),
+      (surface?"SURFACE DETAIL: "+surface+". Use this as controlled surface-level detail. Keep it subordinate to silhouette, focal hierarchy and the overall visual read; avoid uniform detail everywhere.":""),
+      (framing?"COMPOSITION & SPATIAL DESIGN: "+framing+". Build a deliberate hierarchy of foreground, subject, supporting elements and negative space. Maintain clear silhouette separation, purposeful framing and consistent spatial logic.":""),
+      (light?"LIGHTING: "+light+". Establish a coherent key-light direction, supporting fill and shadow logic. Let illumination reveal form and material instead of flattening or randomly decorating the scene.":""),
+      (palette?"COLOUR & ATMOSPHERE: "+palette+". Use colour as a unified palette and emotional system. Coordinate dominant, supporting and accent colours; control saturation and contrast to protect the focal point.":""),
+      (effect?"ATMOSPHERIC / OPTICAL TREATMENT: "+effect+". Integrate these phenomena into the scene's lighting, depth and physical space. Effects should have a clear source and scale, never appear as pasted overlays.":""),
+      (render?"CAPTURE & FINAL RENDER: "+render+". Render at high fidelity with controlled detail, clean edges, intentional depth, and no accidental artifacts.":""),
+      "ART-DIRECTION PRIORITY: Subject readability and concept first; composition and visual language second; material, surface, lighting, colour and atmosphere serve the concept. Reconcile overlaps, discard redundant wording and resolve incompatible instructions into the strongest unified interpretation.",
+      (mode==="smart"?"SMART RESOLUTION: Prefer the most coherent interpretation of the selected modules. Use restrained accents where multiple directions compete; maintain consistent perspective, scale, material physics, light sources, colour logic and detail density.":"EXPERIMENTAL RESOLUTION: Preserve meaningful contrasts and unexpected combinations, but translate them into one deliberate design logic. Creative collision is welcome; incoherent placement, contradictory physics, competing focal points and random decoration are not."),
+      "OUTPUT: Produce a single polished image with a confident focal hierarchy, purposeful detail, balanced visual weight, convincing spatial relationships and professional finish. No text, logos, watermarks, borders or additional panels unless explicitly required by the selected creative direction."
+    ].filter(Boolean);
+    return textParts.join("\\n\\n");
   }
   function render(){const a=mode==="smart"?smartSample():sample();if(!a.length){output.innerHTML='<p class="randomiser-placeholder">Select at least one category to generate a combined prompt.</p>';fullPrompt="";copyBtn.disabled=true;compat.hidden=true;return;}
     fullPrompt=compose(a);const preview=fullPrompt.slice(0,220)+"…";const sources=a.map(x=>'<details class="randomiser-source-prompt"><summary>'+esc(x.prompt.title)+' <small>'+esc(x.cat[1])+'</small></summary><div class="randomiser-source-prompt-text">'+esc(x.prompt.prompt||x.prompt.desc||"")+'</div></details>').join("");
