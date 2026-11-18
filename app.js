@@ -197,7 +197,12 @@ const builder=$("#builder-type");if(builder){
   {id:"films-shows-films",label:"Films & Shows / Films",categories:["films-shows"],subcategory:"Films",description:"Transform subjects into cinematic film visual identities."},
   {id:"films-shows-anime",label:"Films & Shows / Anime",categories:["films-shows"],subcategory:"Anime",description:"Transform subjects into anime visual languages."},
   {id:"films-shows-other",label:"Films & Shows / Other Screen Worlds",categories:["films-shows"],subcategory:"Other Screen Worlds",description:"Transform subjects into other screen-based formats."},
-  {id:"toys-collectibles",label:"Toys & Collectibles",categories:["toys-collectibles"],description:"Transform supplied subjects into 56 mainstream toy, figure, model and trading-card collectible formats, including LEGO, Hot Wheels, Barbie and major TCG designs."}
+  {id:"toys-collectibles",label:"Toys & Collectibles",categories:["toys-collectibles"],description:"Transform supplied subjects into mainstream collectible toy, figure, model and trading-card formats."},
+  {id:"architecture-spaces",label:"Architecture & Spaces",categories:["architecture-spaces"],description:"Architectural spatial systems, site response, buildings and interiors."},
+  {id:"sculpture-3d-objects",label:"Sculpture & 3D Objects",categories:["sculpture-3d-objects"],description:"Sculptural volume, assembly, movement, organic form and monumental works."},
+  {id:"graphic-design-layout",label:"Graphic Design & Layout",categories:["graphic-design-layout"],description:"Editorial, poster, typography, branding and print-production systems."},
+  {id:"photography-camera",label:"Photography & Camera",categories:["photography-camera"],description:"Camera, lens, exposure, focus, movement and photographic capture methods."},
+  {id:"product-design",label:"Product Design",categories:["product-design"],description:"Industrial objects, electronics, furniture, packaging and functional concepts."}
  ];
  const selected=new Set();
  const builderPrompts=window.AI_PROMPT_BUILDER_CATALOGUE||prompts;
