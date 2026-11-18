@@ -71,3 +71,22 @@ jobs:
         env:
           SITE_URL: https://aka30art.github.io/library/
         run: node scripts/browser-smoke-test.cjs
+  randomiser-browser-test:
+    name: Randomiser mobile interaction tests
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Verify deployed Randomiser interactions
+        env:
+          SITE_URL: https://aka30art.github.io/library/
+        run: node scripts/randomiser-smoke-test.cjs
