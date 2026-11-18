@@ -2,7 +2,7 @@
   "use strict";
   const root=document.querySelector("#randomiser-categories"); if(!root)return;
   const db=window.AI_PROMPT_BUILDER_CATALOGUE||window.AI_PROMPT_EXPANSION||[];
-  const cats=[["materials","Materials","materials"],["styles","Styles","styles"],["textures","Textures","textures"],["lighting","Photography Post-Edits","lighting"],["effects","Effects","effects"],["composition","Composition","composition"],["rendering","Rendering","rendering"],["colour-atmosphere","Colour & Atmosphere","colour-atmosphere"],["films-tv","Films & Shows — TV Shows","films-shows","TV Shows"],["films-cartoon","Films & Shows — Cartoons","films-shows","Cartoons"],["films-films","Films & Shows — Films","films-shows","Films"],["films-anime","Films & Shows — Anime","films-shows","Anime"],["films-other","Films & Shows — Other Screen Worlds","films-shows","Other Screen Worlds"],["toys-collectibles","Toys & Collectibles","toys-collectibles"]];
+  const cats=[["materials","Materials","materials"],["styles","Styles","styles"],["textures","Textures","textures"],["lighting","Photography Post-Edits","lighting"],["effects","Effects","effects"],["composition","Composition","composition"],["rendering","Rendering","rendering"],["colour-atmosphere","Colour & Atmosphere","colour-atmosphere"],["films-tv","Films & Shows — TV Shows","films-shows","TV Shows"],["films-cartoon","Films & Shows — Cartoons","films-shows","Cartoons"],["films-films","Films & Shows — Films","films-shows","Films"],["films-anime","Films & Shows — Anime","films-shows","Anime"],["films-other","Films & Shows — Other Screen Worlds","films-shows","Other Screen Worlds"],["toys-collectibles","Toys & Collectibles","toys-collectibles"],["architecture-spaces","Architecture & Spaces","architecture-spaces"],["sculpture-3d-objects","Sculpture & 3D Objects","sculpture-3d-objects"],["graphic-design-layout","Graphic Design & Layout","graphic-design-layout"],["photography-camera","Photography & Camera","photography-camera"],["product-design","Product Design","product-design"]];
   const picked=new Map();let mode="smart",fullPrompt="";
   const output=document.querySelector("#randomiser-result"),copyBtn=document.querySelector("#randomiser-copy"),heading=document.querySelector("#randomiser-result-title"),compat=document.querySelector("#randomiser-compatibility");
   const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -13,7 +13,7 @@
   function smartSample(){let best=[],max=-Infinity;for(let t=0;t<30;t++){const trial=sample();let total=0,pairs=0;if(window.PromptIntelligence&&trial.length>1){for(let i=0;i<trial.length;i++)for(let j=i+1;j<trial.length;j++){const score=window.PromptIntelligence.compatibility(trial[i].prompt,trial[j].prompt).score;total+=Number(score)||0;pairs++;}}else total=100;const score=pairs?total/pairs:total;if(score>max){best=trial;max=score;}}return best;}
   function compose(a){
     const chosen=a.map(x=>({category:x.cat[1],title:String(x.prompt.title||"").trim(),body:String(x.prompt.prompt||x.prompt.desc||"").trim()}));
-    const buckets={materials:[],styles:[],textures:[],lighting:[],effects:[],composition:[],rendering:[],colour:[],world:[],objects:[]};
+    const buckets={materials:[],styles:[],textures:[],lighting:[],effects:[],composition:[],rendering:[],colour:[],world:[],objects:[],architecture:[],sculpture:[],graphic:[],photography:[],product:[]};
     const mapRole=category=>{
       if(category==="Materials")return "materials";
       if(category==="Styles")return "styles";
@@ -25,6 +25,11 @@
       if(category==="Colour & Atmosphere")return "colour";
       if(category.startsWith("Films & Shows"))return "world";
       if(category==="Toys & Collectibles")return "objects";
+      if(category==="Architecture & Spaces")return "architecture";
+      if(category==="Sculpture & 3D Objects")return "sculpture";
+      if(category==="Graphic Design & Layout")return "graphic";
+      if(category==="Photography & Camera")return "photography";
+      if(category==="Product Design")return "product";
       return "styles";
     };
     chosen.forEach(x=>buckets[mapRole(x.category)].push(x));
@@ -39,7 +44,12 @@
     const directives=role=>buckets[role].map(x=>({name:x.title,text:compact(x)})).filter(x=>x.text);
     const join=arr=>arr.map(x=>x.text).filter(Boolean).join("; ");
     const subjectWorld=join(directives("world"));
+    const architecture=join(directives("architecture"));
     const form=join(directives("objects"));
+    const sculpture=join(directives("sculpture"));
+    const product=join(directives("product"));
+    const graphic=join(directives("graphic"));
+    const camera=join(directives("photography"));
     const material=join(directives("materials"));
     const style=join(directives("styles"));
     const surface=join(directives("textures"));
@@ -54,7 +64,11 @@
       "Create one fully resolved, high-end image from the following creative brief. Treat it as a single artwork or photograph, not a collage, moodboard, multi-panel layout, or collection of separate effects.",
       "CREATIVE THESIS: Establish one clear visual idea and a deliberate focal subject. The image should communicate a distinct concept immediately, with every secondary decision reinforcing that concept rather than competing for attention.",
       "SUBJECT & SCENE: [Insert subject or reference image]."+(subjectWorld?" Shape its setting and world through this direction: "+subjectWorld+".":"")+" Preserve the subject's defining form, identity, proportions and recognisable features unless transformation is explicitly part of the brief. Give the subject a believable relationship to the environment and a clear reason to occupy the frame.",
-      (form?"OBJECT / FORM LANGUAGE: "+form+".":""),
+      (architecture?"ARCHITECTURE & SPATIAL WORLD: "+architecture+". Resolve site, massing, circulation, structural logic and human scale into a coherent spatial setting.":"") ,
+      (form?"OBJECT / FORM LANGUAGE: "+form+".":"") ,
+      (sculpture?"SCULPTURAL FORM & CONSTRUCTION: "+sculpture+". Resolve volume, negative space, balance, gravity, assembly and material behaviour as a unified object.":"") ,
+      (product?"PRODUCT DESIGN & FUNCTION: "+product+". Make usability, ergonomics, construction, manufacturing logic and functional details intentional and believable.":"") ,
+      (graphic?"GRAPHIC DESIGN & LAYOUT: "+graphic+". Treat typography, grid, hierarchy, spacing, contrast and production details as a deliberate communication system; avoid adding text unless the module calls for it.":""),
       (style?"VISUAL LANGUAGE: Apply "+style+". Treat this as the overarching art-direction grammar—shape language, level of abstraction, detail, finish and visual character—not as a collection of independent styles.":""),
       (material?"MATERIAL & PHYSICALITY: "+material+". Assign materials according to the object's form and function; make surface qualities, weight, translucency, reflectivity and edge behaviour visually credible.":""),
       (surface?"SURFACE DETAIL: "+surface+". Use this as controlled surface-level detail. Keep it subordinate to silhouette, focal hierarchy and the overall visual read; avoid uniform detail everywhere.":""),
@@ -62,6 +76,7 @@
       (light?"LIGHTING: "+light+". Establish a coherent key-light direction, supporting fill and shadow logic. Let illumination reveal form and material instead of flattening or randomly decorating the scene.":""),
       (palette?"COLOUR & ATMOSPHERE: "+palette+". Use colour as a unified palette and emotional system. Coordinate dominant, supporting and accent colours; control saturation and contrast to protect the focal point.":""),
       (effect?"ATMOSPHERIC / OPTICAL TREATMENT: "+effect+". Integrate these phenomena into the scene's lighting, depth and physical space. Effects should have a clear source and scale, never appear as pasted overlays.":""),
+      (camera?"CAMERA & PHOTOGRAPHIC CAPTURE: "+camera+". Translate the selected camera/lens/exposure/focus characteristics into a consistent capture choice; do not let optical effects contradict the scene scale or composition.":"") ,
       (render?"CAPTURE & FINAL RENDER: "+render+". Render at high fidelity with controlled detail, clean edges, intentional depth, and no accidental artifacts.":""),
       "ART-DIRECTION PRIORITY: Subject readability and concept first; composition and visual language second; material, surface, lighting, colour and atmosphere serve the concept. Reconcile overlaps, discard redundant wording and resolve incompatible instructions into the strongest unified interpretation.",
       (mode==="smart"?"SMART RESOLUTION: Prefer the most coherent interpretation of the selected modules. Use restrained accents where multiple directions compete; maintain consistent perspective, scale, material physics, light sources, colour logic and detail density.":"EXPERIMENTAL RESOLUTION: Preserve meaningful contrasts and unexpected combinations, but translate them into one deliberate design logic. Creative collision is welcome; incoherent placement, contradictory physics, competing focal points and random decoration are not."),
