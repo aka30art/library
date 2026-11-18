@@ -20,7 +20,8 @@ for(const p of all){
 }
 for(const category of expected.slice(0,8)){const target=({materials:200,styles:125,textures:125,lighting:75,effects:125,composition:75,rendering:75,'colour-atmosphere':75})[category];if(counts[category]!==target)errors.push(category+' expected '+target+' entries, got '+counts[category]);}
 if(counts['films-shows']!==350)errors.push('films-shows expected 350 entries, got '+counts['films-shows']);
-if(counts['toys-collectibles']!==87)errors.push('toys-collectibles expected 87 entries, got '+counts['toys-collectibles']);\nfor(const category of expected.slice(10)){if(counts[category]!==50)errors.push(category+' expected 50 entries, got '+counts[category]);}
+if(counts['toys-collectibles']!==87)errors.push('toys-collectibles expected 87 entries, got '+counts['toys-collectibles']);
+for(const category of expected.slice(10)){if(counts[category]!==50)errors.push(category+' expected 50 entries, got '+counts[category]);}
 const screen=all.filter(p=>p.category==='films-shows');
 for(const p of screen){
  for(const term of ['SUBJECT RE-CREATION','WORLD AND ENVIRONMENT TRANSFORMATION','UNIFIED ART DIRECTION','SCENE CONTROL'])if(!p.prompt.includes(term))errors.push('Incomplete screen-universe transformation prompt '+p.id+' missing '+term);
