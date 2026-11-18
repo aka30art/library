@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs=require('node:fs'),vm=require('node:vm'),errors=[],app=fs.readFileSync('app.js','utf8');
-const start=app.indexOf('const collections = '),end=app.indexOf(';\nlet prompts =',start);
+const start=app.indexOf('const collections = '),end=app.indexOf(';
+let prompts =',start);
 if(start<0||end<0)throw Error('Cannot parse collections');
 const collections=vm.runInNewContext(app.slice(start+'const collections = '.length,end+1));
 const sandbox={window:{}};
@@ -47,11 +48,15 @@ const randomiserHtml=fs.readFileSync('randomiser.html','utf8'),randomiserJs=fs.r
 for(const id of ['randomiser-mode-smart','randomiser-mode-experimental','randomiser-generate','randomiser-copy'])if(!randomiserHtml.includes('id="'+id+'"'))errors.push('Randomiser missing '+id);
 for(const token of ['randomiser-prompt-toggle','randomiser-ingredients-toggle','randomiser-source-list','randomiser-composed-text'])if(!randomiserJs.includes(token))errors.push('Randomiser missing collapse control '+token);
 if(!randomiserJs.includes('randomiser-source-list" hidden')||!randomiserJs.includes('randomiser-composed-text" hidden'))errors.push('Randomiser collapsed-by-default state missing');
-if(!randomiserCss.includes('#randomiser-page .randomiser-mode-option'))errors.push('Randomiser mobile mode visibility styles missing');\nif(randomiserCss.includes('.randomiser-source-details:not([open]) .randomiser-source-list'))errors.push('Randomiser ingredient accordion uses obsolete details[open] CSS');\nif(!randomiserCss.includes('.randomiser-source-list:not([hidden])'))errors.push('Randomiser ingredient accordion open state CSS missing');\nif(!randomiserHtml.includes('randomiser-rebuild-v7'))errors.push('Randomiser cache version is stale');
+if(!randomiserCss.includes('#randomiser-page .randomiser-mode-option'))errors.push('Randomiser mobile mode visibility styles missing');
+if(randomiserCss.includes('.randomiser-source-details:not([open]) .randomiser-source-list'))errors.push('Randomiser ingredient accordion uses obsolete details[open] CSS');
+if(!randomiserCss.includes('.randomiser-source-list:not([hidden])'))errors.push('Randomiser ingredient accordion open state CSS missing');
+if(!randomiserHtml.includes('randomiser-rebuild-v7'))errors.push('Randomiser cache version is stale');
 
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
 if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-tcg-single-subcategory-v1'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
-if(errors.length){console.error(errors.join('\n'));process.exit(1);}
+if(errors.length){console.error(errors.join('
+'));process.exit(1);}
 console.log('PASS: 1,312 prompts, ten collections, category-specific subcategory filters, five Films & Shows subcategories ×70, 87 mainstream collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
