@@ -195,7 +195,7 @@ const builder=$("#builder-type");if(builder){
    const items=groupItems(g).filter(p=>!g.subcategory||(p.tags||[]).includes(g.subcategory));
    const chosen=items.filter(p=>selected.has(String(p.id))).length;
    const filtered=items.filter(p=>!builderQuery||p.title.toLowerCase().includes(builderQuery));
-   const expanded=openGroup===gi||!!builderQuery;
+   const expanded=openGroup===gi||(!!builderQuery&&filtered.length>0);
    return '<section class="builder-module '+(expanded?'is-open':'')+'"><button type="button" class="builder-module-toggle" data-group-index="'+gi+'" aria-expanded="'+expanded+'"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span class="builder-module-count">'+(chosen?chosen+' selected · ':'')+items.length+' elements <b class="builder-chevron">⌄</b></span></div></button><div class="builder-module-content" '+(expanded?'':'hidden')+'><div class="builder-module-grid">'+filtered.map(p=>'<div class="builder-option"><label><input type="checkbox" data-prompt-id="'+p.id+'" '+ (selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label></div>').join("")+'</div>'+(builderQuery&&!filtered.length?'<p class="builder-empty">No matching options in this group.</p>':'')+'</div></section>';
   }).join("");
   $("#builder-modules").querySelectorAll(".builder-module-toggle").forEach(button=>button.addEventListener("click",()=>{openGroup=Number(button.dataset.groupIndex)===openGroup?null:Number(button.dataset.groupIndex);renderGroups();}));
