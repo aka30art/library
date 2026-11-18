@@ -35,7 +35,7 @@
   const chosen=[];categories.filter(c=>selected.has(c.id)).forEach(c=>{const pool=available(c).slice(),amount=Math.min(selected.get(c.id)||1,pool.length);for(let i=0;i<amount;i++){const idx=Math.floor(Math.random()*pool.length);chosen.push({category:c.label,prompt:pool.splice(idx,1)[0]});}});
   if(!chosen.length){output.innerHTML='<p class="randomiser-placeholder">Select at least one category to generate a prompt.</p>';copy.disabled=true;diagnostics([]);return;}
   lastPrompt=composePrompt(chosen);title.textContent="Integrated prompt · "+chosen.length+" elements";
-  output.innerHTML='<article class="randomiser-composed"><p class="randomiser-composed-label">ONE COMPOSED PROMPT</p><p class="randomiser-composed-text">'+esc(lastPrompt.replace("RANDOMISED VISUAL PROMPT\n\n",""))+'</p><div class="randomiser-source-elements"><span>Integrated elements</span>'+chosen.map(x=>'<small>'+esc(x.category)+': '+esc(x.prompt.title)+'</small>').join("")+'</div></article>';
+  const promptBody=lastPrompt.replace("RANDOMISED VISUAL PROMPT\n\n","");const preview=promptBody.length>240?promptBody.slice(0,240)+"…":promptBody;output.innerHTML='<article class="randomiser-composed"><p class="randomiser-composed-label">ONE COMPOSED PROMPT</p><details class="randomiser-prompt-details"><summary><span>Show full prompt</span><small>'+esc(preview)+'</small></summary><p class="randomiser-composed-text">'+esc(promptBody)+'</p></details><div class="randomiser-source-elements"><span>Integrated elements</span>'+chosen.map(x=>'<small>'+esc(x.category)+': '+esc(x.prompt.title)+'</small>').join("")+'</div></article>';
   copy.disabled=false;diagnostics(chosen);
  };
  document.querySelector("#randomiser-generate").addEventListener("click",randomise);
