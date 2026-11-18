@@ -157,3 +157,10 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 .randomiser-quantity{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);flex-shrink:0}.randomiser-quantity[hidden]{display:none!important}.randomiser-quantity select{background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
 .randomiser-actions{display:flex;gap:10px;margin:20px 0 28px;flex-wrap:wrap}.randomiser-result-wrap{border-top:1px solid var(--line);padding-top:24px}.randomiser-result{display:grid;gap:12px;margin:18px 0}.randomiser-picked{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.randomiser-picked-label{color:var(--orange);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.randomiser-picked h3{margin:8px 0 10px}.randomiser-picked p{margin:0;color:var(--muted);line-height:1.6}.randomiser-placeholder{color:var(--muted);padding:14px 0}.randomiser-panel .button:disabled{opacity:.4;cursor:not-allowed}
 @media(max-width:700px){.randomiser-categories{grid-template-columns:1fr}.randomiser-category{padding:12px}.randomiser-category-main{flex-wrap:wrap;gap:8px}.randomiser-category-main small{margin-left:27px}}
+
+/* Tools landing page */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:26px}
+.tool-card{min-height:230px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--text);background:var(--panel);transition:transform .2s,border-color .2s}
+.tool-card:hover{transform:translateY(-3px);border-color:var(--orange)}
+.tool-card-icon{display:grid;place-items:center;height:85px;background:var(--tool-bg);font-size:34px;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.tool-card-body{padding:20px;display:flex;flex-direction:column;gap:8px}.tool-card-body h2{margin:0;font-size:22px}.tool-card-body p{color:var(--muted);line-height:1.65;margin:0}.tool-card-action{margin-top:10px;color:var(--orange);font-weight:600;display:flex;justify-content:space-between}
