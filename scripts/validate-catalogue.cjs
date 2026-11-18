@@ -47,7 +47,7 @@ const randomiserHtml=fs.readFileSync('randomiser.html','utf8'),randomiserJs=fs.r
 for(const id of ['randomiser-mode-smart','randomiser-mode-experimental','randomiser-generate','randomiser-copy'])if(!randomiserHtml.includes('id="'+id+'"'))errors.push('Randomiser missing '+id);
 for(const token of ['randomiser-prompt-toggle','randomiser-ingredients-toggle','randomiser-source-list','randomiser-composed-text'])if(!randomiserJs.includes(token))errors.push('Randomiser missing collapse control '+token);
 if(!randomiserJs.includes('randomiser-source-list" hidden')||!randomiserJs.includes('randomiser-composed-text" hidden'))errors.push('Randomiser collapsed-by-default state missing');
-if(!randomiserCss.includes('#randomiser-page .randomiser-mode-option'))errors.push('Randomiser mobile mode visibility styles missing');
+if(!randomiserCss.includes('#randomiser-page .randomiser-mode-option'))errors.push('Randomiser mobile mode visibility styles missing');\nif(randomiserCss.includes('.randomiser-source-details:not([open]) .randomiser-source-list'))errors.push('Randomiser ingredient accordion uses obsolete details[open] CSS');\nif(!randomiserCss.includes('.randomiser-source-list:not([hidden])'))errors.push('Randomiser ingredient accordion open state CSS missing');\nif(!randomiserHtml.includes('randomiser-rebuild-v7'))errors.push('Randomiser cache version is stale');
 
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
