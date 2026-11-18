@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const fs=require('node:fs'),vm=require('node:vm'),errors=[],app=fs.readFileSync('app.js','utf8');
-const start=app.indexOf('const collections = '),end=app.indexOf(';
-let prompts =',start);
+const start=app.indexOf('const collections = '),end=app.indexOf(';\nlet prompts =',start);
 if(start<0||end<0)throw Error('Cannot parse collections');
 const collections=vm.runInNewContext(app.slice(start+'const collections = '.length,end+1));
 const sandbox={window:{}};
