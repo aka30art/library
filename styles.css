@@ -133,3 +133,15 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 .visual-reference-source-link{color:#ff9a54;font-size:9px;text-decoration:none;margin-top:3px}
 .visual-reference-source-link:hover,.visual-license:hover{text-decoration:underline}
 
+
+/* DNA Builder — progressive disclosure */
+.builder-module{padding:12px 0;border-top:1px solid rgba(255,255,255,.1)}
+.builder-module-toggle{width:100%;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;padding:0}
+.builder-module-heading{margin:0;padding:15px 16px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(255,255,255,.025);transition:background .15s,border-color .15s}
+.builder-module-toggle:hover .builder-module-heading,.builder-module.is-open .builder-module-heading{background:rgba(255,255,255,.045);border-color:rgba(232,121,53,.35)}
+.builder-module-heading h3{font-size:1.1rem}.builder-module-count{display:flex;align-items:center;gap:12px;white-space:nowrap;color:#f18a43;font-size:.8rem}
+.builder-chevron{display:inline-block;font-size:1.15rem;transition:transform .18s}.builder-module.is-open .builder-chevron{transform:rotate(180deg)}
+.builder-module-content{padding:14px 4px 2px}.builder-module-content[hidden]{display:none!important}
+.builder-module-search{width:100%;margin-top:16px}.builder-module-search input{width:100%;min-height:46px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:#11161e;color:#f4f4f4;font:inherit}
+.builder-empty{color:var(--muted,#a9adb5);padding:8px 4px}
+@media(max-width:560px){.builder-module-heading{gap:10px;flex-direction:row!important;align-items:center!important}.builder-module-count{font-size:.72rem}}
