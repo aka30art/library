@@ -148,7 +148,7 @@
 #randomiser-page .randomiser-mode-option{display:flex!important;visibility:visible!important;opacity:1!important}
 #randomiser-page .randomiser-prompt-toggle{display:flex!important}
 #randomiser-page .randomiser-composed-text[hidden]{display:none!important;visibility:hidden!important}
-#randomiser-page .randomiser-source-details:not([open]) .randomiser-source-list{display:none!important}
+#randomiser-page .randomiser-source-list:not([hidden]){display:flex!important}
 @media(max-width:600px){#randomiser-page .randomiser-mode-selector{grid-template-columns:1fr!important}}
 
 /* v6: ingredients accordion is closed until explicitly expanded */
@@ -158,3 +158,7 @@
 #randomiser-page .randomiser-source-list[hidden]{display:none!important}
 #randomiser-page .randomiser-source-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 #randomiser-page .randomiser-source-prompt:not([open]) .randomiser-source-prompt-text{display:none!important}
+
+/* v7: accordion list visibility is controlled by its hidden attribute, not obsolete details[open] */
+#randomiser-page .randomiser-source-list[hidden]{display:none!important}
+#randomiser-page .randomiser-source-list:not([hidden]){display:flex!important}
