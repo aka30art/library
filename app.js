@@ -8,7 +8,7 @@ const collections = [
 {id:"rendering",name:"Rendering",count:0,icon:"⬡",tone:"blue",bg:"linear-gradient(135deg,#b6c0c2,#343d46 55%,#111820)"},
 {id:"colour-atmosphere",name:"Colour & Atmosphere",count:0,icon:"◌",tone:"violet",bg:"linear-gradient(135deg,#39265c,#d15b64 55%,#10151e)"},
 {id:"films-shows",name:"Films & Shows",count:0,icon:"▣",tone:"violet",bg:"linear-gradient(135deg,#34264d,#b94b58 55%,#111820)"},
-{id:"toys-collectibles",name:"Toys & Collectibles",count:0,icon:"✧",tone:"orange",bg:"linear-gradient(135deg,#4b3528,#bd7b45 55%,#111820)"}
+{id:"toys-collectibles",name:"Toys & Collectibles",count:0,icon:"✧",tone:"orange",bg:"linear-gradient(135deg,#4b3528,#bd7b45 55%,#111820)"},
 {id:"architecture-spaces",name:"Architecture & Spaces",count:0,icon:"⌂",tone:"blue",bg:"linear-gradient(135deg,#1c3545,#6d8997 55%,#111820)"},
 {id:"sculpture-3d-objects",name:"Sculpture & 3D Objects",count:0,icon:"⬡",tone:"violet",bg:"linear-gradient(135deg,#292a38,#9478a2 55%,#111820)"},
 {id:"graphic-design-layout",name:"Graphic Design & Layout",count:0,icon:"▣",tone:"orange",bg:"linear-gradient(135deg,#43352b,#d09a5e 55%,#111820)"},
