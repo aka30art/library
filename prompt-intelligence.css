@@ -60,3 +60,19 @@
 .builder-output-intro strong{display:block;margin-bottom:8px;color:var(--text)}
 .builder-output-intro p{white-space:pre-wrap;line-height:1.6}
 .builder-output-collapse-note{font-size:12px;color:var(--muted);margin:12px 0}
+
+/* Randomiser: individually expandable source prompts, closed by default */
+.randomiser-source-details{margin-top:15px;border-top:1px solid var(--line);padding-top:12px}
+.randomiser-source-details>summary{cursor:pointer;color:var(--muted);font-size:12px;list-style:none}
+.randomiser-source-details>summary::-webkit-details-marker{display:none}
+.randomiser-source-details>summary:after{content:'＋';float:right}
+.randomiser-source-details[open]>summary:after{content:'－'}
+.randomiser-source-list{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.randomiser-source-prompt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.02)}
+.randomiser-source-prompt summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.randomiser-source-prompt summary::-webkit-details-marker{display:none}
+.randomiser-source-prompt summary:after{content:'＋';color:var(--muted)}
+.randomiser-source-prompt[open] summary:after{content:'－'}
+.randomiser-source-prompt summary span{font-size:13px;color:var(--text)}
+.randomiser-source-prompt summary small{font-size:11px;color:var(--muted)}
+.randomiser-source-prompt-text{margin-top:10px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65;color:var(--muted)}
