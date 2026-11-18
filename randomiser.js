@@ -21,12 +21,12 @@
     order.forEach(category=>{
       const entries=selected.filter(x=>x.category===category);
       if(entries.length){
-        sections.push("\\n"+category.toUpperCase()+" — INTEGRATED DIRECTION");
+        sections.push("\n"+category.toUpperCase()+" — INTEGRATED DIRECTION");
         entries.forEach(e=>sections.push("• "+e.title+": "+e.body));
       }
     });
     sections.push(mode==="smart"?"FINAL SYNTHESIS: Integrate all instructions into one unified image. Maintain a clear focal point, believable spatial relationships, consistent perspective, intentional hierarchy and cohesive colour/lighting. Avoid duplication, uncontrolled clutter and contradictory rendering.":"FINAL SYNTHESIS: Let the chosen contrasts remain expressive, but make the image feel intentional, singular and visually resolved. Preserve focal hierarchy, spatial logic and legibility.");
-    return sections.join("\\n\\n");
+    return sections.join("\n\n");
   }
   function render(){const a=mode==="smart"?smartSample():sample();if(!a.length){output.innerHTML='<p class="randomiser-placeholder">Select at least one category to generate a combined prompt.</p>';fullPrompt="";copyBtn.disabled=true;compat.hidden=true;return;}
     fullPrompt=compose(a);const preview=fullPrompt.slice(0,220)+"…";const sources=a.map(x=>'<details class="randomiser-source-prompt"><summary>'+esc(x.prompt.title)+' <small>'+esc(x.cat[1])+'</small></summary><div class="randomiser-source-prompt-text">'+esc(x.prompt.prompt||x.prompt.desc||"")+'</div></details>').join("");
