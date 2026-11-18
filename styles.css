@@ -148,3 +148,12 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 
 .builder-selection-bar{flex-wrap:wrap}.builder-module-search{flex:1;min-width:240px;max-width:420px}
 @media(max-width:560px){.builder-module-search{min-width:100%;max-width:none}}
+
+/* Randomiser tool */
+.randomiser-panel{padding:24px}.randomiser-intro{color:var(--muted);margin-bottom:16px}
+.randomiser-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.randomiser-category{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);min-width:0}
+.randomiser-category-main{display:flex;align-items:center;gap:11px;min-width:0;cursor:pointer}.randomiser-category-main input{accent-color:var(--orange);width:18px;height:18px;flex-shrink:0}.randomiser-category-name{font-weight:600}.randomiser-category-main small{color:var(--muted);font-size:11px;white-space:nowrap}
+.randomiser-quantity{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);flex-shrink:0}.randomiser-quantity[hidden]{display:none!important}.randomiser-quantity select{background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.randomiser-actions{display:flex;gap:10px;margin:20px 0 28px;flex-wrap:wrap}.randomiser-result-wrap{border-top:1px solid var(--line);padding-top:24px}.randomiser-result{display:grid;gap:12px;margin:18px 0}.randomiser-picked{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.randomiser-picked-label{color:var(--orange);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.randomiser-picked h3{margin:8px 0 10px}.randomiser-picked p{margin:0;color:var(--muted);line-height:1.6}.randomiser-placeholder{color:var(--muted);padding:14px 0}.randomiser-panel .button:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:700px){.randomiser-categories{grid-template-columns:1fr}.randomiser-category{padding:12px}.randomiser-category-main{flex-wrap:wrap;gap:8px}.randomiser-category-main small{margin-left:27px}}
