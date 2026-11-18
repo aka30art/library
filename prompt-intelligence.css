@@ -26,3 +26,13 @@
 .randomiser-source-elements{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .randomiser-source-elements>span{width:100%;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
 .randomiser-source-elements small{display:inline-block;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px}
+
+/* Collapsible Randomiser prompt */
+.randomiser-prompt-details{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:rgba(255,255,255,.02)}
+.randomiser-prompt-details summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:9px;min-width:0}
+.randomiser-prompt-details summary::-webkit-details-marker{display:none}
+.randomiser-prompt-details summary span{font-weight:600;color:var(--orange);font-size:13px}
+.randomiser-prompt-details summary span::after{content:'＋';float:right;color:var(--muted)}
+.randomiser-prompt-details[open] summary span::after{content:'－'}
+.randomiser-prompt-details summary small{color:var(--muted);font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.randomiser-prompt-details .randomiser-composed-text{margin-top:14px;font-size:14px;line-height:1.75;overflow-wrap:anywhere}
