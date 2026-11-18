@@ -1,0 +1,20 @@
+/* Prompt Intelligence: discovery, anatomy and compatibility */
+.intelligence-filter{min-width:150px;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:12px 14px;font:inherit}
+.intelligence-profile{margin:18px 0;padding:16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,rgba(49,139,255,.06),rgba(135,87,255,.05))}
+.intelligence-profile h3,.compatibility-panel h3{font:600 16px 'Space Grotesk',sans-serif;margin:0 0 10px}
+.intelligence-profile .profile-top{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.intelligence-chip{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-size:11px;color:var(--muted);background:rgba(255,255,255,.025)}
+.intelligence-profile .profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.intelligence-profile .profile-cell{min-width:0}
+.intelligence-profile .profile-cell strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.intelligence-profile .profile-cell p{margin:0;line-height:1.55;color:var(--text);font-size:13px;overflow-wrap:anywhere}
+.intelligence-profile .profile-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.compatibility-panel{margin:16px 0;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.compatibility-panel .compat-list{display:grid;gap:8px;margin-top:10px}
+.compat-row{padding:10px 12px;border:1px solid var(--line);border-radius:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.compat-row strong{font-size:13px}
+.compat-row small{display:block;color:var(--muted);margin-top:4px}
+.compat-score{font-size:11px;white-space:nowrap;color:var(--orange)}
+.compat-warning{color:#ffb27a;font-size:12px;margin:8px 0 0}
+.compat-note{font-size:12px;color:var(--muted);margin:8px 0 0}
+@media(max-width:700px){.intelligence-profile .profile-grid{grid-template-columns:1fr}.intelligence-filter{width:100%;min-width:0}}
