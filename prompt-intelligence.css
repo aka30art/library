@@ -46,3 +46,17 @@
 .randomiser-mode-option strong{font-size:14px;color:var(--text)}
 .randomiser-mode-option small{font-size:12px;line-height:1.4;color:var(--muted)}
 @media(max-width:600px){.randomiser-mode-selector{grid-template-columns:1fr}}
+
+/* DNA Builder generated modules: collapsed by default for compact scrolling */
+.builder-output-module{border:1px solid var(--line);border-radius:12px;margin:9px 0;padding:12px 14px;background:rgba(255,255,255,.02);white-space:normal}
+.builder-output-module summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.builder-output-module summary::-webkit-details-marker{display:none}
+.builder-output-module summary:after{content:'＋';color:var(--muted);font-size:18px;flex:none}
+.builder-output-module[open] summary:after{content:'－'}
+.builder-output-module summary span{font-weight:600;color:var(--text);overflow-wrap:anywhere}
+.builder-output-module summary small{font-size:11px;color:var(--muted);text-align:right;flex:none}
+.builder-output-module-text{margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;color:var(--muted);font-size:14px}
+.builder-output-intro{padding:0 2px 12px;white-space:normal}
+.builder-output-intro strong{display:block;margin-bottom:8px;color:var(--text)}
+.builder-output-intro p{white-space:pre-wrap;line-height:1.6}
+.builder-output-collapse-note{font-size:12px;color:var(--muted);margin:12px 0}
