@@ -150,3 +150,11 @@
 #randomiser-page .randomiser-composed-text[hidden]{display:none!important;visibility:hidden!important}
 #randomiser-page .randomiser-source-details:not([open]) .randomiser-source-list{display:none!important}
 @media(max-width:600px){#randomiser-page .randomiser-mode-selector{grid-template-columns:1fr!important}}
+
+/* v6: ingredients accordion is closed until explicitly expanded */
+#randomiser-page .randomiser-source-details{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+#randomiser-page .randomiser-ingredients-toggle{display:flex;width:100%;min-height:48px;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.035);color:var(--text);font:600 13px Inter,Arial,sans-serif;text-align:left;cursor:pointer}
+#randomiser-page .randomiser-ingredients-toggle[aria-expanded=true]{border-color:var(--orange);color:var(--orange)}
+#randomiser-page .randomiser-source-list[hidden]{display:none!important}
+#randomiser-page .randomiser-source-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+#randomiser-page .randomiser-source-prompt:not([open]) .randomiser-source-prompt-text{display:none!important}
