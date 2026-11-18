@@ -28,17 +28,16 @@
       return "styles";
     };
     chosen.forEach(x=>buckets[mapRole(x.category)].push(x));
-    const clean=s=>String(s||"").replace(/\\s+/g," ").replace(/^[•*\\-]+\\s*/,"").replace(/[.\\s]+$/,"").trim();
+    const clean=s=>String(s||"").replace(/\s+/g," ").replace(/^[•*\-]+\s*/,"").replace(/[.\s]+$/,"").trim();
     const compact=x=>{
       const body=clean(x.body);
-      const sentences=body.split(/(?<=[.!?])\\s+/).filter(Boolean);
+      const sentences=body.split(/(?<=[.!?])\s+/).filter(Boolean);
       let parts=sentences.length?sentences.slice(0,2):[body];
       if(parts.join(" ").length>330)parts=[parts[0]];
       return parts.join(" ").slice(0,380);
     };
     const directives=role=>buckets[role].map(x=>({name:x.title,text:compact(x)})).filter(x=>x.text);
     const join=arr=>arr.map(x=>x.text).filter(Boolean).join("; ");
-    const named=arr=>arr.map(x=>x.name).filter(Boolean).join(", ");
     const subjectWorld=join(directives("world"));
     const form=join(directives("objects"));
     const material=join(directives("materials"));
@@ -49,7 +48,6 @@
     const effect=join(directives("effects"));
     const palette=join(directives("colour"));
     const render=join(directives("rendering"));
-    const allNames=chosen.map(x=>x.title).filter(Boolean);
     const mood=mode==="smart"?"SMART / COHERENT":"EXPERIMENTAL / CREATIVE COLLISION";
     const textParts=[
       "MASTER IMAGE PROMPT — "+mood,
@@ -69,7 +67,7 @@
       (mode==="smart"?"SMART RESOLUTION: Prefer the most coherent interpretation of the selected modules. Use restrained accents where multiple directions compete; maintain consistent perspective, scale, material physics, light sources, colour logic and detail density.":"EXPERIMENTAL RESOLUTION: Preserve meaningful contrasts and unexpected combinations, but translate them into one deliberate design logic. Creative collision is welcome; incoherent placement, contradictory physics, competing focal points and random decoration are not."),
       "OUTPUT: Produce a single polished image with a confident focal hierarchy, purposeful detail, balanced visual weight, convincing spatial relationships and professional finish. No text, logos, watermarks, borders or additional panels unless explicitly required by the selected creative direction."
     ].filter(Boolean);
-    return textParts.join("\\n\\n");
+    return textParts.join("\n\n");
   }
   function render(){const a=mode==="smart"?smartSample():sample();if(!a.length){output.innerHTML='<p class="randomiser-placeholder">Select at least one category to generate a combined prompt.</p>';fullPrompt="";copyBtn.disabled=true;compat.hidden=true;return;}
     fullPrompt=compose(a);const preview=fullPrompt.slice(0,220)+"…";const sources=a.map(x=>'<details class="randomiser-source-prompt"><summary>'+esc(x.prompt.title)+' <small>'+esc(x.cat[1])+'</small></summary><div class="randomiser-source-prompt-text">'+esc(x.prompt.prompt||x.prompt.desc||"")+'</div></details>').join("");
