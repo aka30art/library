@@ -164,3 +164,65 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 .tool-card:hover{transform:translateY(-3px);border-color:var(--orange)}
 .tool-card-icon{display:grid;place-items:center;height:85px;background:var(--tool-bg);font-size:34px;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
 .tool-card-body{padding:20px;display:flex;flex-direction:column;gap:8px}.tool-card-body h2{margin:0;font-size:22px}.tool-card-body p{color:var(--muted);line-height:1.65;margin:0}.tool-card-action{margin-top:10px;color:var(--orange);font-weight:600;display:flex;justify-content:space-between}
+
+/* DNA Builder usability redesign — mobile-first touch layout */
+.builder-hero .section-heading{align-items:flex-start;gap:18px}
+.builder-hero .section-note{max-width:680px;line-height:1.65}
+.builder-panel{display:flex;flex-direction:column;gap:20px;padding:clamp(12px,2.5vw,24px)}
+.builder-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.builder-controls label,.builder-source-label{font-size:13px;line-height:1.4}
+.builder-controls select,.builder-source-label textarea{min-height:48px;font-size:14px}
+.builder-source-label textarea{min-height:96px}
+.builder-selection-bar{align-items:flex-start;flex-direction:column;gap:12px}
+.builder-selection-bar h2,.builder-output-heading h2{font-size:clamp(1.25rem,5vw,1.7rem)}
+.builder-selection-actions{width:100%;justify-content:space-between;flex-wrap:wrap}
+.builder-selection-actions .button{min-height:44px}
+.builder-module{padding:0;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;margin-bottom:10px;background:rgba(255,255,255,.02)}
+.builder-module-toggle{width:100%;padding:14px 15px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.builder-module-heading{margin:0;align-items:center}
+.builder-module-heading h3{font-size:15px}
+.builder-module-heading p{font-size:12px;line-height:1.45}
+.builder-module-count{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:11px}
+.builder-chevron{display:inline-block;transition:transform .2s}
+.builder-module.is-open .builder-chevron{transform:rotate(180deg)}
+.builder-module-content{padding:0 12px 12px}
+.builder-module-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.builder-option{min-width:0;padding:0;border-radius:9px}
+.builder-option label{min-height:46px;display:flex;align-items:center;padding:10px;gap:9px;cursor:pointer;font-size:13px;line-height:1.35}
+.builder-option input{width:18px;height:18px}
+.builder-option span{overflow-wrap:anywhere}
+.builder-module-search{width:100%}
+.builder-module-search input{width:100%;min-height:48px;border-radius:10px;padding:12px 14px;font-size:14px}
+.builder-output-wrap{padding-top:16px}
+.builder-output-heading{align-items:flex-start}
+.builder-output{min-height:160px;max-height:55vh;padding:14px;font-size:12px;line-height:1.6}
+#copy-builder{min-height:48px;width:100%;position:sticky;bottom:10px;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+@media(max-width:700px){
+ .builder-hero{padding-top:26px}
+ .builder-hero .section-heading{flex-direction:column;gap:10px}
+ .builder-hero .section-note{font-size:13px}
+ .builder-panel{gap:16px;padding:12px;border-radius:12px}
+ .builder-controls{grid-template-columns:1fr;gap:10px}
+ .builder-controls label{display:flex;flex-direction:column}
+ .builder-controls select{width:100%}
+ .builder-source-label textarea{min-height:100px}
+ .builder-selection-bar{gap:8px}
+ .builder-selection-bar p:not(.eyebrow){font-size:12px}
+ .builder-selection-actions{align-items:center}
+ .builder-selection-actions>span{font-size:12px}
+ .builder-selection-actions #builder-clear{min-height:42px;padding:0 12px}
+ .builder-module-toggle{padding:13px}
+ .builder-module-heading{flex-direction:column;align-items:flex-start;gap:6px}
+ .builder-module-heading h3{font-size:15px}
+ .builder-module-heading p{font-size:11px}
+ .builder-module-count{white-space:normal;justify-content:flex-start}
+ .builder-module-grid{grid-template-columns:1fr;gap:6px}
+ .builder-option label{min-height:48px;padding:12px}
+ .builder-module-content{padding:0 10px 10px}
+ .builder-output-wrap{gap:12px}
+ .builder-output{font-size:11px;max-height:50vh}
+}
+@media(min-width:701px) and (max-width:1100px){
+ .builder-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .builder-module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
