@@ -33,7 +33,7 @@ for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){
 if(!app.includes('const builder=$("#builder-type")'))errors.push('Builder guard missing');
 for(const page of ['index.html','explore.html','builder.html']){
  const html=fs.readFileSync(page,'utf8');
- for(const asset of ['catalogue-expansion.js?v=20261118-tcg-single-subcategory-v1','app.js?v=20261118-tcg-single-subcategory-v1','styles.css?v=20261118-tcg-single-subcategory-v1'])if(!html.includes(asset))errors.push(page+' stale '+asset);
+ const assetNames=['catalogue-expansion.js','app.js','styles.css'];for(const asset of assetNames){const re=new RegExp('<script[^>]+src="'+asset+'\\?v=[^"]+"|<link[^>]+href="'+asset+'\\?v=[^"]+"');if(!re.test(html))errors.push(page+' missing or unversioned '+asset);}
  for(const id of ['focus-search','menu-toggle','mobile-menu','prompt-dialog','dialog-content','toast'])if(!html.includes('id="'+id+'"'))errors.push(page+' missing '+id);
  if(html.includes('id="dna-builder"'))errors.push(page+' legacy UI');
  if(page==='explore.html'&&(!html.includes('id="subcategory-filter"')||!html.includes('Filter by subcategory')))errors.push('Explore category subcategory filter missing');
@@ -43,6 +43,12 @@ for(const page of ['index.html','explore.html','builder.html']){
  if(page!=='builder.html'&&(!html.includes('id="hero-search-form"')||!html.includes('id="hero-search"')||!html.includes('id="archive-search"')))errors.push(page+' search markup missing');
  if(page==='builder.html')for(const id of ['builder-type','builder-source','builder-modules','builder-output','builder-clear','copy-builder'])if(!html.includes('id="'+id+'"'))errors.push('builder missing '+id);
 }
+const randomiserHtml=fs.readFileSync('randomiser.html','utf8'),randomiserJs=fs.readFileSync('randomiser.js','utf8'),randomiserCss=fs.readFileSync('prompt-intelligence.css','utf8');
+for(const id of ['randomiser-mode-smart','randomiser-mode-experimental','randomiser-generate','randomiser-copy'])if(!randomiserHtml.includes('id="'+id+'"'))errors.push('Randomiser missing '+id);
+for(const token of ['randomiser-prompt-toggle','randomiser-ingredients-toggle','randomiser-source-list','randomiser-composed-text'])if(!randomiserJs.includes(token))errors.push('Randomiser missing collapse control '+token);
+if(!randomiserJs.includes('randomiser-source-list" hidden')||!randomiserJs.includes('randomiser-composed-text" hidden'))errors.push('Randomiser collapsed-by-default state missing');
+if(!randomiserCss.includes('#randomiser-page .randomiser-mode-option'))errors.push('Randomiser mobile mode visibility styles missing');
+
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
 if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-tcg-single-subcategory-v1'))errors.push('Builder transformation system not loaded');
