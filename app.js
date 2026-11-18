@@ -189,12 +189,17 @@ const builder=$("#builder-type");if(builder){
  const uniquePrompts=[...new Map(builderPrompts.filter(p=>groups.some(g=>g.categories.includes(p.category))).map(p=>[String(p.id),p])).values()];
  const groupItems=(g)=>uniquePrompts.filter(p=>g.categories.includes(p.category)).sort((a,b)=>a.title.localeCompare(b.title));
  const esc=(v)=>String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+ let openGroup=null, builderQuery="";
  const renderGroups=()=>{
-  $("#builder-modules").innerHTML=groups.map(g=>{
+  $("#builder-modules").innerHTML=groups.map((g,gi)=>{
    const items=groupItems(g).filter(p=>!g.subcategory||(p.tags||[]).includes(g.subcategory));
-   return '<section class="builder-module"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span>'+items.length+' elements</span></div><div class="builder-module-grid">'+items.map(p=>'<div class="builder-option"><label><input type="checkbox" data-prompt-id="'+p.id+'" '+(selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label></div>').join("")+'</div></section>';
+   const chosen=items.filter(p=>selected.has(String(p.id))).length;
+   const filtered=items.filter(p=>!builderQuery||p.title.toLowerCase().includes(builderQuery));
+   const expanded=openGroup===gi||!!builderQuery;
+   return '<section class="builder-module '+(expanded?'is-open':'')+'"><button type="button" class="builder-module-toggle" data-group-index="'+gi+'" aria-expanded="'+expanded+'"><div class="builder-module-heading"><div><h3>'+g.label+'</h3><p>'+g.description+'</p></div><span class="builder-module-count">'+(chosen?chosen+' selected · ':'')+items.length+' elements <b class="builder-chevron">⌄</b></span></div></button><div class="builder-module-content" '+(expanded?'':'hidden')+'><div class="builder-module-grid">'+filtered.map(p=>'<div class="builder-option"><label><input type="checkbox" data-prompt-id="'+p.id+'" '+ (selected.has(String(p.id))?'checked':'')+'><span>'+esc(p.title)+'</span></label></div>').join("")+'</div>'+(builderQuery&&!filtered.length?'<p class="builder-empty">No matching options in this group.</p>':'')+'</div></section>';
   }).join("");
-  $("#builder-modules").querySelectorAll('input[data-prompt-id]').forEach(input=>input.addEventListener("change",()=>{const id=input.dataset.promptId;if(input.checked)selected.add(id);else selected.delete(id);compose();}));
+  $("#builder-modules").querySelectorAll(".builder-module-toggle").forEach(button=>button.addEventListener("click",()=>{openGroup=Number(button.dataset.groupIndex)===openGroup?null:Number(button.dataset.groupIndex);renderGroups();}));
+  $("#builder-modules").querySelectorAll('input[data-prompt-id]').forEach(input=>input.addEventListener("change",()=>{const id=input.dataset.promptId;if(input.checked)selected.add(id);else selected.delete(id);compose();renderGroups();}));
  };
  const compose=()=>{
   const chosen=[...selected].map(id=>byId.get(id)).filter(Boolean);
@@ -213,6 +218,7 @@ const builder=$("#builder-type");if(builder){
  $("#builder-type").addEventListener("change",compose);
  ["builder-style","builder-light","builder-frame","builder-source"].forEach(id=>$("#"+id).addEventListener(id==="builder-source"?"input":"change",compose));
  $("#builder-clear").addEventListener("click",()=>{selected.clear();renderGroups();compose();});
+ const moduleSearch=$("#builder-module-search"); if(moduleSearch)moduleSearch.addEventListener("input",()=>{builderQuery=moduleSearch.value.trim().toLowerCase();if(builderQuery)openGroup=null;renderGroups();});
  $("#copy-builder").addEventListener("click",()=>copyText($("#builder-output").textContent));
  renderGroups();compose();
 }
