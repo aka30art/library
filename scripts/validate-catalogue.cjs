@@ -57,6 +57,5 @@ const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
 if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-tcg-single-subcategory-v1'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
-if(errors.length){console.error(errors.join('
-'));process.exit(1);}
+if(errors.length){console.error(errors.join('\\n'));process.exit(1);}
 console.log('PASS: 1,312 prompts, ten collections, category-specific subcategory filters, five Films & Shows subcategories ×70, 87 mainstream collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
