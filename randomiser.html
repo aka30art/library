@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b10">
+  <meta name="description" content="Build modular image prompts by combining independent materials, styles, effects, lighting and rendering systems.">
+  <title>Prompt DNA Builder — AI Prompt Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20261118-tcg-single-subcategory-v1">
+</head>
+<body data-page="builder">
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="AI Prompt Library home"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a class="nav-link " href="index.html">Home</a><a class="nav-link " href="explore.html#archive">Prompts</a><a class="nav-link " href="explore.html#collections">Collections</a><a class="nav-link active" href="builder.html">DNA Builder</a><a class="nav-link active" href="randomiser.html">Randomiser</a><a class="nav-link" href="explore.html#guides">Guides</a><a class="nav-link" href="explore.html#tools">Tools</a><a class="nav-link" href="explore.html#about">About</a>
+    </nav>
+    <div class="header-actions"><button class="icon-button" id="focus-search" aria-label="Focus search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></button><button class="menu-button" id="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button><a class="button button-small button-orange header-cta" href="explore.html#archive">Get started <span>↗</span></a></div>
+  </header>
+  <div class="mobile-menu" id="mobile-menu"><a href="index.html">Home</a><a href="explore.html#archive">Prompts</a><a href="explore.html#collections">Collections</a><a href="builder.html">DNA Builder</a><a href="explore.html#guides">Guides</a><a href="explore.html#tools">Tools</a><a href="explore.html#about">About</a></div>
+
+  <main id="randomiser-page">
+<section class="section shell builder-hero">
+<div class="section-heading"><div><p class="eyebrow">RANDOM PROMPT MIXER</p><h1>Randomiser</h1></div><p class="section-note">Choose the main categories you want to combine. Set how many prompts to draw from each category, then generate a unique combination.</p></div>
+<div class="builder-panel randomiser-panel">
+<div class="randomiser-intro"><p>Select categories to include. The Randomiser draws unique prompts within each selected category.</p></div>
+<div id="randomiser-categories" class="randomiser-categories"></div>
+<div class="randomiser-actions"><button class="button button-orange" id="randomiser-generate" type="button">Randomise prompts</button><button class="button button-outline" id="randomiser-clear" type="button">Reset</button></div>
+<div class="randomiser-result-wrap"><div class="builder-output-heading"><div><p class="eyebrow">RANDOM COMBINATION</p><h2 id="randomiser-result-title">Your prompt mix</h2></div></div><div id="randomiser-result" class="randomiser-result"><p class="randomiser-placeholder">Select categories and generate your combination.</p></div><button class="button button-outline" id="randomiser-copy" type="button" disabled>Copy combined prompt</button></div>
+</div></section></main>
+  <footer class="site-footer shell" id="tools"><div class="footer-main">
+    <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"><i></i><i></i></span><span>AI PROMPT LIBRARY</span></a><p>A visual transformation library spanning 1,312 prompts, including universal visual elements, screen worlds and collectible formats.</p></div>
+    <div class="footer-col"><strong>Library</strong><a href="explore.html#archive">All prompts</a><a href="explore.html#collections">Collections</a><a href="explore.html#archive">Featured</a><a href="explore.html#archive">New releases</a></div>
+    <div class="footer-col"><strong>Resources</strong><a href="explore.html#guides">Guides</a><a href="explore.html#tools">Tools</a><a href="explore.html#guides">Prompt tips</a><a href="explore.html#guides">Workflow ideas</a></div>
+    <div class="footer-col"><strong>About</strong><a href="explore.html#about">About the project</a><a href="explore.html#about">Updates</a><a href="explore.html#about">Changelog</a><a href="explore.html#about">Contact information pending</a></div>
+    <form class="newsletter" id="newsletter"><strong>Stay in the loop</strong><p>Occasional prompt releases and creative updates.</p><div class="newsletter-input"><input type="email" placeholder="Your email address" aria-label="Email address" required><button aria-label="Subscribe">→</button></div><small id="newsletter-message">No spam. Just useful creative resources.</small></form>
+  </div><div class="footer-bottom"><span>© 2026 AI Prompt Library. All rights reserved.</span><div><a href="explore.html#about">Terms</a><a href="explore.html#about">Privacy</a><a href="explore.html#about">Cookies</a></div></div></footer>
+
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="catalogue-expansion.js?v=20261118-randomiser-v1"></script>
+<script src="app.js?v=20261118-randomiser-v1"></script>
+<script src="randomiser.js?v=20261118-randomiser-v1"></script>
+</body></html>
