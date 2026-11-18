@@ -145,3 +145,6 @@ body[data-page="builder"] #dna-builder{padding-top:54px;min-height:calc(100vh - 
 .builder-module-search{width:100%;margin-top:16px}.builder-module-search input{width:100%;min-height:46px;padding:12px 14px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:#11161e;color:#f4f4f4;font:inherit}
 .builder-empty{color:var(--muted,#a9adb5);padding:8px 4px}
 @media(max-width:560px){.builder-module-heading{gap:10px;flex-direction:row!important;align-items:center!important}.builder-module-count{font-size:.72rem}}
+
+.builder-selection-bar{flex-wrap:wrap}.builder-module-search{flex:1;min-width:240px;max-width:420px}
+@media(max-width:560px){.builder-module-search{min-width:100%;max-width:none}}
