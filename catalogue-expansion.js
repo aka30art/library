@@ -63,25 +63,107 @@ const defs={
 "photography-camera":{label:"Photography & Camera",subs:["Lens & Perspective","Exposure & Capture","Photographic Genres","Camera Movement","Focus & Depth"],names:"Wide Environmental Lens|Normal Lens Perspective|Telephoto Compression|Tilt-Shift Architecture|Fisheye Projection|Close-Focus Wide Angle|Anamorphic Lens Character|Vintage Lens Signature|Macro Lens Perspective|Optical Character Study|High-Key Exposure|Low-Key Exposure|Long Exposure|Flash Freeze|Intentional Overexposure|Balanced Natural Light|Backlit Silhouette|Exposure Bracketing|Night Exposure|Mixed Colour Temperature|Documentary Photograph|Fashion Editorial|Still-Life Photograph|Street Photography|Fine-Art Photography|Product Photograph|Portrait Photograph|Landscape Photograph|Architectural Photograph|Sports Action Photograph|Panning Motion|Handheld Intimacy|Dolly Perspective|Directional Motion Blur|Static Tripod Frame|Tracking Shot|Orbiting Camera|Zoom Burst|Intentional Camera Shake|Dutch Angle|Shallow Depth of Field|Deep Focus|Focus Stacking|Selective Focus|Bokeh Shape Study|Rack-Focus Frame|Foreground Bokeh|Zone Focus|Soft Diffusion|Focus Falloff",direction:"Photography thinking: camera-to-subject distance, lens behaviour, perspective, shutter, exposure, focus plane, depth, capture authenticity, framing and intentional optical characteristics."},
 "product-design":{label:"Product Design",subs:["Industrial Objects","Consumer Electronics","Furniture & Lighting","Packaging & Containers","Concept Products"],names:"Precision Hand Tool|Modular Storage|Desk Object|Outdoor Equipment|Kitchen Utility|Workshop Accessory|Measuring Instrument|Reconfigurable System|Material-Saving Object|Repairable Design|Portable Device|Audio Hardware|Wearable Technology|Smart-Home Interface|Physical Control Interface|Compact Camera|Charging Dock|Mechanical Keyboard|Home Sensor|Personal Audio Device|Ergonomic Chair|Table System|Task Light|Ambient Lamp|Flat-Pack Furniture|Shelf System|Bench Seating|Portable Light|Acoustic Furniture|Space-Saving Furniture|Premium Packaging|Reusable Container|Refill System|Protective Case|Sustainable Package|Luxury Bottle|Shipping Package|Display Packaging|Minimal Label System|Stackable Container|Future Utility|Hybrid Object|Transformable Product|Minimal Intervention|Speculative Utility|Assistive Product|Circular Product|Analog-Digital Hybrid|Ritual Object|Next-Generation Utility",direction:"Industrial-design thinking: user task, ergonomics, form/function, material selection, manufacturing, assembly, serviceability, interface hierarchy, sustainability and realistic product constraints."}
 };
-const promptLogic=[
-"Anchor the result around one dominant idea; let every secondary detail reinforce it. Keep visual hierarchy unambiguous and avoid generic embellishment.",
-"Use a distinctive silhouette and a controlled detail hierarchy. Resolve edge conditions, transitions and supporting elements with precision; avoid noisy overdesign.",
-"Make the central concept evident through construction and composition, not labels. Ensure proportion, context, material and lighting work together coherently.",
-"Introduce an original, unexpected design decision that is still purposeful and integrated. Avoid arbitrary novelty, clichés and feature stacking.",
-"Treat the composition as a professional design study: disciplined spacing, precise alignment, believable scale and carefully selected detail density.",
-"Resolve technical specifics—joints, edges, thickness, spacing, surface response, movement or reading order as relevant—so the concept holds up on close inspection.",
-"Balance strong contrast with restraint. Establish what dominates, what supports it, where the eye travels and what can be removed without weakening the concept.",
-"Use context as a design ingredient, not decoration. The background, environment or presentation should explain scale and purpose without competing for attention.",
-"Prioritize authored intent over default AI aesthetics. Use meaningful asymmetry, subtle variation and coherent materials; reject random extra elements.",
-"Create a refined, memorable final image with clear intent, excellent craft, coherent geometry and realistic execution. Do not compromise the core idea for decorative effects."
-];
+const subcategoryLogic={
+"Urban Architecture":"Design the urban fabric as a connected public system. Resolve block grain, frontage, permeability, pedestrian routes, service access, setbacks, street section, density transitions and the relationship between private plots and shared public realm. Make the scheme belong to a plausible city rather than float as an isolated object.",
+"Residential Architecture":"Resolve domestic life through plan, section and threshold. Balance privacy, daylight, ventilation, acoustic separation, storage, accessibility, adaptability, climate response and connection to outdoor space. Make the dwelling legible as a humane, buildable home with a clear relationship between shared and private zones.",
+"Interior Architecture":"Treat the interior as a sequence of purposeful spaces. Resolve circulation, thresholds, sightlines, proportions, furniture clearances, daylight, artificial lighting, acoustics, material junctions and service integration. Use the section and spatial hierarchy to communicate how a person moves through and occupies the interior.",
+"Civic & Institutional":"Make the public programme understandable through massing, entrance hierarchy, inclusive circulation, accessible routes, waiting and gathering spaces, clear wayfinding, robust construction and durable materials. Design for a wide range of users and realistic institutional operation, not only for a striking exterior.",
+"Sacred & Contemplative":"Create a deliberate progression from arrival to threshold to stillness. Use proportion, orientation, light, silence, material tactility and carefully controlled views to support reflection. Keep symbolism spatial and architectural rather than relying on decorative clichés or a generic religious motif.",
+"Monolithic Form":"Develop the work through mass, cut, void and compression. Make the relationship between solid volume and carved absence carry the concept. Resolve footprint, centre of gravity, edge condition, surface continuity, material weight and viewing distance so the object reads as one intentional sculptural body.",
+"Assembled Sculpture":"Make construction visible and coherent. Specify how components meet, interlock, overlap, suspend or fasten; resolve contact surfaces, tolerances, joints, load paths, assembly order, material contrast and points of support. The final object must look physically assembled rather than like unrelated forms touching by chance.",
+"Kinetic Sculpture":"Define the mechanism and its motion envelope. Establish pivots, bearings, counterweights, balance, travel, power or environmental input, repeated motion and the still frame chosen to communicate movement. Keep moving parts physically plausible, with safe clearances and a legible relationship between static and moving elements.",
+"Biomorphic Sculpture":"Translate an organic principle into sculptural structure without simply copying a natural object. Use growth, branching, cellular rhythm, membranes, shells, skeletal supports or fluid transitions to shape the form. Resolve how the structure stands, joins, thickens, thins and distributes visual weight.",
+"Public Monument":"Design the sculpture in relation to its site and the people who encounter it. Resolve approach, sightlines, viewing distance, human scale, ground contact, accessibility, weathering, material longevity, public safety and the surrounding landscape or urban fabric. The work must belong to its setting without obstructing its use.",
+"Editorial Systems":"Build a clear reading sequence through grid, column width, margins, baseline rhythm, headline scale, body-text measure, image placement, captions and folios. Distinguish primary, secondary and tertiary information. Make the page feel art-directed and readable at its intended physical or screen size.",
+"Poster Composition":"Communicate one dominant message at a glance. Establish focal image or typographic gesture, headline hierarchy, supporting information, contrast, negative space and viewing-distance legibility. Make the layout distinctive and memorable without sacrificing the clarity of event, title or call to action.",
+"Typographic Experiment":"Treat letterforms as a designed system with controlled departures from convention. Resolve anatomy, spacing, kerning, tracking, baseline, rhythm, optical balance, contrast and legibility. Experimental distortion must feel intentional and preserve the reading priority of any required text.",
+"Brand Applications":"Translate one coherent identity into a specific touchpoint. Maintain consistent logo handling, colour, typography, spacing, graphic devices, tone and hierarchy while adapting to the function and proportions of the application. Do not invent a second identity or add arbitrary brand marks.",
+"Print & Production":"Design for a real production process. Account for trim, bleed, safe area, imposition, paper or substrate, ink coverage, CMYK or spot-colour separation, registration, trapping, overprint, folds, die-lines and finishing. Make production effects plausible and keep critical information clear.",
+"Lens & Perspective":"Choose camera position and focal length as a deliberate pair. Resolve field of view, subject distance, perspective convergence, compression, distortion, edge behaviour and optical character. Keep verticals, horizon and scale relationships consistent with the intended lens and viewpoint.",
+"Exposure & Capture":"Make aperture, shutter speed, ISO, dynamic range and light level work as one exposure decision. Preserve important highlight and shadow information, use motion rendering intentionally, and avoid contradictory exposure cues. The result must read as a credible captured photograph, not an arbitrary filter.",
+"Photographic Genres":"Respect the conventions and purpose of the selected photographic genre. Establish the appropriate relationship between subject, environment, timing, viewpoint, styling, authenticity and editorial intent. Avoid applying commercial polish, documentary treatment or portrait conventions where they undermine the chosen genre.",
+"Camera Movement":"Translate movement into a convincing still-frame trace. Define camera path, direction, speed, parallax, motion blur, subject tracking, horizon behaviour and the moment of exposure. Keep the motion cue consistent across foreground, subject and background rather than applying a uniform blur.",
+"Focus & Depth":"Control the focus plane and depth hierarchy. Specify subject distance, aperture character, depth of field, near-to-far transitions, bokeh shape and foreground/background separation. Keep the critical subject detail sharp and make every defocused region consistent with the same optical system.",
+"Industrial Objects":"Start with the task and user interaction. Resolve affordances, grip, reach, orientation, dimensions, load, moving parts, parting lines, fasteners, tolerances, material choice, assembly and repair access. Every visible feature should have a functional or manufacturing reason.",
+"Consumer Electronics":"Design the object around its interaction and internal system. Resolve screen or control hierarchy, tactile inputs, ports, speakers, sensors, thermal paths, seams, charging, component placement, hand ergonomics and serviceability. Keep the interface and physical hardware consistent with a believable device.",
+"Furniture & Lighting":"Design around the human body and the space it occupies. Resolve anthropometric scale, support, comfort, stability, load-bearing members, joinery, cable or power routing, light distribution, glare control and material durability. Make the object safe, usable and structurally credible.",
+"Packaging & Containers":"Resolve the complete product journey: filling, closure, sealing, protection, opening, dispensing, storage, transport, labelling and end-of-life. Make material thickness, fold or mould logic, closures, structural strength and graphic hierarchy plausible for the intended product.",
+"Concept Products":"Explore a speculative but understandable use case. Define who uses the object, what task it improves, how it is operated, what makes it distinctive and which physical or digital systems enable it. Novelty must be supported by plausible ergonomics, material behaviour, manufacturing and service logic."
+};
+const categoryProtocols={
+"architecture-spaces":"Resolve site, north/light, structure, envelope, programme, circulation, accessibility, environmental performance, material junctions and human scale. Show credible construction and a clear relationship between plan, section and elevation.",
+"sculpture-3d-objects":"Resolve three-dimensional volume, silhouette, negative space, balance, gravity, material thickness, joints, support and scale. Show a convincing object with deliberate viewpoints and physically coherent construction.",
+"graphic-design-layout":"Resolve format, grid, typographic hierarchy, reading order, contrast, spacing, image-to-text relationship and output production. Treat all text as intentional content; preserve legibility and avoid fabricated filler copy.",
+"photography-camera":"Resolve viewpoint, lens, focal length, camera-to-subject distance, exposure, shutter, focus plane, depth, motion and capture authenticity. Parameters must describe one physically consistent camera setup.",
+"product-design":"Resolve user task, ergonomics, affordances, dimensions, materials, manufacturing process, tolerances, assembly, safety, maintenance and lifecycle. Every component and interface must have a credible purpose."
+};
+const categoryAvoidance={
+"architecture-spaces":"Avoid impossible spans, unsupported cantilevers, nonsensical circulation, inaccessible entries, context-free massing and purely decorative facades.",
+"sculpture-3d-objects":"Avoid unstable balance, unexplained joints, impossible suspension, inconsistent scale, arbitrary appendages and material transitions with no construction logic.",
+"graphic-design-layout":"Avoid illegible type, random filler text, inconsistent grids, accidental hierarchy, unsupported logos, unsafe margins and print effects that contradict the substrate.",
+"photography-camera":"Avoid contradictory focal lengths, impossible perspective, inconsistent focus falloff, conflicting motion cues, clipped exposure without intent and effects unrelated to capture.",
+"product-design":"Avoid non-functional controls, impossible assembly, unsafe edges, implausible wall thickness, decorative features that obstruct use and unserviceable construction."
+};
+function moduleSpecificity(name,category){
+ const n=name.toLowerCase();
+ const rules={
+ "architecture-spaces":[
+  [/transit|rail|hub|station|skybridge/,"Make movement and interchange legible: separate pedestrian, vehicle and service flows, clarify arrival/departure and resolve vertical connections."],
+  [/waterfront|floating|coastal|harbour|water/,"Resolve water level, drainage, salt exposure, flood resilience, edge access and the transition between land and water."],
+  [/adaptive|reuse|retrofit/,"Show what is retained, repaired, removed and added; make old/new junctions and the existing structural logic understandable."],
+  [/courtyard|garden|forest|sanctuary|retreat/,"Use enclosure, prospect, planting, climate and controlled views to define a calm, usable relationship between inside and outside."],
+  [/night|landmark|gateway|monument|memorial/,"Make the form recognisable at distance and at close range; resolve approach, night-time illumination and its civic or landscape presence."]
+ ],
+ "sculpture-3d-objects":[
+  [/stack|assembly|module|interlock|frame|joinery|fastener/,"Make each connection and support visible enough to understand the assembly, with believable tolerances and contact."],
+  [/kinetic|wind|pendulum|orbit|counter|magnetic|mechanic|wave/,"Show the mechanism, direction and range of motion through one deliberate temporal moment."],
+  [/growth|cellular|root|shell|coral|tendril|biomorphic|bone/,"Use an organic structural rule such as branching, repetition, cellular growth or membrane tension."],
+  [/monolith|block|slab|volume|void|plane|eroded|carved/,"Make subtraction, compression, mass and void define the silhouette and the way light enters the form."]
+ ],
+ "graphic-design-layout":[
+  [/editorial|magazine|book|feature|spread|sequence/,"Make the reading path explicit through grid, column rhythm, image sequence, captioning and typographic scale."],
+  [/poster|campaign|event/,"Prioritise one immediate visual message with a clear information stack and readable distance hierarchy."],
+  [/type|letterform|glyph|alphabet|ligature/,"Let the typography carry the central idea; control letter anatomy, optical spacing and the balance between expression and legibility."],
+  [/brand|identity|packaging|social|merchandise|wayfinding/,"Show a repeatable identity logic applied to the specific touchpoint, with consistent assets and function-led adaptation."],
+  [/print|risograph|screenprint|foil|emboss|die.cut|fold|spot|paper|proof/,"Make the production process visible through credible registration, layer order, substrate and finishing detail."]
+ ],
+ "photography-camera":[
+  [/lens|perspective|wide|telephoto|fisheye|anamorphic|macro/,"Express the selected optical behaviour through viewpoint, field of view, compression, distortion and edge rendering."],
+  [/exposure|high.key|low.key|long.exposure|flash|backlit|night/,"Use shutter, aperture, ISO and light level to produce one consistent exposure with intentional highlight, shadow and motion treatment."],
+  [/documentary|fashion|still.life|street|fine.art|product|portrait|landscape|architectural|sports/,"Apply the conventions of the named photographic genre without compromising the subject's authenticity or the purpose of the image."],
+  [/panning|handheld|dolly|tracking|orbit|zoom|camera.shake|motion/,"Use directional parallax and blur to communicate a specific camera trajectory while keeping the intended subject readable."],
+  [/focus|bokeh|depth|diffusion|rack/,"Define the focus plane and falloff so the subject, foreground and background share one coherent optical depth."]
+ ],
+ "product-design":[
+  [/tool|workshop|measuring|kitchen|outdoor|utility/,"Make grip, reach, force, balance, maintenance and task sequence evident in the object's form."],
+  [/device|audio|wearable|interface|camera|charging|keyboard|sensor|electronic/,"Resolve the user interface, controls, ports, sensing, power, thermal management and internal packaging as one product system."],
+  [/chair|table|light|lamp|furniture|bench|shelf|acoustic/,"Resolve body scale, support, stability, load path, comfort, lighting or acoustic performance and the room context."],
+  [/packaging|container|case|bottle|label|shipping|refill|display/,"Make closure, protection, opening sequence, shelf presence, labelling and material efficiency part of one packaging system."],
+  [/future|hybrid|transform|speculative|assistive|circular|next.generation|ritual/,"Make the new use case understandable: show the human interaction, functional transformation, and practical reason for the innovation."]
+ ]
+ };
+ const match=(rules[category]||[]).find(([re])=>re.test(n));
+ return match?match[1]:"Use the specific module "+name+" as the decisive proposition. Show the design decisions that make this module distinct, including its form, purpose, scale, context and relationship to the user or viewer.";
+}
 let nextId=6000;
 for(const [cat,d] of Object.entries(defs)){
  const names=d.names.split("|");
  names.forEach((name,i)=>{
   const sub=d.subs[Math.floor(i/10)];
-  const prompt="[SUBJECT] / [SOURCE IMAGE] as the reference anchor. MODULE: "+name+". COLLECTION: "+d.label+". SUBCATEGORY: "+sub+". "+promptLogic[i%10]+" "+d.direction+" Make this module the decisive visual or functional idea, interpreted specifically rather than merely illustrated literally. Preserve recognisable identity when a source subject is supplied; alter only what the module requires. Output a polished, intentional, professional image with coherent scale, composition, materials, technical detail and lighting.";
-  window.AI_PROMPT_EXPANSION.push({id:nextId++,title:name,category:cat,desc:d.label+" / "+sub+". A specialist "+name+" prompt module.",prompt,negative:"generic stock imagery, random decorations, incoherent hierarchy, implausible scale or construction, conflicting materials, clutter, poor edges, meaningless text, watermark, low detail",kind:"style",bg:"#202832",art:"linear-gradient(135deg,#17233a,#596c7d 50%,#d47c43)",glow:"#a9bfd3",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:[d.label,sub,name,"Creative module"],difficulty:"Advanced"});
+  const prompt=[
+   "UNIVERSAL SPECIALIST DESIGN PROMPT",
+   "SOURCE INPUT: [SUBJECT] / [SOURCE IMAGE]. Treat the supplied subject or reference as the identity and context anchor. Do not replace it with an unrelated concept.",
+   "TARGET MODULE: "+name,
+   "COLLECTION: "+d.label+" / "+sub,
+   "DESIGN INTENT: Make "+name+" the single decisive design proposition. Interpret it as a specific visual, spatial, photographic or functional solution rather than merely repeating its name.",
+   "SUBCATEGORY METHOD: "+subcategoryLogic[sub],
+   "DOMAIN-SPECIFIC EXECUTION: "+categoryProtocols[cat],
+   "MODULE-SPECIFIC FOCUS: "+moduleSpecificity(name,cat),
+   "SOURCE AND CONTEXT: Preserve defining source attributes where a reference is supplied. Adapt only the features that the selected module requires. Keep scale, context, intended use and visual hierarchy coherent.",
+   "QUALITY GATE: Resolve proportion, silhouette, material behaviour, technical detail, transitions, viewpoint and presentation to professional standard. Remove details that do not strengthen the central idea.",
+   "EXCLUSION RULE: "+categoryAvoidance[cat]+" Do not use generic AI embellishment, arbitrary accessories, meaningless text, watermarks or decorative noise."
+  ].join("\n\n");
+  additions.push({id:nextId++,title:name,category:cat,desc:d.label+" / "+sub+". A specialist "+name+" module with domain-specific design, execution and quality constraints.",prompt,negative:categoryAvoidance[cat]+", generic stock imagery, random decorations, incoherent hierarchy, implausible scale or construction, text artefacts, watermark, low detail",kind:cat==="photography-camera"?"lighting":"style",bg:"#202832",art:"linear-gradient(135deg,#17233a,#596c7d 50%,#d47c43)",glow:"#a9bfd3",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:[d.label,sub,name,"Creative module"],difficulty:"Professional"});
  });
 }
 })();
