@@ -29,6 +29,41 @@ jobs:
           node-version: 22
       - name: Verify catalogue integrity
         run: node scripts/validate-catalogue.cjs
+      - name: Report prompt-quality diagnostics
+        run: node scripts/audit-prompt-quality.cjs
+
+  branch-browser-tests:
+    name: PR browser QA (local branch, no deployment)
+    if: github.event_name == 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local static server
+        run: |
+          python3 -m http.server 8000 > /tmp/library-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl --fail http://127.0.0.1:8000/ >/dev/null && break
+            sleep 1
+          done
+          curl --fail http://127.0.0.1:8000/ >/dev/null
+      - name: Test branch website interactions (desktop and mobile)
+        env:
+          SITE_URL: http://127.0.0.1:8000/
+        run: node scripts/browser-smoke-test.cjs
+      - name: Test Randomiser interactions (mobile)
+        env:
+          SITE_URL: http://127.0.0.1:8000/
+        run: node scripts/randomiser-smoke-test.cjs
 
   deploy:
     if: github.event_name != 'pull_request'
