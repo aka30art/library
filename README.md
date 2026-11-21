@@ -47,22 +47,29 @@ Subcategories are collection-specific and counts are derived from loaded records
 - Search, collection and contextual subcategory filtering
 - Model filtering, sorting, prompt detail and copy interactions
 - Prompt DNA Builder with Standard, Transformation and ART DNA modes
-- Smart/Experimental Randomiser with independent module selection
+- Smart/Experimental Randomiser with independent module selection and role-aware prompt synthesis
+- Domain-aware compatibility scoring and conflict diagnostics across all fifteen collections
+- Subject-preserving synthesis that reconciles selected modules by creative priority and carries through negative constraints
 - Prompt compatibility and related-prompt intelligence
 - On-demand visual references with source/licence information
 - Keyboard accessibility and reduced-motion support
 
 ## Quality checks
 
-Run the catalogue structural validator and the browser/randomiser smoke tests from the repository scripts:
+Run the catalogue validator, prompt-quality audit and browser/randomiser smoke tests from the repository scripts:
 
 ```bash
 node scripts/validate-catalogue.cjs
+node scripts/audit-prompt-quality.cjs
 node scripts/browser-smoke-test.cjs
 node scripts/randomiser-smoke-test.cjs
 ```
 
-The structural validator verifies expected counts, unique IDs, required fields, valid categories, subject placeholders, Films & Shows subcategory distribution, specialist subcategory distribution, and page asset wiring. Prompt-quality review additionally targets duplicate concepts, unclear boundaries, template repetition, weak specificity, classification collisions, and contradictory module combinations.
+The structural validator checks record counts, unique IDs, required fields, subject placeholders, valid categories, screen-world and specialist subcategory distribution, transformation architectures and page asset wiring. The prompt-quality audit checks every record's completeness, title duplication, prompt length, subcategory coverage and unclassified routing. It reports category and subcategory counts and highlights repeated specialist prompt skeletons for review. The current catalogue audit passes with zero unclassified records.
+
+The Randomiser uses domain-aware compatibility scoring across all fifteen collections, penalises conflicting combinations in Smart mode, and reports remaining warnings. Its synthesis assigns selected modules to creative roles, prioritises source identity and functional constraints, reconciles visual treatments, and carries selected negative constraints into the final prompt.
+
+Pull requests run desktop/mobile and Randomiser browser checks against a local static server. They do not deploy the preview branch. Production deployment remains restricted to validated changes pushed to `main`.
 
 ## Development
 
