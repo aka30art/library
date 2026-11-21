@@ -36,14 +36,14 @@ const scored=prompts.map(p=>{
  return {id:p.id,title:p.title,category:p.category,subcategory:(p.tags||[]).join(' / '),wordCount,score,dims,reasons};
 });
 const categorySummary={};
-for(const r of scored){const c=categorySummary[r.category]||(categorySummary[r.category]={count:0,total:0,low:0,mid:0,high:0});c.count++;c.total+=r.score;if(r.score<40)c.low++;else if(r.score<70)c.mid++;else c.high++;}
+for(const r of scored){const c=categorySummary[r.category]||(categorySummary[r.category]={count:0,total:0,low:0,mid:0,high:0});c.count++;c.total+=r.score;if(r.score<40)c.low++;else if(r.score<80)c.mid++;else c.high++;}
 for(const c of Object.values(categorySummary))c.average=Math.round(c.total/c.count);
-const flagged=scored.filter(r=>r.score<70).sort((a,b)=>a.score-b.score);
-const output={generatedAt:new Date().toISOString(),auditType:'heuristic signals only; manual semantic review required',total:scored.length,scoring:{max:100,signals:signals.map(s=>({key:s.key,label:s.label,weight:s.weight})),bands:{low:'0-39: weak signal coverage; review first',medium:'40-69: review for gaps/redundancy',high:'70-100: strong signal coverage, not a guarantee of quality'}},categorySummary,flaggedCount:flagged.length,flagged:flagged.map(r=>({id:r.id,title:r.title,category:r.category,subcategory:r.subcategory,wordCount:r.wordCount,score:r.score,reasons:r.reasons,dims:r.dims}))};
+const flagged=scored.filter(r=>r.score<80).sort((a,b)=>a.score-b.score);
+const output={generatedAt:new Date().toISOString(),auditType:'heuristic signals only; manual semantic review required',total:scored.length,scoring:{max:100,signals:signals.map(s=>({key:s.key,label:s.label,weight:s.weight})),bands:{low:'0-39: weak signal coverage; review first',medium:'40-79: review for gaps/redundancy',high:'70-100: strong signal coverage, not a guarantee of quality'}},categorySummary,flaggedCount:flagged.length,flagged:flagged.map(r=>({id:r.id,title:r.title,category:r.category,subcategory:r.subcategory,wordCount:r.wordCount,score:r.score,reasons:r.reasons,dims:r.dims}))};
 if(process.argv.includes('--json'))console.log(JSON.stringify(output,null,2));
 else{
  console.log('PROMPT INTELLIGENCE AUDIT — heuristic only; manual semantic review required');
- console.log('Records: '+output.total+' | Flagged for review (<70): '+output.flaggedCount);
+ console.log('Records: '+output.total+' | Flagged for review (<80): '+output.flaggedCount);
  console.log('Category summary:');
  for(const [name,c] of Object.entries(categorySummary))console.log('  '+name+': avg '+c.average+'/100 | low '+c.low+' | review '+c.mid+' | strong '+c.high);
  console.log('Lowest-scoring records (first 30):');
