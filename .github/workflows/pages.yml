@@ -13,7 +13,9 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  # Isolate each PR from production pushes so preview validation cannot cancel
+  # an active GitHub Pages deployment (and vice versa).
+  group: pages-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -65,12 +67,12 @@ jobs:
           SITE_URL: http://127.0.0.1:8000/
         run: node scripts/randomiser-smoke-test.cjs
 
-  deploy:
+  # Separate artifact preparation from deployment to avoid the intermittent
+  # artifact-registration race between upload-pages-artifact and deploy-pages.
+  prepare-pages:
+    name: Prepare GitHub Pages artifact
     if: github.event_name != 'pull_request'
     needs: validate
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -83,6 +85,16 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
+  deploy:
+    name: Deploy GitHub Pages
+    if: github.event_name != 'pull_request'
+    needs: prepare-pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
