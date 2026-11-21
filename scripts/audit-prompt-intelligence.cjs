@@ -10,7 +10,7 @@ const start=app.indexOf('const collections = '),end=app.indexOf(';\nlet prompts'
 if(start<0||end<0)throw Error('Unable to parse collections from app.js');
 const collections=vm.runInNewContext(app.slice(start+'const collections = '.length,end),{});
 const sandbox={window:{}};
-vm.runInContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{timeout:5000});
+vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{timeout:5000});
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
 const signals=[
  {key:'actionable_method',label:'Actionable method',weight:20,re:/\b(apply|use|construct|build|render|transform|create|employ|integrate|simulate|compose|derive|model|define)\b/i},
