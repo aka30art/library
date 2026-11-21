@@ -33,7 +33,7 @@ if(fnStart<0||fnEnd<0)throw Error("Unable to parse subcategory classifier");
 const overrideStart=app.indexOf("const subcategoryOverrides=");
 const overrideEnd=app.indexOf(";\nfunction subcategoryFor",overrideStart);
 if(overrideStart<0||overrideEnd<0)throw Error("Unable to parse explicit subcategory overrides");
-const overrides=vm.runInNewContext("("+app.slice(overrideStart+"const subcategoryOverrides=".length,overrideEnd).replace(/;\\s*$/, "")+")");
+const overrides=vm.runInNewContext("("+app.slice(overrideStart+"const subcategoryOverrides=".length,overrideEnd).replace(/;+\s*$/, "")+")");
 const classifier=vm.runInNewContext(app.slice(fnStart,fnEnd)+";subcategoryFor",{subcategoryTaxonomy:taxonomy,subcategoryOverrides:overrides,prompts});
 const subcategoryCounts={};
 for(const p of prompts){const sub=classifier(p);const key=p.category+" / "+sub;subcategoryCounts[key]=(subcategoryCounts[key]||0)+1;}
