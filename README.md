@@ -1,28 +1,72 @@
 # AI Prompt Library
 
-A responsive, dark editorial prompt-discovery website built for the AI Prompt Library project.
+A modular visual-prompt archive and builder for creative image transformation. The catalogue is designed around reusable creative elements—not rigid scene recipes—so users can combine ideas while retaining control of the subject and intent.
 
-## Design direction
+## Current catalogue
 
-The interface follows the approved hybrid direction: functional archive and search patterns combined with a distinctive editorial identity. The palette uses ink/charcoal foundations, signature neon orange interactions, and electric blue/violet artwork accents. Typography uses Space Grotesk for display text and Inter for interface/body copy.
+**1,562 prompt records · 15 collections · 5 specialist collections**
 
-## Included
+| Collection | Records |
+|---|---:|
+| Materials | 200 |
+| Styles | 125 |
+| Textures | 125 |
+| Photography Post-Edits | 75 |
+| Effects | 125 |
+| Composition | 75 |
+| Rendering | 75 |
+| Colour & Atmosphere | 75 |
+| Films & Shows | 350 |
+| Toys & Collectibles | 87 |
+| Architecture & Spaces | 50 |
+| Sculpture & 3D Objects | 50 |
+| Graphic Design & Layout | 50 |
+| Photography & Camera | 50 |
+| Product Design | 50 |
+| **Total** | **1,562** |
 
-- Responsive homepage and navigation
-- Twenty collection entry points
-- Prompt archive with text search, collection filter, model filter and sorting
-- Prompt detail dialog with Standard and universal ART DNA MASTER PROMPT modes
-- Prompt DNA Builder for combining a base prompt with visual style, lighting and composition
-- Prompt difficulty labels: Foundation, Advanced and Professional
-- Daily featured prompt
-- Visual-trait filtering
-- Session-only bookmark interaction
-- Newsletter interface with explicit integration placeholder
-- Reduced-motion support and keyboard-accessible controls
+Films & Shows contains five groups: TV Shows, Cartoons, Films, Anime, and Other Screen Worlds (70 records each). The five specialist collections contain ten modules in each of five subcategories. Toys & Collectibles has 87 entries, including a consolidated TCG archive.
 
-## Run locally
+## Prompt philosophy
 
-No build step or package installation is required. Open `index.html` in a browser, or run a local static server:
+- **Universal collections:** a single integrated prompt per element. Avoid splitting one element into repetitive attribute variants.
+- **Neutral creative cores:** subject-specific output requirements, framing, camera, lighting, rendering, and technical specifications should be supplied by the Builder, not hard-coded into universal prompt entries.
+- **Transformation prompts:** preserve source identity and structure unless the target transformation specifically requires a change.
+- **Photography Post-Edits:** treat the supplied photo as the fixed source; adjust the photographic finish rather than inventing a new capture setup or scene.
+- **Specialist collections:** use domain-aware design logic (architecture, sculptural form, graphic hierarchy, photography, product function) rather than generic style language.
+- **Films & Shows:** transform the supplied subject into a target world's visual language without replacing it with an existing character or copying protected logos.
+- **Collectibles:** make the target format legible through its construction, materials, proportions, presentation and relevant product details.
+
+## Subcategory system
+
+Subcategories are collection-specific and counts are derived from loaded records. Materials, styles, textures, photographic edits, effects, composition, rendering and colour/atmosphere use keyword-based routing; Films & Shows uses explicit tags; specialist collections use explicit subcategory tags. Toys & Collectibles is organized by collectible format, with card-system entries consolidated under TCG.
+
+## Website features
+
+- Responsive homepage, navigation, and prompt archive
+- Search, collection and contextual subcategory filtering
+- Model filtering, sorting, prompt detail and copy interactions
+- Prompt DNA Builder with Standard, Transformation and ART DNA modes
+- Smart/Experimental Randomiser with independent module selection
+- Prompt compatibility and related-prompt intelligence
+- On-demand visual references with source/licence information
+- Keyboard accessibility and reduced-motion support
+
+## Quality checks
+
+Run the catalogue structural validator and the browser/randomiser smoke tests from the repository scripts:
+
+```bash
+node scripts/validate-catalogue.cjs
+node scripts/browser-smoke-test.cjs
+node scripts/randomiser-smoke-test.cjs
+```
+
+The structural validator verifies expected counts, unique IDs, required fields, valid categories, subject placeholders, Films & Shows subcategory distribution, specialist subcategory distribution, and page asset wiring. Prompt-quality review additionally targets duplicate concepts, unclear boundaries, template repetition, weak specificity, classification collisions, and contradictory module combinations.
+
+## Development
+
+No build step or package installation is required. Run a local static server:
 
 ```bash
 python3 -m http.server 8000
@@ -30,79 +74,17 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000.
 
-## Content status
+GitHub Pages deployment is configured through `.github/workflows/pages.yml`. Changes should be validated and reviewed before merging to `main`; this audit branch does not deploy.
 
-The catalogue contains 1,312 prompt records across ten collections. Materials contains 200 prompts; Styles, Textures and Effects contain 125 each; Photography Post-Edits contains 75; Composition, Rendering and Colour & Atmosphere contain 75 each. Films & Shows contains 350 prompts across five subcategories—TV Shows, Cartoons, Films, Anime, and Other Screen Worlds—with 70 prompts in each. Toys & Collectibles contains 56 mainstream formats, including major trading-card-game and sports-card designs. The Explore page exposes the screen-world filter only when Films & Shows is selected, while the DNA Builder presents the five screen-world groups independently.
+## Backups and recovery
 
-The Prompt DNA Builder includes five specialist Universal Transformation Prompt architectures: material transformation, surface transformation, texture transformation, style transfer, and hybrid transformation. The universal collections use one integrated prompt per element rather than splitting each element into facet-specific variants.
+A snapshot is retained in `backups/2026-11-17/`, and the branch `safety/pre-reliability-audit-2026-11-17` preserves the earlier state. Restore only when necessary and after comparing the desired version.
 
-### Prompt design and research basis
+## Reference material
 
-Each universal collection entry is a complete, category-specific treatment prompt. Material prompts describe the requested material transformation as one unified visual outcome; they do not split the treatment into surface, finish, behaviour or detail specifications. Photography Post-Edits treats the supplied photograph as the fixed source and applies a coherent finishing process rather than changing the capture lighting. The same integrated-prompt principle applies to styles, textures, photographic post-edits, effects, composition, rendering, and colour & atmosphere.
-
-Research references:
-- OpenAI, Image prompting: https://developers.openai.com/api/docs/guides/image-prompting
-- Khronos Group, Physically Based Rendering in glTF: https://www.khronos.org/gltf/pbr/
-- Adobe Substance 3D, OpenPBR FAQ: https://experienceleague.adobe.com/en/docs/substance-3d/general-knowledge/openpbr/openpbr-faq
-- MIT, Computational Photography — lens filters: https://people.csail.mit.edu/fredo/comp-photo-book/02-fundamentals-10-photography-and-camera-101.html
-- GS1, Product Image Specification Standard: https://assets.ctfassets.net/9uypwcnuzbqi/Rk3x9bOpgBMnlPYajw4tT/5a261266d2afba045bd5cc00844056e7/GS1-technical-product-image-specification-standard.pdf
-- GS1 US, Best Practice Guideline for Exchanging Product Images and Attributes: https://www.gs1us.org/content/dam/gs1us/documents/industries-insights/by-industry/apparel-general-merchandise/guideline-toolkit/Guideline-Best-Practice-Guideline-for-Exchanging-Product-Images-and-Attributes.pdf
-
-## Integrations still required
-
-- Connect newsletter form to an email provider before collecting addresses.
-- Add persistent user accounts/bookmarks only if required.
-- Configure a production host/domain and analytics only when chosen.
-- Replace the CSS-generated artwork placeholders with approved image assets when available.
-
-## File structure
-
-- `index.html` — semantic page structure
-- `styles.css` — responsive visual system and components
-- `app.js` — collection and prompt seed data, filtering and interactions
-
-## Deployment
-
-A GitHub Actions workflow has been added at `.github/workflows/pages.yml` to publish the static site to GitHub Pages on pushes to `main`. GitHub Pages must be configured to use GitHub Actions in repository Settings → Pages. Once configured, each push to `main` triggers deployment. Vercel project creation was blocked by the connected Vercel account permissions, so no Vercel project or deployment was created. No backend secrets or API keys are required for the current prototype.
-
-
-## Catalogue expansion
-
-The catalogue contains 950 prompts across ten collections. Materials contains 150 prompts; the other seven universal collections contain 75 each; Films & Shows contains 350 prompts across five subcategories of 70 each; and Toys & Collectibles contains 56 mainstream toy and TCG collectible formats. Counts are calculated from the loaded records and verified by the catalogue validator.
-
-## Reliability and recovery
-
-- All three pages use synchronized, versioned shared assets.
-- Each page attempts to load the primary catalogue expansion and falls back to the verified snapshot at `backups/2026-11-17/catalogue-expansion.js` if the primary script fails to expose its data.
-- `scripts/validate-catalogue.cjs` checks expected prompt and collection totals, collection-specific sizes, unique IDs, required prompt fields, category references and synchronized page asset versions.
-- GitHub Pages deployment is gated on that validation passing.
-- A full pre-maintenance snapshot is stored under `backups/2026-11-17/`; a separate Git branch `safety/pre-reliability-audit-2026-11-17` preserves the prior site state.
-
-To restore the full snapshot, copy the files from `backups/2026-11-17/` back to the repository root and commit the restoration. To restore only the catalogue expansion, copy `backups/2026-11-17/catalogue-expansion.js` to the root as `catalogue-expansion.js`.
-
-
-## Visual examples
-
-Every prompt includes an on-demand visual-reference panel. It searches Openverse for openly licensed image examples relevant to the prompt category and title, displays creator and licence information, and links to the original source. Results are cached in the visitor's browser to reduce repeat searches. The panel is available from prompt detail views and from each item in the Builder. Visual references illustrate the material, texture, style, process, screen world or collectible; they are reference examples, not generated outputs of the prompt.
-
-
-
-### Category subcategories
-The Explore archive provides a contextual subcategory filter for each collection. Subcategory labels are collection-specific, and counts are calculated from the current catalogue. Films & Shows retains its five established subcategories.
-
-
-### Trading-card systems and rarity expansion
-The Toys & Collectibles collection now separates Pokémon TCG, Magic: The Gathering, Yu-Gi-Oh!, One Piece Card Game, Disney Lorcana, sports cards, rarity/chase cards, foil/parallels, autographs/memorabilia and card products/accessories. The catalogue includes 30 additional card-treatment prompts, bringing the library to 1,312 prompts and Toys & Collectibles to 87. Rarity names are game-specific and should not be treated as one universal cross-game scale.
-
-Research references:
-- Pokémon official card database and rarity filters: https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/663
-- Pokémon official Paradox Rift checklist: https://assets.pokemon.com/assets/cms2-en-uk/pdf/trading-card-game/checklist/par_web_cardlist_en.pdf
-- Yu-Gi-Oh! official rarity guide: https://www.yugioh-card.com/en/about/new-to-ygo/
-- Magic: The Gathering rarity explanation: https://magic.wizards.com/en/news/making-magic/quite-rarity-2018-03-12
-- Disney Lorcana official Fabled rarity announcement: https://www.disneylorcana.com/en-GB/product/fabled
-- One Piece Card Game comprehensive rules: https://en.onepiece-cardgame.com/pdf/rule_comprehensive.pdf
-- Topps collector glossary: https://uk.topps.com/pages/uk-hobby-glossary
-
-
-### TCG subcategory consolidation
-All trading-card-game, sports-card, rarity, foil/parallel, autograph/memorabilia and card-product prompts in Toys & Collectibles are grouped under one archive subcategory: **TCG**. Other collectible formats retain their own subcategories.
+- OpenAI image prompting: https://developers.openai.com/api/docs/guides/image-prompting
+- Khronos glTF PBR: https://www.khronos.org/gltf/pbr/
+- Adobe OpenPBR: https://experienceleague.adobe.com/en/docs/substance-3d/general-knowledge/openpbr/openpbr-faq
+- MIT computational photography: https://people.csail.mit.edu/fredo/comp-photo-book/02-fundamentals-10-photography-and-camera-101.html
+- GS1 product-image standards: https://www.gs1us.org/
+- Pokémon, Yu-Gi-Oh!, Magic: The Gathering, Disney Lorcana, One Piece Card Game and Topps official/reference resources are useful when validating franchise-specific card language and rarity terminology.
