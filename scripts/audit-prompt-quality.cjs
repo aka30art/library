@@ -24,7 +24,7 @@ for(const p of prompts){
  if(String(p.prompt).split(/\s+/).filter(Boolean).length<45)warnings.push("Short prompt may lack depth: "+p.id+" "+p.title);
 }
 if(prompts.length!==expectedTotal)errors.push("Expected "+expectedTotal+" prompts, got "+prompts.length);
-const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf("\nfunction subcategoryFor",taxStart);
+const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf(";;\nconst subcategoryOverrides=",taxStart);
 if(taxStart<0||taxEnd<0)throw Error("Unable to parse subcategory taxonomy");
 const taxonomySource=app.slice(taxStart+"subcategoryTaxonomy=".length,taxEnd).replace(/;+\s*$/,"");
 const taxonomy=vm.runInNewContext("("+taxonomySource+")");
