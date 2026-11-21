@@ -77,7 +77,7 @@ const requiredTcgParents=["Pokémon Trading Card Game Card","One Piece Card Game
 for(const title of requiredTcgParents)if(!all.some(p=>p.category==="toys-collectibles"&&p.title===title))errors.push('Missing TCG parent prompt '+title);
 if(!app.includes('function promptOptionsFor(p)')||!app.includes('data-prompt-option'))errors.push('Configurable per-prompt option controls missing');
 if(!app.includes('Holographic foil')||!app.includes('One-of-One / 1-of-1'))errors.push('TCG finish or serialisation options missing');
-for(const label of ['Natural Resins & Waxes','Trading Cards & TCG','Miniatures, Vehicles & Statues','Soft, Handmade & Traditional Toys','Games, Puzzles & Interactive Toys'])if(!app.includes(label))errors.push('Missing refined taxonomy group '+label);
+for(const label of ['Resins & Waxes','Trading Cards & TCG','Miniatures, Vehicles & Statues','Soft, Handmade & Traditional Toys','Games, Puzzles & Interactive Toys'])if(!app.includes(label))errors.push('Missing refined taxonomy group '+label);
 
 if(errors.length){console.error(errors.join('\\n'));process.exit(1);}
 console.log('PASS: 1,521 prompts, fifteen collections, consolidated TCG brand prompts with configurable variants, category-specific subcategory filters, five Films & Shows subcategories ×70, unique IDs, subject variables, specialist UTP architectures and page wiring.');
