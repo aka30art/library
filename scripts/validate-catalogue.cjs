@@ -8,7 +8,7 @@ vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{tim
 const all=sandbox.window.AI_PROMPT_EXPANSION;
 const expected=['materials','styles','textures','lighting','effects','composition','rendering','colour-atmosphere','films-shows','toys-collectibles','architecture-spaces','sculpture-3d-objects','graphic-design-layout','photography-camera','product-design'];
 if(collections.length!==15||expected.some((x,i)=>collections[i]?.id!==x))errors.push('Collection taxonomy mismatch');
-if(all.length!==1562)errors.push('Expected 1562 entries, got '+all.length);
+if(all.length!==1521)errors.push('Expected 1521 entries after TCG consolidation, got '+all.length);
 const ids=new Set(),counts=Object.fromEntries(expected.map(x=>[x,0]));
 for(const p of all){
  if(ids.has(p.id))errors.push('Duplicate ID '+p.id);
@@ -20,7 +20,7 @@ for(const p of all){
 }
 for(const category of expected.slice(0,8)){const target=({materials:200,styles:125,textures:125,lighting:75,effects:125,composition:75,rendering:75,'colour-atmosphere':75})[category];if(counts[category]!==target)errors.push(category+' expected '+target+' entries, got '+counts[category]);}
 if(counts['films-shows']!==350)errors.push('films-shows expected 350 entries, got '+counts['films-shows']);
-if(counts['toys-collectibles']!==87)errors.push('toys-collectibles expected 87 entries, got '+counts['toys-collectibles']);
+if(counts['toys-collectibles']!==46)errors.push('toys-collectibles expected 46 entries after consolidation, got '+counts['toys-collectibles']);
 for(const category of expected.slice(10)){if(counts[category]!==50)errors.push(category+' expected 50 entries, got '+counts[category]);}
 const screen=all.filter(p=>p.category==='films-shows');
 for(const p of screen){
@@ -72,5 +72,12 @@ for(const [category,subs] of Object.entries(specialistTaxonomy)){
   if(n!==10)errors.push(category+'/'+sub+' expected 10 prompts, got '+n);
  }
 }
+
+const requiredTcgParents=["Pokémon Trading Card Game Card","One Piece Card Game Card","Yu-Gi-Oh! Trading Card","Magic: The Gathering Card","Disney Lorcana Trading Card","Sports Trading Card","Universal TCG Card Design"];
+for(const title of requiredTcgParents)if(!all.some(p=>p.category==="toys-collectibles"&&p.title===title))errors.push('Missing TCG parent prompt '+title);
+if(!app.includes('function promptOptionsFor(p)')||!app.includes('data-prompt-option'))errors.push('Configurable per-prompt option controls missing');
+if(!app.includes('Holographic foil')||!app.includes('One-of-One / 1-of-1'))errors.push('TCG finish or serialisation options missing');
+for(const label of ['Resins & Waxes','Trading Cards & TCG','Miniatures, Vehicles & Statues','Soft, Handmade & Traditional Toys','Games, Puzzles & Interactive Toys'])if(!app.includes(label))errors.push('Missing refined taxonomy group '+label);
+
 if(errors.length){console.error(errors.join('\\n'));process.exit(1);}
-console.log('PASS: 1,562 prompts, fifteen collections (five new collections with 50 modules each), category-specific subcategory filters, five Films & Shows subcategories ×70, 87 collectible formats, unique IDs, subject variables, specialist UTP architectures and page wiring.');
+console.log('PASS: 1,521 prompts, fifteen collections, consolidated TCG brand prompts with configurable variants, category-specific subcategory filters, five Films & Shows subcategories ×70, unique IDs, subject variables, specialist UTP architectures and page wiring.');

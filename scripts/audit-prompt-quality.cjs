@@ -7,7 +7,7 @@ const collections=vm.runInNewContext(app.slice(start+"const collections = ".leng
 const sandbox={window:{}};
 vm.runInNewContext(fs.readFileSync("catalogue-expansion.js","utf8"),sandbox,{timeout:5000});
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
-const expectedTotal=1562;
+const expectedTotal=1521;
 const normalise=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
 const titleGroups=new Map(),categoryCounts={},promptBodyGroups=new Map();
 for(const p of prompts){
@@ -24,13 +24,17 @@ for(const p of prompts){
  if(String(p.prompt).split(/\s+/).filter(Boolean).length<45)warnings.push("Short prompt may lack depth: "+p.id+" "+p.title);
 }
 if(prompts.length!==expectedTotal)errors.push("Expected "+expectedTotal+" prompts, got "+prompts.length);
-const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf("\nfunction subcategoryFor",taxStart);
+const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf(";;\nconst subcategoryOverrides=",taxStart);
 if(taxStart<0||taxEnd<0)throw Error("Unable to parse subcategory taxonomy");
 const taxonomySource=app.slice(taxStart+"subcategoryTaxonomy=".length,taxEnd).replace(/;+\s*$/,"");
 const taxonomy=vm.runInNewContext("("+taxonomySource+")");
 const fnStart=app.indexOf("function subcategoryFor(p){"),fnEnd=app.indexOf("\nfunction updateSubcategoryOptions",fnStart);
 if(fnStart<0||fnEnd<0)throw Error("Unable to parse subcategory classifier");
-const classifier=vm.runInNewContext(app.slice(fnStart,fnEnd)+";subcategoryFor",{subcategoryTaxonomy:taxonomy,prompts});
+const overrideStart=app.indexOf("const subcategoryOverrides=");
+const overrideEnd=app.indexOf(";\nfunction subcategoryFor",overrideStart);
+if(overrideStart<0||overrideEnd<0)throw Error("Unable to parse explicit subcategory overrides");
+const overrides=vm.runInNewContext("("+app.slice(overrideStart+"const subcategoryOverrides=".length,overrideEnd).replace(/;+\s*$/, "")+")");
+const classifier=vm.runInNewContext(app.slice(fnStart,fnEnd)+";subcategoryFor",{subcategoryTaxonomy:taxonomy,subcategoryOverrides:overrides,prompts});
 const subcategoryCounts={};
 for(const p of prompts){const sub=classifier(p);const key=p.category+" / "+sub;subcategoryCounts[key]=(subcategoryCounts[key]||0)+1;}
 for(const category of Object.keys(taxonomy)){
@@ -54,6 +58,13 @@ const intelligenceMaps={
 for(const category of collections)for(const mapName of Object.keys(intelligenceMaps))if(!intelligenceMaps[mapName][category.id])errors.push("Prompt Intelligence "+mapName+" mapping missing collection: "+category.id);
 const duplicateStyles=[...titleGroups.entries()].filter(([k,n])=>k.startsWith("styles::")&&n>1);
 if(duplicateStyles.length)errors.push("Duplicate style titles remain: "+duplicateStyles.map(x=>x[0].replace("styles::","")).join(", "));
+
+const tcgPrompts=prompts.filter(p=>p.category==="toys-collectibles"&&classifier(p)==="Trading Cards & TCG");
+const requiredTcgParents=["Pokémon Trading Card Game Card","One Piece Card Game Card","Yu-Gi-Oh! Trading Card","Magic: The Gathering Card","Disney Lorcana Trading Card","Sports Trading Card","Universal TCG Card Design"];
+for(const title of requiredTcgParents)if(!tcgPrompts.some(p=>p.title===title))errors.push("Missing consolidated TCG parent prompt: "+title);
+if(tcgPrompts.length!==11)errors.push("Expected 11 TCG parent/product prompts, got "+tcgPrompts.length);
+if(tcgPrompts.some(p=>/Pokémon.*(Common|Uncommon|Ultra Rare|Illustration Rare|Secret Rare)|One Piece.*(Manga Rare|SP Special|Treasure Rare)|Yu-Gi-Oh!.*(Ghost Rare|Starlight Rare|Ultimate Rare)|Magic.*(Mythic Rare|Borderless)/i.test(p.title)))errors.push("Separate brand-specific card rarity prompt remains; use detail options instead");
+
 const unclassified=prompts.filter(p=>classifier(p)==="Other");
 const unclassifiedByCategory={};
 for(const p of unclassified){(unclassifiedByCategory[p.category]??=[]).push(p.title);}

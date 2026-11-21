@@ -4,7 +4,7 @@ A modular visual-prompt archive and builder for creative image transformation. T
 
 ## Current catalogue
 
-**1,562 prompt records · 15 collections · 5 specialist collections**
+**1,521 prompt records · 15 collections · 5 specialist collections**
 
 | Collection | Records |
 |---|---:|
@@ -17,15 +17,15 @@ A modular visual-prompt archive and builder for creative image transformation. T
 | Rendering | 75 |
 | Colour & Atmosphere | 75 |
 | Films & Shows | 350 |
-| Toys & Collectibles | 87 |
+| Toys & Collectibles | 46 |
 | Architecture & Spaces | 50 |
 | Sculpture & 3D Objects | 50 |
 | Graphic Design & Layout | 50 |
 | Photography & Camera | 50 |
 | Product Design | 50 |
-| **Total** | **1,562** |
+| **Total** | **1,521** |
 
-Films & Shows contains five groups: TV Shows, Cartoons, Films, Anime, and Other Screen Worlds (70 records each). The five specialist collections contain ten modules in each of five subcategories. Toys & Collectibles has 87 entries, including a consolidated TCG archive.
+Films & Shows contains five groups: TV Shows, Cartoons, Films, Anime, and Other Screen Worlds (70 records each). The five specialist collections contain ten modules in each of five subcategories. Toys & Collectibles has 46 entries. Trading-card brands are represented by one parent prompt per game or sports category; rarity, card class, artwork layout, foil/finish and serialisation are selected inside the opened prompt.
 
 ## Prompt philosophy
 
@@ -39,7 +39,7 @@ Films & Shows contains five groups: TV Shows, Cartoons, Films, Anime, and Other 
 
 ## Subcategory system
 
-Subcategories are collection-specific and counts are derived from loaded records. Materials, styles, textures, photographic edits, effects, composition, rendering and colour/atmosphere use keyword-based routing; Films & Shows uses explicit tags; specialist collections use explicit subcategory tags. Toys & Collectibles is organized by collectible format, with card-system entries consolidated under TCG.
+Subcategories are collection-specific and counts are derived from loaded records. Subcategory values are resolved and stored on each prompt record at runtime. Collection-specific exact tags and curated title overrides take precedence over narrow keyword fallbacks. Taxonomy review checks that titles and prompt intent belong to the named group. Toys & Collectibles is grouped by coherent collectible formats, with one parent prompt for each TCG brand/game and reusable card configuration inside its detail view.
 
 ## Website features
 
@@ -65,7 +65,7 @@ node scripts/browser-smoke-test.cjs
 node scripts/randomiser-smoke-test.cjs
 ```
 
-The structural validator checks record counts, unique IDs, required fields, subject placeholders, valid categories, screen-world and specialist subcategory distribution, transformation architectures and page asset wiring. The prompt-quality audit checks every record's completeness, title duplication, prompt length, subcategory coverage and unclassified routing. It reports category and subcategory counts and highlights repeated specialist prompt skeletons for review. The current catalogue audit passes with zero unclassified records.
+The structural validator checks record counts, unique IDs, required fields, subject placeholders, valid categories, screen-world and specialist subcategory distribution, transformation architectures and page asset wiring. The prompt-quality audit checks every record's completeness, title duplication, prompt length, subcategory coverage and unclassified routing. It reports category and subcategory counts and highlights repeated specialist prompt skeletons for review. The quality audit checks every record's completeness, title duplication, prompt length, taxonomy coverage and unclassified routing. Exact duplicate detection is structural and does not claim full semantic uniqueness.
 
 The Randomiser uses domain-aware compatibility scoring across all fifteen collections, penalises conflicting combinations in Smart mode, and reports remaining warnings. Its synthesis assigns selected modules to creative roles, prioritises source identity and functional constraints, reconciles visual treatments, and carries selected negative constraints into the final prompt.
 
