@@ -15,7 +15,7 @@ for(const p of prompts){
  if(!p.id||!p.title||!p.desc||!p.prompt||!p.negative||!Array.isArray(p.tags)||!p.tags.length||!Array.isArray(p.model)||!p.model.length)errors.push("Incomplete record: "+(p.id||p.title||"unknown"));
  if(!String(p.prompt).includes("[SUBJECT]"))warnings.push("Missing [SUBJECT] variable: "+p.id+" "+p.title);
  const key=p.category+"::"+normalise(p.title);
- if(titleGroups.has(key))warnings.push("Repeated title in category: "+p.category+" / "+p.title);
+ if(titleGroups.has(key))warnings.push("Repeated title in category: "+p.category+" / "+p.title+" (id="+p.id+", tags="+(p.tags||[]).join(", ")+")");
  titleGroups.set(key,(titleGroups.get(key)||0)+1);
  const fingerprint=normalise(p.prompt.replace(/\[[^\]]+\]/g,"VAR").replace(/\b(?:source image|subject|target element|module|collection|subcategory)\b/g,"VAR"));
  const fkey=p.category+"::"+fingerprint;
