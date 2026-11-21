@@ -10,41 +10,16 @@
   const target=document.getElementById("transformation-target");
   const preservation=document.getElementById("transformation-preservation");
   const rules={
-    material:[
-      "MATERIAL TRANSFORMATION PROTOCOL",
-      "Replace the source material identity with the specified target material while retaining the object's underlying geometry, silhouette, dimensions, construction, topology and recognisable design.",
-      "Define the target material through physically coherent optical and tactile properties: base colour, metallic or dielectric response, roughness, gloss, reflectance, transmission, refraction, absorption, subsurface behaviour, anisotropy, edge response and micro-surface variation where relevant.",
-      "Make reflections, highlights, shadows, thickness, transparency and light interaction consistent with the target material. Do not merely recolour the source or add a material-like overlay."
-    ].join("\n"),
-    surface:[
-      "SURFACE TRANSFORMATION PROTOCOL",
-      "Retain the source object's substrate, geometry, topology, proportions and construction. Transform only the exposed surface treatment: coating, finish, patina, glaze, polish, oxidation, print, inlay, relief, wear, pattern or applied layer as specified.",
-      "Respect the relationship between the treatment and the underlying form. Define coverage, boundaries, thickness, edge transitions, layer order, adhesion, wear distribution and interaction with existing seams, recesses and protrusions.",
-      "Do not turn a surface treatment into a replacement base material unless the target brief explicitly requires it. Keep the underlying object structurally legible."
-    ].join("\n"),
-    texture:[
-      "TEXTURE TRANSFORMATION PROTOCOL",
-      "Preserve the source subject's material identity and geometry unless explicitly overridden. Change the surface's tactile and microstructural character: grain, pore scale, fibre direction, roughness variation, relief, embossing, erosion, granularity, striation, cracking or other specified texture behaviour.",
-      "Control texture scale relative to the object's real dimensions. Distribute detail according to curvature, orientation, wear, contact zones and manufacturing logic. Distinguish shallow surface detail from actual geometric relief.",
-      "Avoid texture tiling, uniform noise, scale drift, excessive displacement, melted contours and detail that obscures the source silhouette."
-    ].join("\n"),
-    "style-transfer":[
-      "VISUAL STYLE TRANSFER PROTOCOL",
-      "Translate the source image into the target visual language through its defining formal rules: shape grammar, line behaviour, mark-making, value structure, colour logic, edge treatment, spatial simplification, detail hierarchy and rendering conventions.",
-      "Preserve the source subject's recognisable identity, key features, pose, gesture, object relationships and intended focal hierarchy. Reconstruct those features in the target visual language rather than placing a style filter over the original pixels.",
-      "Do not import unrelated characters, signature props, logos, text or scene content from style references. Transfer visual principles, not reference-image subject matter."
-    ].join("\n"),
-    hybrid:[
-      "HYBRID TRANSFORMATION ORCHESTRATION PROTOCOL",
-      "Combine two or more selected treatments as a controlled visual system. Establish a primary transformation, secondary supporting treatments and explicit priority order before rendering.",
-      "Assign each treatment a clear spatial or material responsibility. Define where treatments overlap, where they remain separate, how boundaries transition and which source attributes remain locked. Avoid uncontrolled blending or competing treatments applied uniformly to every surface.",
-      "Resolve conflicts using this hierarchy: source identity and preservation contract; primary transformation; secondary treatments; selected visual modules; lighting and composition refinements. Keep every treatment visually legible and technically compatible."
-    ].join("\n")
+    material:["MATERIAL TRANSFORMATION PROTOCOL","Change the material identity to the specified target. Preserve silhouette, proportions, construction and topology unless material-driven redesign is explicitly requested.","Define physically coherent colour, metallic/dielectric response, roughness, gloss, reflectance, transmission, refraction, absorption, subsurface response, anisotropy, thickness and edge behaviour only where relevant.","Make highlights, reflections, shadows, transparency and light interaction consistent. Do not merely recolour or overlay."].join("\n"),
+    surface:["SURFACE TRANSFORMATION PROTOCOL","Change only the exposed treatment—finish, coating, patina, glaze, polish, oxidation, print, inlay, relief or wear—unless explicitly instructed to replace the substrate.","Specify coverage, boundaries, thickness, layer order, adhesion, transitions and interaction with seams, recesses and contact zones.","Do not replace the base material or deform the form unless requested."].join("\n"),
+    texture:["TEXTURE TRANSFORMATION PROTOCOL","Change tactile/microstructural character—grain, pore scale, fibre direction, roughness, relief, embossing, erosion, granularity, striation or cracking—without changing material identity or silhouette unless displacement is requested.","Scale texture to the subject and distribute it according to curvature, orientation, wear and manufacturing logic.","Avoid tiling, uniform noise, scale drift, melted contours or detail that obscures the subject."].join("\n"),
+    "style-transfer":["VISUAL STYLE TRANSFER PROTOCOL","Reconstruct the source through the target visual language: shape grammar, markmaking, value structure, colour logic, edge treatment, simplification, detail hierarchy and rendering conventions.","Preserve identity anchors and intended focal subject. Pose, camera and composition may change only when the brief allows or requires it.","Transfer visual principles, not unrelated characters, props, logos, text or scene content."].join("\n"),
+    hybrid:["HYBRID TRANSFORMATION ORCHESTRATION PROTOCOL","Combine selected treatments deliberately. Establish primary transformation, supporting treatments, priority and distinct visual roles before execution.","Define each module’s spatial/material/compositional responsibility, coverage, overlaps, transitions and locked attributes. Avoid uniform application or uncontrolled blending.","Conflict precedence: explicit user requirements > primary transformation > architecture scope > preservation contract > supporting modules > optional refinements. Adapt or omit lower-priority conflicts."].join("\n")
   };
   const preservationRules={
-    strict:"STRICT LOCK: preserve subject identity, exact silhouette, defining features, proportions, pose, expression, object count, object relationships, camera viewpoint, framing and essential composition. Alter only the explicitly requested visual treatment.",
-    structural:"STRUCTURAL LOCK: preserve the recognisable subject, primary geometry, proportions, pose, key details and principal composition. Permit only local changes required to make the requested treatment coherent.",
-    reinterpret:"CONTROLLED REINTERPRETATION: preserve identity anchors and the subject's semantic recognisability. Allow deliberate changes to secondary detail, edge language and local composition only where they directly support the target visual language."
+    strict:"STRICT SOURCE LOCK: preserve identity, defining features, exact silhouette, proportions, pose, expression, object count, relationships, viewpoint and framing. Change only explicitly permitted attributes. If the requested treatment inherently requires a change, make the smallest necessary local change and preserve all other locked attributes.",
+    structural:"STRUCTURAL LOCK: preserve identity, primary geometry, proportions, pose, key details and principal composition. Permit only local changes required by the requested transformation; do not redesign unrelated features.",
+    reinterpret:"CONTROLLED REINTERPRETATION: preserve semantic identity anchors and recognisability. Permit secondary details, shape language, edge behaviour and composition to change only when directly supporting the target visual language."
   };
   let rendering=false;
   const promptById=new Map((window.AI_PROMPT_BUILDER_CATALOGUE||[]).map(p=>[String(p.id),p]));
@@ -84,13 +59,13 @@
       artDirection||"No additional style, lighting or composition refinement specified.",
       "",
       "7. EXECUTION AND INTEGRATION",
-      "Analyse the source before applying the treatment. Separate invariant source attributes from attributes permitted to change. Apply the transformation at the correct spatial scale and maintain coherent perspective, geometry, depth, lighting and occlusion. Keep transitions deliberate and localised. Ensure that the transformed result reads as one resolved image rather than a collection of disconnected effects.",
+      "CONSTRAINT PRECEDENCE: explicit user requirements > primary transformation objective > architecture scope > source preservation contract > supporting modules > optional style, lighting and composition refinements. Resolve conflicts before rendering; adapt or omit lower-priority instructions. Analyse the source and separate locked attributes from permitted and required changes. Maintain perspective, geometry, depth, lighting and occlusion only where compatible with the chosen transformation. Ensure one coherent resolved image.",
       "",
       "8. QUALITY CONTROL",
-      "Check subject recognisability, silhouette integrity, feature placement, proportion, edge continuity, material or style coherence, texture scale, lighting consistency, focal hierarchy and visual clarity. Correct artefacts, accidental substitutions, inconsistent reflections, broken boundaries, repeated texture patterns and details that compete with the subject.",
+      "Check transformation-specific fidelity, identity anchors, locked attributes, permitted changes, material/style behaviour, texture scale, transitions and focal clarity. Check lighting, depth and atmosphere only when relevant. Correct artifacts, accidental substitutions, contradictions, broken boundaries, repeated patterns and details competing with the objective.",
       "",
       "9. NEGATIVE CONSTRAINTS",
-      "No unintended redesign, subject substitution, identity drift, geometry distortion, arbitrary props, unrelated text, logos, inconsistent material physics, uncontrolled effects, excessive surface noise, visual clutter or decorative additions that do not serve the transformation.",
+      "No subject substitution or identity drift unless requested; no changes to locked attributes; no unrelated props, text or logos; no contradictory instructions; no incoherent material behavior, uncontrolled effects, excessive surface noise or clutter. Do not impose camera, depth, lighting or atmosphere changes unless relevant and permitted.",
       "",
       "10. FINAL OUTPUT",
       "Deliver a fully resolved transformation with the source subject recognisable and the target treatment clearly, consistently and convincingly realised."
