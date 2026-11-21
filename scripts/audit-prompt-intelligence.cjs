@@ -8,7 +8,7 @@ const fs=require('node:fs'),vm=require('node:vm');
 const app=fs.readFileSync('app.js','utf8');
 const start=app.indexOf('const collections = '),end=app.indexOf(';\nlet prompts',start);
 if(start<0||end<0)throw Error('Unable to parse collections from app.js');
-const collections=vm.runInNewContext(app.slice(start+'const collections = '.length,end+1);
+const collections=vm.runInNewContext(app.slice(start+'const collections = '.length,end+1));
 const sandbox={window:{}};
 vm.runInContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{timeout:5000});
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
