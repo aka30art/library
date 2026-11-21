@@ -33,6 +33,8 @@ jobs:
         run: node scripts/validate-catalogue.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
+      - name: Report heuristic prompt-intelligence diagnostics
+        run: node scripts/audit-prompt-intelligence.cjs
 
   branch-browser-tests:
     name: PR browser QA (local branch, no deployment)
