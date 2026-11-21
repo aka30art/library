@@ -2,7 +2,7 @@
 /**
  * Prompt Intelligence Audit v2.
  * Conservative rule-based triage, not a semantic quality score.
- * Usage: --json | --summary | --self-test
+ * Usage: --json | --summary | --self-test | --calibration-test
  */
 const fs=require("node:fs"),vm=require("node:vm");
 const SPECIALIST=new Set(["architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"]);
@@ -245,6 +245,24 @@ function loadCatalogue(){
  const sandbox={window:{}};vm.runInNewContext(fs.readFileSync("catalogue-expansion.js","utf8"),sandbox,{timeout:5000});
  const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];if(!prompts.length)throw new Error("Catalogue expansion loaded no prompts");return prompts;
 }
+function calibrationTest(){
+ const prompts=loadCatalogue(),report=analysePrompts(prompts);
+ const expected={materials:200,styles:125,textures:125,lighting:75,effects:125,composition:75,rendering:75,"colour-atmosphere":75};
+ if(report.total!==1521)throw new Error("Calibration failed: expected 1,521 records, got "+report.total);
+ if(report.targetSubstitutionFamilies.length!==8)throw new Error("Calibration failed: expected eight target-substitution families.");
+ for(const [category,count] of Object.entries(expected)){
+  const matches=report.targetSubstitutionFamilies.filter(f=>f.category===category);
+  if(matches.length!==1||matches[0].count!==count||matches[0].categoryTotal!==count||matches[0].categoryCoverage!==100)throw new Error("Calibration failed for "+category+": expected one full-coverage family of "+count+".");
+ }
+ if(report.counts.familyRewriteCandidateMembers!==875)throw new Error("Calibration failed: expected 875 family-level candidate members.");
+ const byId=new Map(report.records.map(r=>[String(r.id),r]));
+ const brushed=byId.get("1"),bauhaus=byId.get("201"),grain=byId.get("326"),monolith=byId.get("6050"),museum=byId.get("6033"),device=byId.get("6210");
+ if(!brushed?.familyRewriteCandidate||!bauhaus?.familyRewriteCandidate||!grain?.familyRewriteCandidate)throw new Error("Calibration failed: universal collection examples were not assigned to rewrite families.");
+ if(monolith?.rewriteCandidate||monolith?.familyRewriteCandidate||monolith?.disposition!=="differentiation_review")throw new Error("Calibration failed: domain-specific sculpture prompt was over-escalated.");
+ if(museum?.disposition!=="targeted_review"||!museum.issues.some(x=>x.code==="generic_module_focus_fallback"))throw new Error("Calibration failed: Museum module-focus section was not isolated as targeted review.");
+ if(device?.rewriteCandidate||device?.familyRewriteCandidate||device?.issues.some(x=>x.code==="generic_module_focus_fallback"))throw new Error("Calibration failed: Product Design specialist prompt was over-escalated.");
+ return "PASS: all 1,521 records calibrated; eight target-substitution rewrite families / 875 members; strong specialist examples retained; Museum section-level gap isolated.";
+}
 function selfTest(){
  const strong={id:1,title:"Calibrated Material Study",category:"materials",tags:["Metals"],prompt:"[SUBJECT] Transform the supplied object into brushed aluminium while preserving its defining silhouette and proportions. Model the directional grain, anisotropic reflectance, edge radii and subtle machining marks. Control the key-light direction so highlights travel consistently across the surface; retain the source geometry and avoid unrelated additions. Resolve the transition between polished edges and satin faces."};
  const weak={id:2,title:"Generic Module",category:"product-design",tags:["Consumer Electronics"],prompt:"[SUBJECT] Make it beautiful, amazing, stunning and visually interesting. Add lots of detail and make it unique. Use the specific module Portable Device as the decisive proposition. Show the design decisions that make this module distinct."};
@@ -268,6 +286,7 @@ function selfTest(){
 function main(){
  const args=new Set(process.argv.slice(2));
  if(args.has("--self-test")){console.log(selfTest());return;}
+ if(args.has("--calibration-test")){console.log(calibrationTest());return;}
  const report=analysePrompts(loadCatalogue());
  if(args.has("--json")){process.stdout.write(JSON.stringify(report,null,2)+"\n");return;}
  if(args.has("--summary")){process.stdout.write(markdown(report)+"\n");return;}
