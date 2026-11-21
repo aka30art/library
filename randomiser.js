@@ -38,7 +38,7 @@
   function compactDirective(item){
     const raw=String(item.prompt.prompt||item.prompt.desc||"").trim();
     if(!raw)return "";
-    const blocks=raw.split(/\\n\\s*\\n/).map(x=>x.replace(/\\s+/g," ").trim()).filter(Boolean);
+    const blocks=raw.split(/\n\s*\n/).map(x=>x.replace(/\s+/g," ").trim()).filter(Boolean);
     const preferred=[
       "DESIGN INTENT:","SUBCATEGORY METHOD:","DOMAIN-SPECIFIC EXECUTION:","MODULE-SPECIFIC FOCUS:",
       "SUBJECT RE-CREATION","WORLD AND ENVIRONMENT TRANSFORMATION","UNIFIED ART DIRECTION","SCENE CONTROL",
@@ -50,8 +50,8 @@
       if(found&&!selected.includes(found))selected.push(found);
       if(selected.join(" ").length>1050)break;
     }
-    let text=selected.length?selected.join(" "):blocks.filter(x=>!/^UNIVERSAL .* PROMPT$/i.test(x)).join(" ");
-    text=text.replace(/\\s+/g," ").trim();
+    let text=selected.length&&( /DESIGN INTENT:|SUBJECT RE-CREATION|WORLD AND ENVIRONMENT TRANSFORMATION|UNIFIED ART DIRECTION|SCENE CONTROL/i.test(raw) )?selected.join(" "):raw;
+    text=text.replace(/\s+/g," ").trim();
     if(text.length>1050){
       const cut=text.slice(0,1050);
       const boundary=Math.max(cut.lastIndexOf(". "),cut.lastIndexOf("; "));
@@ -80,7 +80,7 @@
       return "styles";
     };
     a.forEach(x=>buckets[mapRole(x.cat[1])].push({title:String(x.prompt.title||"").trim(),text:compactDirective(x)}));
-    const join=role=>buckets[role].filter(x=>x.text).map(x=>x.title+": "+x.text).join("\\n");
+    const join=role=>buckets[role].filter(x=>x.text).map(x=>x.title+": "+x.text).join("\n");
     const subjectWorld=join("world"),architecture=join("architecture"),form=join("collectibles"),sculpture=join("sculpture");
     const product=join("product"),graphic=join("graphic"),camera=join("photography"),material=join("materials");
     const style=join("styles"),surface=join("textures"),framing=join("composition"),photoFinish=join("photoFinish");
@@ -112,14 +112,17 @@
       negativeTerms.length?"NEGATIVE CONSTRAINTS: "+negativeTerms.join(", ")+".":"",
       "FINAL QUALITY GATE: Check subject fidelity, hierarchy, spatial logic, proportion, material behaviour, typography where relevant, lighting, camera consistency, edge quality, texture scale and finish. Deliver one intentional, technically convincing image with no accidental artefacts, unrelated props, meaningless text, watermarks or decorative noise."
     ].filter(Boolean);
-    return textParts.join("\\n\\n");
+    return textParts.join("\n\n");
   }
   function render(){const a=mode==="smart"?smartSample():sample();if(!a.length){output.innerHTML='<p class="randomiser-placeholder">Select at least one category to generate a combined prompt.</p>';fullPrompt="";copyBtn.disabled=true;compat.hidden=true;return;}
-    fullPrompt=compose(a);const preview=fullPrompt.slice(0,220)+"…";const sources=a.map(x=>'<details class="randomiser-source-prompt"><summary>'+esc(x.prompt.title)+' <small>'+esc(x.cat[1])+'</small></summary><div class="randomiser-source-prompt-text">'+esc(x.prompt.prompt||x.prompt.desc||"")+'</div></details>').join("");
+    compositionMeta=assess(a);fullPrompt=compose(a);const preview=fullPrompt.slice(0,220)+"…";const sources=a.map(x=>'<details class="randomiser-source-prompt"><summary>'+esc(x.prompt.title)+' <small>'+esc(x.cat[1])+'</small></summary><div class="randomiser-source-prompt-text">'+esc(x.prompt.prompt||x.prompt.desc||"")+'</div></details>').join("");
     output.innerHTML='<article class="randomiser-composed"><p class="randomiser-composed-label">ONE COMPLETE COMBINED PROMPT</p><button type="button" class="randomiser-prompt-toggle" aria-expanded="false">Show full combined prompt <span>＋</span></button><p class="randomiser-prompt-preview">'+esc(preview)+'</p><div class="randomiser-composed-text" hidden>'+esc(fullPrompt)+'</div><div class="randomiser-source-details"><button type="button" class="randomiser-ingredients-toggle" aria-expanded="false">View individual ingredient prompts ('+a.length+') <span>＋</span></button><div class="randomiser-source-list" hidden>'+sources+'</div></div></article>';
     const btn=output.querySelector(".randomiser-prompt-toggle"),textBlock=output.querySelector(".randomiser-composed-text");btn.onclick=()=>{const open=btn.getAttribute("aria-expanded")==="true";btn.setAttribute("aria-expanded",String(!open));textBlock.hidden=open;btn.innerHTML=(open?"Show full combined prompt":"Hide full combined prompt")+' <span>'+(open?"＋":"－")+'</span>';};
     const ingredientBtn=output.querySelector(".randomiser-ingredients-toggle"),ingredientList=output.querySelector(".randomiser-source-list");ingredientBtn.onclick=()=>{const open=ingredientBtn.getAttribute("aria-expanded")==="true";ingredientBtn.setAttribute("aria-expanded",String(!open));ingredientList.hidden=open;ingredientBtn.innerHTML=(open?"View individual ingredient prompts":"Hide individual ingredient prompts")+' ('+a.length+') <span>'+(open?"＋":"－")+'</span>';};
-    heading.textContent=(mode==="smart"?"Smart":"Experimental")+" mode · "+a.length+" ingredients";copyBtn.disabled=false;compat.hidden=true;compat.innerHTML="";
+    heading.textContent=(mode==="smart"?"Smart":"Experimental")+" mode · "+a.length+" ingredients";
+    const warningMarkup=compositionMeta.warnings.length?'<ul>'+compositionMeta.warnings.map(w=>'<li>'+esc(w)+'</li>').join("")+'</ul>':'<p>No major conflicts detected by the compatibility rules.</p>';
+    compat.innerHTML='<p><strong>Module compatibility: '+compositionMeta.score+'/100</strong> · '+compositionMeta.pairCount+' pair checks</p>'+warningMarkup;
+    compat.hidden=false;copyBtn.disabled=false;
   }
   document.querySelector("#randomiser-generate").addEventListener("click",render);
   document.querySelectorAll('input[name="randomiser-mode"]').forEach(r=>r.addEventListener("change",()=>{if(r.checked){mode=r.value;heading.textContent=mode==="smart"?"Smart mode selected":"Experimental mode selected";}}));
