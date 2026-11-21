@@ -35,6 +35,20 @@ for(const category of Object.keys(taxonomy)){
  if(duplicates.length)errors.push("Duplicate subcategory labels in "+category+": "+duplicates.join(", "));
  for(const label of labels)if(!subcategoryCounts[category+" / "+label])errors.push("Empty subcategory: "+category+" / "+label);
 }
+const intelligenceSource=fs.readFileSync("prompt-intelligence.js","utf8");
+function readIntelligenceMap(name,nextName){
+ const start=intelligenceSource.indexOf("const "+name+"=");
+ const end=intelligenceSource.indexOf("\\nconst "+nextName,start);
+ if(start<0||end<0)throw Error("Unable to parse Prompt Intelligence map: "+name);
+ const expression=intelligenceSource.slice(start+("const "+name+"=").length,end).replace(/;\\s*$/,"");
+ return vm.runInNewContext("("+expression+")");
+}
+const intelligenceMaps={
+ types:readIntelligenceMap("types","roles"),
+ roles:readIntelligenceMap("roles","terms"),
+ categories:readIntelligenceMap("categories","conflicts")
+};
+for(const category of collections)for(const mapName of Object.keys(intelligenceMaps))if(!intelligenceMaps[mapName][category.id])errors.push("Prompt Intelligence "+mapName+" mapping missing collection: "+category.id);
 const duplicateStyles=[...titleGroups.entries()].filter(([k,n])=>k.startsWith("styles::")&&n>1);
 if(duplicateStyles.length)errors.push("Duplicate style titles remain: "+duplicateStyles.map(x=>x[0].replace("styles::","")).join(", "));
 const unclassified=prompts.filter(p=>classifier(p)==="Other");
