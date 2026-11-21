@@ -97,7 +97,7 @@ function evidence(text,re){const m=re.exec(text);return m?excerpt(text,m):null;}
 function skeleton(record){
  let text=String(record.prompt||"");
  const values=[record.title,record.category].concat(Array.isArray(record.tags)?record.tags:[]).filter(Boolean).sort((a,b)=>String(b).length-String(a).length);
- for(const value of values){const escaped=String(value).replace(/[-/\\^$*+?.()|[\]{}]/g,"\\$&");text=text.replace(new RegExp(escaped,"gi")," MODULETOKEN ");}
+ for(const value of values){const escaped=String(value).split("").map(ch=>"\\^$.*+?()[]{}|/".includes(ch)?"\\"+ch:ch).join("");text=text.replace(new RegExp(escaped,"gi")," MODULETOKEN ");}
  return norm(text.replace(/\[SUBJECT\]/gi," SOURCEINPUT "));
 }
 function analysePrompts(prompts){
