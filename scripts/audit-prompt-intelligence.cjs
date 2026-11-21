@@ -8,6 +8,16 @@ const fs=require("node:fs"),vm=require("node:vm");
 const SPECIALIST=new Set(["architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"]);
 const UNIVERSAL_TARGET_CATEGORIES=new Set(["materials","styles","textures","lighting","effects","composition","rendering","colour-atmosphere"]);
 const MIN_TARGET_FAMILY_SIZE=20;
+const TARGET_REDESIGN_BRIEFS={
+ materials:["Specify the selected material's physical behaviour (for example reflectance, translucency, anisotropy, porosity, grain or elasticity).","Define a relevant surface or manufacturing process and how it changes edges, joints or geometry.","Explain how light interacts with the material and how the behaviour adapts to the supplied subject."],
+ styles:["Translate the selected movement or style into distinctive form, geometry, line, proportion, palette, typography or ornament decisions.","Identify medium- and technique-specific execution, not only a style label.","Preserve relevant historical or cultural visual logic without reducing the style to superficial decoration."],
+ textures:["Define the texture's morphology, scale, density, direction and formation mechanism.","Specify where it appears and how it follows the source surface or image structure.","Describe its response to light, focus, contrast and surrounding materials."],
+ lighting:["Specify the chosen photographic process or stock's tonal curve, colour response, grain and highlight/shadow behaviour.","Distinguish capture characteristics from post-production treatment where relevant.","Define how the treatment affects skin, materials, highlights, shadow detail and mixed light."],
+ effects:["Explain the physical, optical, chemical or digital mechanism producing the effect.","Control location, direction, intensity, falloff and interaction with the source subject.","Define what remains legible and which parts of the source must not be distorted."],
+ composition:["Translate the named principle into concrete focal hierarchy, framing, spatial relationships, alignment, rhythm and negative-space decisions.","Specify viewpoint, crop and depth relationships appropriate to the source.","Explain how the arrangement guides attention rather than merely naming a composition concept."],
+ rendering:["Name the relevant rendering or simulation method and why it suits the subject.","Specify material response, light transport, shadow, reflection/refraction and surface fidelity.","Set technical quality constraints such as geometry, sampling, anti-aliasing, noise and artifact control where relevant."],
+ "colour-atmosphere":["Define the actual hue relationships and palette roles, not only a mood label.","Specify tonal hierarchy, contrast, saturation and highlight/shadow colour behaviour.","Tie atmospheric effects to a plausible light source, environment or time-of-day condition."]
+};
 const CHECKS={
 materials:[
 ["material_behaviour","Material behaviour",/\b(reflectance|reflective|translucen\w*|refract\w*|absorb\w*|diffus\w*|poros\w*|malleab\w*|elastic\w*|brittle|conduct\w*|density|grain|patina|oxid\w*|corros\w*|weather\w*|hardness|flexib\w*|roughness)\b/i],
@@ -144,6 +154,7 @@ function detectTargetSubstitutionFamilies(prompts,records){
    evidence:"The complete normalized prompt body is identical across this family after masking only [SUBJECT] and each record's exact target title. The target concept therefore changes, but the instructions do not.",
    whyItMatters:"A material, style, texture, effect or other selected target may require its own physical, visual, technical or compositional execution logic. A single generic instruction body does not explain how the selected target should actually behave or be applied.",
    recommendedAction:"Redesign this as a family of target-aware prompts. Preserve any useful common source-lock/application scaffold, but add genuinely distinct mechanisms, visual consequences, execution parameters and exclusions for each target. Review one representative from every subcategory before regenerating the family.",
+   targetSpecificRequirements:TARGET_REDESIGN_BRIEFS[category]||[],
    members:memberList,sharedTemplatePreview:targetSubstitutionPreview(source)
   };
   families.push(family);
@@ -232,7 +243,7 @@ function markdown(report){
  for(const r of candidates.slice(0,80)){out.push("- **"+r.id+" — "+r.title+" ("+r.category+")** ["+r.confidence+"]");for(const x of r.issues)if(x.severity==="high"||x.severity==="medium")out.push("  - "+x.code+": "+x.whyItMatters);}
  out.push("","## Target-substitution rewrite families");
  if(!report.targetSubstitutionFamilies.length)out.push("No large target-substitution family met the conservative threshold.");
- for(const f of report.targetSubstitutionFamilies)out.push("- **"+f.familyId+" — "+f.category+" ("+f.count+"/"+f.categoryTotal+", "+f.categoryCoverage+"%)**: "+f.evidence+" Action: "+f.recommendedAction);
+ for(const f of report.targetSubstitutionFamilies){out.push("- **"+f.familyId+" — "+f.category+" ("+f.count+"/"+f.categoryTotal+", "+f.categoryCoverage+"%)**: "+f.evidence+" Action: "+f.recommendedAction);for(const item of f.targetSpecificRequirements)out.push("  - "+item);}
  out.push("","## Specialist template families");
  if(!report.templateFamilies.length)out.push("No repeated specialist skeletons detected.");
  for(const f of report.templateFamilies)out.push("- **"+f.familyId+" — "+f.category+" ("+f.count+")**: "+f.members.map(x=>x.title).join("; "));
