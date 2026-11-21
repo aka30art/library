@@ -6,6 +6,8 @@
  */
 const fs=require("node:fs"),vm=require("node:vm");
 const SPECIALIST=new Set(["architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"]);
+const UNIVERSAL_TARGET_CATEGORIES=new Set(["materials","styles","textures","lighting","effects","composition","rendering","colour-atmosphere"]);
+const MIN_TARGET_FAMILY_SIZE=20;
 const CHECKS={
 materials:[
 ["material_behaviour","Material behaviour",/\b(reflectance|reflective|translucen\w*|refract\w*|absorb\w*|diffus\w*|poros\w*|malleab\w*|elastic\w*|brittle|conduct\w*|density|grain|patina|oxid\w*|corros\w*|weather\w*|hardness|flexib\w*|roughness)\b/i],
@@ -100,6 +102,64 @@ function skeleton(record){
  for(const value of values){const escaped=String(value).split("").map(ch=>"\\^$.*+?()[]{}|/".includes(ch)?"\\"+ch:ch).join("");text=text.replace(new RegExp(escaped,"gi")," MODULETOKEN ");}
  return norm(text.replace(/\[SUBJECT\]/gi," SOURCEINPUT "));
 }
+function targetSubstitutionFingerprint(record,source){
+ let text=String(source.prompt||"");
+ text=text.replace(/\[SUBJECT\]/gi," SOURCEINPUT ");
+ const title=String(source.title||"");
+ if(title){
+  const escaped=title.split("").map(ch=>"\\^$.*+?()[]{}|/".includes(ch)?"\\"+ch:ch).join("");
+  text=text.replace(new RegExp(escaped,"gi")," TARGETNAME ");
+ }
+ text=text.replace(/TARGET ELEMENT:\\s*[^\\r\\n]+/gi,"TARGET ELEMENT: TARGETNAME");
+ return norm(text);
+}
+function targetSubstitutionPreview(source){
+ let text=String(source.prompt||"");
+ text=text.replace(/\[SUBJECT\]/gi,"[SOURCE]");
+ const title=String(source.title||"");
+ if(title){
+  const escaped=title.split("").map(ch=>"\\^$.*+?()[]{}|/".includes(ch)?"\\"+ch:ch).join("");
+  text=text.replace(new RegExp(escaped,"gi"),"[TARGET ELEMENT]");
+ }
+ text=text.replace(/TARGET ELEMENT:\\s*[^\\r\\n]+/gi,"TARGET ELEMENT: [TARGET ELEMENT]");
+ return text;
+}
+function detectTargetSubstitutionFamilies(prompts,records){
+ const categoryCounts=new Map(),groups=new Map();
+ for(const record of records){
+  if(!UNIVERSAL_TARGET_CATEGORIES.has(record.category)||!record.prompt)continue;
+  categoryCounts.set(record.category,(categoryCounts.get(record.category)||0)+1);
+  const key=record.category+"::"+targetSubstitutionFingerprint(record,prompts[record.index]);
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push(record);
+ }
+ const families=[];
+ for(const [key,members] of groups){
+  const category=members[0].category,total=categoryCounts.get(category)||0,coverage=total?members.length/total:0;
+  if(members.length<MIN_TARGET_FAMILY_SIZE||coverage<0.8)continue;
+  const familyId=category+"-target-substitution-"+String(families.length+1).padStart(2,"0");
+  const memberList=members.map(r=>({id:r.id,title:r.title,subcategory:r.subcategory}));
+  const source=prompts[members[0].index];
+  const family={
+   familyId,category,count:members.length,categoryTotal:total,categoryCoverage:Number((coverage*100).toFixed(1)),
+   classification:"rewrite_family_candidate",
+   evidence:"The complete normalized prompt body is identical across this family after masking only [SUBJECT] and each record's exact target title. The target concept therefore changes, but the instructions do not.",
+   whyItMatters:"A material, style, texture, effect or other selected target may require its own physical, visual, technical or compositional execution logic. A single generic instruction body does not explain how the selected target should actually behave or be applied.",
+   recommendedAction:"Redesign this as a family of target-aware prompts. Preserve any useful common source-lock/application scaffold, but add genuinely distinct mechanisms, visual consequences, execution parameters and exclusions for each target. Review one representative from every subcategory before regenerating the family.",
+   members:memberList,sharedTemplatePreview:targetSubstitutionPreview(source)
+  };
+  families.push(family);
+  for(const record of members){
+   record.targetSubstitutionFamily={id:familyId,size:members.length,categoryCoverage:family.categoryCoverage};
+   record.familyRewriteCandidate=true;
+   issue(record.issues,"target_substitution_family","review","target-specific execution",
+    {familyId,familySize:members.length,categoryCoverage:family.categoryCoverage},
+    "This record belongs to a large family whose complete prompt body is unchanged after masking only the target name. It is a family-level redesign candidate, not an automatic instruction to rewrite this record in isolation.",
+    "Contribute target-specific execution logic to the family redesign: define the selected target's mechanism, observable consequences, controls and exclusions.");
+  }
+ }
+ return families;
+}
 function analysePrompts(prompts){
  const records=prompts.map((p,index)=>{
   const text=String(p.prompt||""),id=String(p.id==null?"":p.id),title=String(p.title||""),category=String(p.category||"unknown");
@@ -133,16 +193,19 @@ function analysePrompts(prompts){
  for(const members of families.values())if(members.length>1){
   familyNo++;const familyId=members[0].category+"-family-"+String(familyNo).padStart(2,"0"),memberList=members.map(m=>({id:m.id,title:m.title,subcategory:m.subcategory}));
   templateFamilies.push({familyId,category:members[0].category,count:members.length,members:memberList});
-  for(const r of members){r.templateFamily={id:familyId,size:members.length,members:memberList};issue(r.issues,"shared_template_family",members.length>=5?"medium":"review","specialist differentiation",{familyId,familySize:members.length,peerTitles:members.filter(m=>m!==r).map(m=>m.title)},"After masking title, category and tags, this prompt shares a normalized instruction skeleton with peers. This may be reusable structure, but could also mean prompts differ mainly by interchangeable module names.","Compare actual module-specific reasoning. Each prompt should contain distinct discipline-specific decisions, not only a changed subject label.");}
+  for(const r of members){r.templateFamily={id:familyId,size:members.length,members:memberList};issue(r.issues,"shared_template_family","review","specialist differentiation",{familyId,familySize:members.length,peerTitles:members.filter(m=>m!==r).map(m=>m.title)},"After masking title, category and tags, this prompt shares a normalized instruction skeleton with peers. This may be reusable structure, but could also mean prompts differ mainly by interchangeable module names.","Compare actual module-specific reasoning. Each prompt should contain distinct discipline-specific decisions, not only a changed subject label.");}
  }
+ const targetSubstitutionFamilies=detectTargetSubstitutionFamilies(prompts,records);
  for(const r of records){
-  const high=r.issues.filter(x=>x.severity==="high").length,mediumDimensions=new Set(r.issues.filter(x=>x.severity==="medium").map(x=>x.dimension));
+  const high=r.issues.filter(x=>x.severity==="high").length;
+  const mediumDimensions=new Set(r.issues.filter(x=>x.severity==="medium"&&x.code!=="shared_template_family").map(x=>x.dimension));
+  const substantiveIssues=r.issues.filter(x=>x.code!=="shared_template_family"&&x.code!=="target_substitution_family");
   if(high){r.disposition="rewrite_candidate";r.confidence="high";r.rewriteCandidate=true;}
   else if(mediumDimensions.size>=2){r.disposition="rewrite_candidate";r.confidence="provisional";r.rewriteCandidate=true;}
-  else if(r.issues.length){r.disposition="targeted_review";r.confidence="review";}
+  else if(substantiveIssues.length){r.disposition="targeted_review";r.confidence="review";}
   else if(r.templateFamily){r.disposition="differentiation_review";r.confidence="review";}
  }
- const counts={rewriteCandidates:0,highConfidenceRewriteCandidates:0,provisionalRewriteCandidates:0,targetedReview:0,differentiationReview:0,noRewriteSignalDetected:0},byCategory={},issueCounts={};
+ const counts={rewriteCandidates:0,highConfidenceRewriteCandidates:0,provisionalRewriteCandidates:0,targetedReview:0,differentiationReview:0,noRewriteSignalDetected:0,familyRewriteCandidates:0,familyRewriteCandidateMembers:0},byCategory={},issueCounts={};
  for(const r of records){
   if(r.disposition==="rewrite_candidate"){counts.rewriteCandidates++;if(r.confidence==="high")counts.highConfidenceRewriteCandidates++;else counts.provisionalRewriteCandidates++;}
   else if(r.disposition==="targeted_review")counts.targetedReview++;
@@ -151,10 +214,13 @@ function analysePrompts(prompts){
   const c=byCategory[r.category]||(byCategory[r.category]={total:0,rewriteCandidates:0,targetedReview:0,differentiationReview:0,noRewriteSignalDetected:0});c.total++;c[r.disposition==="rewrite_candidate"?"rewriteCandidates":r.disposition==="targeted_review"?"targetedReview":r.disposition==="differentiation_review"?"differentiationReview":"noRewriteSignalDetected"]++;
   for(const x of r.issues)issueCounts[x.code]=(issueCounts[x.code]||0)+1;
  }
- return {schemaVersion:2,generatedAt:new Date().toISOString(),auditModel:"conservative rule-based triage; no semantic quality score",interpretation:{rewrite_candidate:"Specific defect evidence warrants a human rewrite decision; never rewrite automatically.",targeted_review:"One or more signals need a human check; current evidence is insufficient to recommend rewriting.",differentiation_review:"A shared specialist template skeleton was detected; verify genuinely distinct domain reasoning.",no_rewrite_signal_detected:"No configured rule found a concrete issue. This is not a quality pass."},limitations:["Pattern matches are evidence hints, not semantic understanding.","A missing keyword is never treated as proof that a concept is absent.","Template reuse is a differentiation signal, not an automatic rewrite verdict.","The audit cannot reliably detect factual errors, weak concepts, cultural inaccuracies or subtle semantic redundancy without human review."],total:records.length,counts,issueCounts,byCategory,templateFamilies,records};
+ counts.familyRewriteCandidates=targetSubstitutionFamilies.length;
+ counts.familyRewriteCandidateMembers=targetSubstitutionFamilies.reduce((n,f)=>n+f.count,0);
+ return {schemaVersion:3,generatedAt:new Date().toISOString(),auditModel:"conservative rule-based triage; no semantic quality score",interpretation:{rewrite_candidate:"Specific defect evidence warrants a human rewrite decision; never rewrite automatically.",targeted_review:"One or more signals need a human check; current evidence is insufficient to recommend rewriting.",differentiation_review:"A shared specialist template skeleton was detected; verify genuinely distinct domain reasoning.",no_rewrite_signal_detected:"No configured rule found a concrete issue. This is not a quality pass.",rewrite_family_candidate:"A large group of records shares the same complete prompt after masking only the target name. Redesign the family template and individual target logic together; do not mechanically rewrite every record."},limitations:["Pattern matches are evidence hints, not semantic understanding.","A missing keyword is never treated as proof that a concept is absent.","Template reuse is a differentiation signal, not an automatic rewrite verdict.","The audit cannot reliably detect factual errors, weak concepts, cultural inaccuracies or subtle semantic redundancy without human review."],total:records.length,counts,issueCounts,byCategory,templateFamilies,targetSubstitutionFamilies,manualCalibration:{status:"human spot-check of representative catalogue records; illustrative calibration, not a statistically validated gold set",examples:[{id:1,title:"Brushed Aluminium",category:"materials",assessment:"member of target-substitution rewrite family",reason:"The same complete instruction body appears for all 200 materials after masking the material title; no aluminium-specific grain direction, anisotropic reflectance, edge treatment or machining behaviour is specified."},{id:201,title:"Bauhaus",category:"styles",assessment:"member of target-substitution rewrite family",reason:"The same complete instruction body appears for all 125 styles after masking the style title; no Bauhaus-specific geometry, typography, palette, composition or historical visual grammar is specified."},{id:326,title:"Fine Film Grain",category:"textures",assessment:"member of target-substitution rewrite family",reason:"The same complete instruction body appears for all 125 textures after masking the texture title; no grain size, density, distribution, luminance response or interaction with image detail is specified."},{id:6050,title:"Void-Carved Monolith",category:"sculpture-3d-objects",assessment:"not a rewrite candidate based on this sample",reason:"Its subcategory method and module focus specify subtraction, compression, mass, void, centre of gravity, edge condition, material weight and viewing distance."},{id:6033,title:"Museum",category:"architecture-spaces",assessment:"targeted section review",reason:"The civic/institutional programme method is substantive, but its module-focus section is a generic fallback; improve that section rather than rewrite the complete prompt."},{id:6210,title:"Portable Device",category:"product-design",assessment:"not a rewrite candidate based on this sample",reason:"Its method specifies interface hierarchy, tactile inputs, ports, sensors, thermal paths, component placement, hand ergonomics and serviceability."}]},records};
 }
 function markdown(report){
- const out=["# Prompt Intelligence Audit v2","","**Records:** "+report.total+"  ","**Rewrite candidates:** "+report.counts.rewriteCandidates+" (high-confidence structural: "+report.counts.highConfidenceRewriteCandidates+"; provisional multi-signal: "+report.counts.provisionalRewriteCandidates+")  ","**Targeted review:** "+report.counts.targetedReview+"  ","**Differentiation review:** "+report.counts.differentiationReview+"  ","**No rewrite signal detected:** "+report.counts.noRewriteSignalDetected,"","> Rewrite candidates are a human-review shortlist, not automatic rewrite orders. No score is used; pattern absence is not proof of quality.","","## Issue types"];
+ const out=["# Prompt Intelligence Audit v2","","**Records:** "+report.total+"  ","**Rewrite candidates:** "+report.counts.rewriteCandidates+" (high-confidence structural: "+report.counts.highConfidenceRewriteCandidates+"; provisional multi-signal: "+report.counts.provisionalRewriteCandidates+")  ",
+  "**Rewrite-family candidates:** "+report.counts.familyRewriteCandidates+" families / "+report.counts.familyRewriteCandidateMembers+" member prompts  ","**Targeted review:** "+report.counts.targetedReview+"  ","**Differentiation review:** "+report.counts.differentiationReview+"  ","**No rewrite signal detected:** "+report.counts.noRewriteSignalDetected,"","> Rewrite candidates are a human-review shortlist, not automatic rewrite orders. No score is used; pattern absence is not proof of quality.","","## Issue types"];
  for(const [k,v] of Object.entries(report.issueCounts).sort((a,b)=>b[1]-a[1]))out.push("- "+k+": "+v);
  out.push("","## Collection triage","| Collection | Total | Rewrite candidates | Targeted review | Differentiation review | No signal |","|---|---:|---:|---:|---:|---:|");
  for(const [k,v] of Object.entries(report.byCategory))out.push("| "+k+" | "+v.total+" | "+v.rewriteCandidates+" | "+v.targetedReview+" | "+v.differentiationReview+" | "+v.noRewriteSignalDetected+" |");
@@ -162,6 +228,9 @@ function markdown(report){
  const candidates=report.records.filter(r=>r.rewriteCandidate);
  if(!candidates.length)out.push("No records met the conservative rewrite-candidate threshold. Inspect targeted and differentiation queues rather than manufacturing false positives.");
  for(const r of candidates.slice(0,80)){out.push("- **"+r.id+" — "+r.title+" ("+r.category+")** ["+r.confidence+"]");for(const x of r.issues)if(x.severity==="high"||x.severity==="medium")out.push("  - "+x.code+": "+x.whyItMatters);}
+ out.push("","## Target-substitution rewrite families");
+ if(!report.targetSubstitutionFamilies.length)out.push("No large target-substitution family met the conservative threshold.");
+ for(const f of report.targetSubstitutionFamilies)out.push("- **"+f.familyId+" — "+f.category+" ("+f.count+"/"+f.categoryTotal+", "+f.categoryCoverage+"%)**: "+f.evidence+" Action: "+f.recommendedAction);
  out.push("","## Specialist template families");
  if(!report.templateFamilies.length)out.push("No repeated specialist skeletons detected.");
  for(const f of report.templateFamilies)out.push("- **"+f.familyId+" — "+f.category+" ("+f.count+")**: "+f.members.map(x=>x.title).join("; "));
@@ -180,7 +249,7 @@ function selfTest(){
  const duplicate={id:3,title:"Duplicate",category:"materials",tags:["Metals"],prompt:strong.prompt};
  const missing={id:4,title:"Missing Anchor",category:"styles",tags:["Illustration"],prompt:"Create a compelling illustration with a considered line system and clear composition."};
  const strongResult=analysePrompts([strong]);
- if(strongResult.records[0].rewriteCandidate)throw new Error("Strong material fixture was incorrectly escalated.");
+ if(strongResult.records[0].rewriteCandidate||strongResult.counts.familyRewriteCandidates)throw new Error("Strong material fixture was incorrectly escalated.");
  const weakResult=analysePrompts([weak]),weakRecord=weakResult.records[0];
  if(!weakRecord.issues.some(x=>x.code==="generic_instruction_density"))throw new Error("Generic wording was not detected.");
  if(!weakRecord.issues.some(x=>x.code==="generic_module_focus_fallback"))throw new Error("Module fallback was not detected.");
@@ -188,7 +257,11 @@ function selfTest(){
  if(!duplicateResult.records.every(r=>r.issues.some(x=>x.code==="duplicate_prompt_body")))throw new Error("Duplicate body was not detected.");
  const missingResult=analysePrompts([missing]),missingRecord=missingResult.records[0];
  if(!missingRecord.issues.some(x=>x.code==="missing_subject_anchor")||!missingRecord.rewriteCandidate)throw new Error("Missing source anchor was not treated as a structural rewrite candidate.");
- return "PASS: strong fixture not escalated; generic instructions, module fallback, duplicate body and missing source anchor detected.";
+ const universal=Array.from({length:MIN_TARGET_FAMILY_SIZE},(_,i)=>({id:100+i,title:"Material "+i,category:"materials",tags:["Metals"],prompt:"UNIVERSAL MATERIALS PROMPT\n\nSUBJECT VARIABLE: [SUBJECT]\nTARGET ELEMENT: Material "+i+"\n\nTransform [SUBJECT] into a complete, convincing embodiment of the material Material "+i+". Preserve the source silhouette.\n\nUNIVERSAL APPLICATION: Apply this treatment to the supplied subject. Keep the result coherent."}));
+ const familyResult=analysePrompts(universal);
+ if(familyResult.counts.familyRewriteCandidates!==1||familyResult.counts.familyRewriteCandidateMembers!==MIN_TARGET_FAMILY_SIZE)throw new Error("Large target-substitution family was not detected.");
+ if(!familyResult.records.every(r=>r.familyRewriteCandidate))throw new Error("Family membership was not assigned to each target prompt.");
+ return "PASS: strong fixture not escalated; generic instructions, module fallback, duplicate body, missing source anchor and target-substitution family detected.";
 }
 function main(){
  const args=new Set(process.argv.slice(2));
@@ -202,6 +275,7 @@ function main(){
  console.log("Targeted review: "+report.counts.targetedReview);
  console.log("Differentiation review: "+report.counts.differentiationReview);
  console.log("No rewrite signal detected: "+report.counts.noRewriteSignalDetected);
+ console.log("Rewrite-family candidates: "+report.counts.familyRewriteCandidates+" families / "+report.counts.familyRewriteCandidateMembers+" member prompts");
  console.log("Use --json for all record-level evidence or --summary for Markdown.");
 }
 if(require.main===module)main();
