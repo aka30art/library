@@ -45,17 +45,18 @@ const templateGroups={};
 for(const p of prompts.filter(p=>specialistCategories.includes(p.category))){
  let skeleton=String(p.prompt||"").toLowerCase();
  for(const token of [p.title,p.category,...(p.tags||[])])if(token)skeleton=skeleton.replaceAll(String(token).toLowerCase(),"[module]");
- skeleton=skeleton.replace(/\\s+/g," ").trim();
+ skeleton=skeleton.replace(/\s+/g," ").trim();
  const key=p.category+"::"+skeleton;
  (templateGroups[key]??=[]).push(p.title);
 }
 const repeatedTemplates=Object.entries(templateGroups).filter(([,titles])=>titles.length>1);
-const promptWordCounts=prompts.map(p=>String(p.prompt||"").trim().split(/\\s+/).filter(Boolean).length).sort((a,b)=>a-b);
+const promptWordCounts=prompts.map(p=>String(p.prompt||"").trim().split(/\s+/).filter(Boolean).length).sort((a,b)=>a-b);
 console.log("PROMPT QUALITY AUDIT — "+prompts.length+" entries / "+collections.length+" collections");
 console.log("Category totals: "+Object.entries(categoryCounts).map(([k,v])=>k+"="+v).join(" | "));
 console.log("Subcategory distribution: "+Object.entries(subcategoryCounts).map(([k,v])=>k+"="+v).join(" | "));
 console.log("Unclassified records: "+unclassified.length);
 for(const [category,titles] of Object.entries(unclassifiedByCategory))console.log("UNCLASSIFIED "+category+": "+titles.join(" | "));
+if(unclassified.length)errors.push("Unclassified prompts remain: "+unclassified.length);
 console.log("Specialist prompt templates: "+repeatedTemplates.length+" repeated skeletons across "+specialistCategories.length+" collections");
 for(const [key,titles] of repeatedTemplates)if(titles.length>1)console.log("TEMPLATE REUSE "+key.split("::")[0]+" ("+titles.length+"): "+titles.join(" | "));
 console.log("Prompt word counts: min="+(promptWordCounts[0]||0)+" / median="+(promptWordCounts[Math.floor(promptWordCounts.length/2)]||0)+" / max="+(promptWordCounts[promptWordCounts.length-1]||0));
