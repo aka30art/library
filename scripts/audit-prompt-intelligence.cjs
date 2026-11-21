@@ -179,12 +179,15 @@ function selfTest(){
  const weak={id:2,title:"Generic Module",category:"product-design",tags:["Consumer Electronics"],prompt:"[SUBJECT] Make it beautiful, amazing, stunning and visually interesting. Add lots of detail and make it unique. Use the specific module Portable Device as the decisive proposition. Show the design decisions that make this module distinct."};
  const duplicate={id:3,title:"Duplicate",category:"materials",tags:["Metals"],prompt:strong.prompt};
  const missing={id:4,title:"Missing Anchor",category:"styles",tags:["Illustration"],prompt:"Create a compelling illustration with a considered line system and clear composition."};
- const result=analysePrompts([strong,weak,duplicate,missing]),byId=Object.fromEntries(result.records.map(r=>[r.id,r]));
- if(byId[1].rewriteCandidate)throw new Error("Strong material fixture was incorrectly escalated.");
- if(!byId[2].issues.some(x=>x.code==="generic_instruction_density"))throw new Error("Generic wording was not detected.");
- if(!byId[2].issues.some(x=>x.code==="generic_module_focus_fallback"))throw new Error("Module fallback was not detected.");
- if(!byId[3].issues.some(x=>x.code==="duplicate_prompt_body"))throw new Error("Duplicate body was not detected.");
- if(!byId[4].issues.some(x=>x.code==="missing_subject_anchor")||!byId[4].rewriteCandidate)throw new Error("Missing source anchor was not treated as a structural rewrite candidate.");
+ const strongResult=analysePrompts([strong]);
+ if(strongResult.records[0].rewriteCandidate)throw new Error("Strong material fixture was incorrectly escalated.");
+ const weakResult=analysePrompts([weak]),weakRecord=weakResult.records[0];
+ if(!weakRecord.issues.some(x=>x.code==="generic_instruction_density"))throw new Error("Generic wording was not detected.");
+ if(!weakRecord.issues.some(x=>x.code==="generic_module_focus_fallback"))throw new Error("Module fallback was not detected.");
+ const duplicateResult=analysePrompts([strong,duplicate]);
+ if(!duplicateResult.records.every(r=>r.issues.some(x=>x.code==="duplicate_prompt_body")))throw new Error("Duplicate body was not detected.");
+ const missingResult=analysePrompts([missing]),missingRecord=missingResult.records[0];
+ if(!missingRecord.issues.some(x=>x.code==="missing_subject_anchor")||!missingRecord.rewriteCandidate)throw new Error("Missing source anchor was not treated as a structural rewrite candidate.");
  return "PASS: strong fixture not escalated; generic instructions, module fallback, duplicate body and missing source anchor detected.";
 }
 function main(){
