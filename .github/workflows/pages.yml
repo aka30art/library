@@ -33,8 +33,21 @@ jobs:
         run: node scripts/validate-catalogue.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
-      - name: Report heuristic prompt-intelligence diagnostics
-        run: node scripts/audit-prompt-intelligence.cjs
+      - name: Test prompt intelligence audit rules
+        run: node scripts/audit-prompt-intelligence.cjs --self-test
+      - name: Generate full prompt intelligence audit
+        run: |
+          mkdir -p artifacts
+          node scripts/audit-prompt-intelligence.cjs --json > artifacts/prompt-intelligence-audit.json
+          node scripts/audit-prompt-intelligence.cjs --summary >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload full prompt intelligence audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prompt-intelligence-audit-${{ github.run_number }}
+          path: artifacts/prompt-intelligence-audit.json
+          if-no-files-found: warn
+          retention-days: 14
 
   branch-browser-tests:
     name: PR browser QA (local branch, no deployment)
