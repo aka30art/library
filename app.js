@@ -37,7 +37,7 @@ const subcategoryTaxonomy={"materials":[["Metals & Alloys",{"__regex":"aluminium
  ["Construction & Building Sets",{"__regex":"lego|brick|construction set|building set"}],
  ["Miniatures, Vehicles & Statues",{"__regex":"die.cast|hot wheels|matchbox|vehicle|car\\b|pull.back|premium statue|miniature scale model|scale model|display statue"}],
  ["Soft, Handmade & Traditional Toys",{"__regex":"plush|bean|beanie|soft toy|wooden toy|wood toy|paper craft collectible|paper toy|handmade toy"}],
- ["Games, Puzzles & Interactive Toys",{"__regex":"puzzle|rubik|game|blaster"}],
+ ["Games, Puzzles & Interactive Toys",{"__regex":"puzzle|rubik|blaster|board game|tabletop game"}],
  ["Trading Cards & TCG",{"__regex":"trading card|tcg|pokemon|pokémon|magic: the gathering|planeswalker|mana cost|yu.gi.oh|one piece|lorcana|sports card|rookie card|hockey card|football soccer card|basketball rookie|baseball rookie|graded trading card slab|booster pack|playmat|card back|trading card game"}]
 ]};;
 const subcategoryOverrides={
