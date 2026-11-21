@@ -9,7 +9,7 @@ vm.runInNewContext(fs.readFileSync("catalogue-expansion.js","utf8"),sandbox,{tim
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
 const expectedTotal=1562;
 const normalise=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
-const titleGroups=new Map(),categoryCounts={};
+const titleGroups=new Map(),categoryCounts={},promptBodyGroups=new Map();
 for(const p of prompts){
  categoryCounts[p.category]=(categoryCounts[p.category]||0)+1;
  if(!p.id||!p.title||!p.desc||!p.prompt||!p.negative||!Array.isArray(p.tags)||!p.tags.length||!Array.isArray(p.model)||!p.model.length)errors.push("Incomplete record: "+(p.id||p.title||"unknown"));
@@ -17,6 +17,9 @@ for(const p of prompts){
  const key=p.category+"::"+normalise(p.title);
  if(titleGroups.has(key))errors.push("Repeated title in category: "+p.category+" / "+p.title+" (id="+p.id+")");
  titleGroups.set(key,(titleGroups.get(key)||0)+1);
+ const bodyKey=normalise(p.prompt);
+ if(promptBodyGroups.has(bodyKey))errors.push("Duplicate prompt body: "+p.id+" "+p.title+" duplicates "+promptBodyGroups.get(bodyKey));
+ else promptBodyGroups.set(bodyKey,p.id+" "+p.title);
 
  if(String(p.prompt).split(/\s+/).filter(Boolean).length<45)warnings.push("Short prompt may lack depth: "+p.id+" "+p.title);
 }
@@ -67,6 +70,7 @@ const repeatedTemplates=Object.entries(templateGroups).filter(([,titles])=>title
 const promptWordCounts=prompts.map(p=>String(p.prompt||"").trim().split(/\s+/).filter(Boolean).length).sort((a,b)=>a-b);
 console.log("PROMPT QUALITY AUDIT — "+prompts.length+" entries / "+collections.length+" collections");
 console.log("Category totals: "+Object.entries(categoryCounts).map(([k,v])=>k+"="+v).join(" | "));
+console.log("Distinct normalised prompt bodies: "+promptBodyGroups.size+" / "+prompts.length);
 console.log("Subcategory distribution: "+Object.entries(subcategoryCounts).map(([k,v])=>k+"="+v).join(" | "));
 console.log("Unclassified records: "+unclassified.length);
 for(const [category,titles] of Object.entries(unclassifiedByCategory))console.log("UNCLASSIFIED "+category+": "+titles.join(" | "));
