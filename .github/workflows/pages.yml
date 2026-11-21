@@ -35,6 +35,8 @@ jobs:
         run: node scripts/audit-prompt-quality.cjs
       - name: Test prompt intelligence audit rules
         run: node scripts/audit-prompt-intelligence.cjs --self-test
+      - name: Calibrate triage against the full catalogue
+        run: node scripts/audit-prompt-intelligence.cjs --calibration-test
       - name: Generate full prompt intelligence audit
         run: |
           mkdir -p artifacts
