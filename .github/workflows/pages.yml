@@ -29,6 +29,8 @@ jobs:
           node-version: 22
       - name: Verify catalogue integrity
         run: node scripts/validate-catalogue.cjs
+      - name: Report prompt-quality diagnostics
+        run: node scripts/audit-prompt-quality.cjs
 
   deploy:
     if: github.event_name != 'pull_request'
