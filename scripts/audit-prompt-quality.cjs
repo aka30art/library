@@ -17,8 +17,7 @@ for(const p of prompts){
  const key=p.category+"::"+normalise(p.title);
  if(titleGroups.has(key))errors.push("Repeated title in category: "+p.category+" / "+p.title+" (id="+p.id+")");
  titleGroups.set(key,(titleGroups.get(key)||0)+1);
- const fkey=p.category+"::"+fingerprint;
- templateGroups.set(fkey,(templateGroups.get(fkey)||0)+1);
+
  if(String(p.prompt).split(/\s+/).filter(Boolean).length<45)warnings.push("Short prompt may lack depth: "+p.id+" "+p.title);
 }
 if(prompts.length!==expectedTotal)errors.push("Expected "+expectedTotal+" prompts, got "+prompts.length);
@@ -34,7 +33,7 @@ for(const p of prompts){const sub=classifier(p);const key=p.category+" / "+sub;s
 for(const category of Object.keys(taxonomy)){
  const labels=taxonomy[category].map(x=>x[0]),duplicates=labels.filter((x,i)=>labels.indexOf(x)!==i);
  if(duplicates.length)errors.push("Duplicate subcategory labels in "+category+": "+duplicates.join(", "));
- for(const label of labels)if(!subcategoryCounts[category+" / "+label])warnings.push("Empty subcategory: "+category+" / "+label);
+ for(const label of labels)if(!subcategoryCounts[category+" / "+label])errors.push("Empty subcategory: "+category+" / "+label);
 }
 const duplicateStyles=[...titleGroups.entries()].filter(([k,n])=>k.startsWith("styles::")&&n>1);
 if(duplicateStyles.length)errors.push("Duplicate style titles remain: "+duplicateStyles.map(x=>x[0].replace("styles::","")).join(", "));
