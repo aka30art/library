@@ -41,13 +41,14 @@ jobs:
         run: |
           mkdir -p artifacts
           node scripts/audit-prompt-intelligence.cjs --json > artifacts/prompt-intelligence-audit.json
-          node scripts/audit-prompt-intelligence.cjs --summary >> "$GITHUB_STEP_SUMMARY"
+          node scripts/audit-prompt-intelligence.cjs --summary > artifacts/prompt-intelligence-audit.md
+          cat artifacts/prompt-intelligence-audit.md >> "$GITHUB_STEP_SUMMARY"
       - name: Upload full prompt intelligence audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: prompt-intelligence-audit-${{ github.run_number }}
-          path: artifacts/prompt-intelligence-audit.json
+          path: artifacts/prompt-intelligence-audit.*
           if-no-files-found: warn
           retention-days: 14
 
