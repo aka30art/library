@@ -31,7 +31,15 @@ const subcategoryTaxonomy={"materials":[["Metals & Alloys",{"__regex":"aluminium
 "graphic-design-layout":[["Editorial Systems",{"__regex":"^$"}],["Poster Composition",{"__regex":"^$"}],["Typographic Experiment",{"__regex":"^$"}],["Brand Applications",{"__regex":"^$"}],["Print & Production",{"__regex":"^$"}]],
 "photography-camera":[["Lens & Perspective",{"__regex":"^$"}],["Exposure & Capture",{"__regex":"^$"}],["Photographic Genres",{"__regex":"^$"}],["Camera Movement",{"__regex":"^$"}],["Focus & Depth",{"__regex":"^$"}]],
 "product-design":[["Industrial Objects",{"__regex":"^$"}],["Consumer Electronics",{"__regex":"^$"}],["Furniture & Lighting",{"__regex":"^$"}],["Packaging & Containers",{"__regex":"^$"}],["Concept Products",{"__regex":"^$"}]],
-"toys-collectibles":[["Action Figures & Dolls",{"__regex":"action figure|six.inch|hot toys|1:6|fashion doll|american girl|transformers|nendoroid"}],["Vinyl & Designer Toys",{"__regex":"vinyl|designer|blind.box|gashapon|capsule toy|retro 1980s|vintage 1990s|funko|bitty pop"}],["Plush & Soft Toys",{"__regex":"plush|bean|beanie|soft toy"}],["Construction & Building Sets",{"__regex":"lego|brick|construction set|building set"}],["Die-Cast & Vehicles",{"__regex":"die.cast|hot wheels|matchbox|vehicle|car\\b|blaster"}],["Trading Cards & TCG",{"__regex":"trading card|tcg|pokemon|pokémon|magic: the gathering|planeswalker|mana cost|yu.gi.oh|one piece|lorcana|sports card|rookie card|hockey card|football soccer card|basketball rookie|baseball rookie|graded trading card slab|booster pack|playmat|card back|trading card game"}],["Traditional & Handmade Toys",{"__regex":"wooden toy|wood toy|paper craft collectible|paper toy|handmade toy"}],["Scale Models & Statues",{"__regex":"scale model|miniature|premium statue|display statue|collector figure"}],["Puzzles & Games",{"__regex":"puzzle|rubik|game"}]]};;
+"toys-collectibles":[
+ ["Action Figures & Dolls",{"__regex":"action figure|six.inch|hot toys|1:6|fashion doll|american girl|transformers|nendoroid"}],
+ ["Vinyl & Designer Toys",{"__regex":"vinyl|designer|blind.box|gashapon|capsule toy|retro 1980s|vintage 1990s|funko|bitty pop"}],
+ ["Construction & Building Sets",{"__regex":"lego|brick|construction set|building set"}],
+ ["Miniatures, Vehicles & Statues",{"__regex":"die.cast|hot wheels|matchbox|vehicle|car\\b|pull.back|premium statue|miniature scale model|scale model|display statue"}],
+ ["Soft, Handmade & Traditional Toys",{"__regex":"plush|bean|beanie|soft toy|wooden toy|wood toy|paper craft collectible|paper toy|handmade toy"}],
+ ["Games, Puzzles & Interactive Toys",{"__regex":"puzzle|rubik|game|blaster"}],
+ ["Trading Cards & TCG",{"__regex":"trading card|tcg|pokemon|pokémon|magic: the gathering|planeswalker|mana cost|yu.gi.oh|one piece|lorcana|sports card|rookie card|hockey card|football soccer card|basketball rookie|baseball rookie|graded trading card slab|booster pack|playmat|card back|trading card game"}]
+]};;
 const subcategoryOverrides={
  "materials":{
   "Amber":"Natural Resins & Waxes","Copal Resin":"Natural Resins & Waxes","Shellac":"Natural Resins & Waxes","Encaustic Wax":"Natural Resins & Waxes","Paraffin Wax":"Natural Resins & Waxes","Carnauba Wax":"Natural Resins & Waxes","Beeswax":"Natural Resins & Waxes","Dried Moss Resin":"Natural Resins & Waxes",
