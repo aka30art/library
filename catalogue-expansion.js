@@ -163,7 +163,7 @@ for(const [cat,d] of Object.entries(defs)){
    "QUALITY GATE: Resolve proportion, silhouette, material behaviour, technical detail, transitions, viewpoint and presentation to professional standard. Remove details that do not strengthen the central idea.",
    "EXCLUSION RULE: "+categoryAvoidance[cat]+" Do not use generic AI embellishment, arbitrary accessories, meaningless text, watermarks or decorative noise."
   ].join("\n\n");
-  additions.push({id:nextId++,title:name,category:cat,desc:d.label+" / "+sub+". A specialist "+name+" module with domain-specific design, execution and quality constraints.",prompt,negative:categoryAvoidance[cat]+", generic stock imagery, random decorations, incoherent hierarchy, implausible scale or construction, text artefacts, watermark, low detail",kind:cat==="photography-camera"?"lighting":"style",bg:"#202832",art:"linear-gradient(135deg,#17233a,#596c7d 50%,#d47c43)",glow:"#a9bfd3",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:[d.label,sub,name,"Creative module"],difficulty:"Professional"});
+  window.AI_PROMPT_EXPANSION.push({id:nextId++,title:name,category:cat,desc:d.label+" / "+sub+". A specialist "+name+" module with domain-specific design, execution and quality constraints.",prompt,negative:categoryAvoidance[cat]+", generic stock imagery, random decorations, incoherent hierarchy, implausible scale or construction, text artefacts, watermark, low detail",kind:cat==="photography-camera"?"lighting":"style",bg:"#202832",art:"linear-gradient(135deg,#17233a,#596c7d 50%,#d47c43)",glow:"#a9bfd3",model:["Midjourney","DALL·E","Stable Diffusion","Flux"],tags:[d.label,sub,name,"Creative module"],difficulty:"Professional"});
  });
 }
 })();
