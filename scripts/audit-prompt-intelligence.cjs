@@ -13,22 +13,22 @@ const sandbox={window:{}};
 vm.runInContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{timeout:5000});
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
 const signals=[
- {key:'actionable_method',label:'Actionable method',weight:20,re:/\\b(apply|use|construct|build|render|transform|create|employ|integrate|simulate|compose|derive|model|define)\\b/i},
- {key:'specific_visual_controls',label:'Specific visual controls',weight:20,re:/\\b(silhouette|geometry|proportion|scale|viewpoint|perspective|composition|surface|texture|material|lighting|contrast|palette|depth|focus|detail|structure|edge|shape|form|spatial|tonal|colour|color)\\b/i},
- {key:'constraint_handling',label:'Constraint handling',weight:15,re:/\\b(preserve|retain|lock|avoid|exclude|without|do not|must|only|consistent|coherent|intentional|controlled|limit)\\b/i},
- {key:'contextual_execution',label:'Contextual execution',weight:15,re:/\\b(context|purpose|function|environment|scene|subject|reference|use case|audience|story|narrative|domain|specific|target)\\b/i},
- {key:'quality_criteria',label:'Quality criteria',weight:15,re:/\\b(quality|professional|resolve|refine|accurate|credible|believable|readable|legible|balanced|clean|precise|finish|cohesive|artifact)\\b/i},
- {key:'anti_generic_guidance',label:'Anti-generic guidance',weight:15,re:/\\b(generic|arbitrary|random|unrelated|unnecessary|noise|watermark|placeholder|incoherent|artifact|filler)\\b/i}
+ {key:'actionable_method',label:'Actionable method',weight:20,re:/\b(apply|use|construct|build|render|transform|create|employ|integrate|simulate|compose|derive|model|define)\b/i},
+ {key:'specific_visual_controls',label:'Specific visual controls',weight:20,re:/\b(silhouette|geometry|proportion|scale|viewpoint|perspective|composition|surface|texture|material|lighting|contrast|palette|depth|focus|detail|structure|edge|shape|form|spatial|tonal|colour|color)\b/i},
+ {key:'constraint_handling',label:'Constraint handling',weight:15,re:/\b(preserve|retain|lock|avoid|exclude|without|do not|must|only|consistent|coherent|intentional|controlled|limit)\b/i},
+ {key:'contextual_execution',label:'Contextual execution',weight:15,re:/\b(context|purpose|function|environment|scene|subject|reference|use case|audience|story|narrative|domain|specific|target)\b/i},
+ {key:'quality_criteria',label:'Quality criteria',weight:15,re:/\b(quality|professional|resolve|refine|accurate|credible|believable|readable|legible|balanced|clean|precise|finish|cohesive|artifact)\b/i},
+ {key:'anti_generic_guidance',label:'Anti-generic guidance',weight:15,re:/\b(generic|arbitrary|random|unrelated|unnecessary|noise|watermark|placeholder|incoherent|artifact|filler)\b/i}
 ];
-const normalize=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+const normalize=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 const scored=prompts.map(p=>{
  const text=String(p.prompt||'');
- const wordCount=text.split(/\\s+/).filter(Boolean).length;
+ const wordCount=text.split(/\s+/).filter(Boolean).length;
  const dims=signals.map(s=>({key:s.key,label:s.label,score:s.re.test(text)?s.weight:0,max:s.weight}));
  const score=dims.reduce((n,d)=>n+d.score,0);
  const reasons=[];
  if(wordCount<100)reasons.push('short prompt (<100 words)');
- if(!/\\[SUBJECT\\]/.test(text))reasons.push('missing subject variable');
+ if(!/\[SUBJECT\]/.test(text))reasons.push('missing subject variable');
  if(!dims[0].score)reasons.push('no clear action/method signal');
  if(!dims[1].score)reasons.push('few visual-control signals');
  if(!dims[2].score)reasons.push('constraint guidance signal absent');
