@@ -38,9 +38,9 @@ for(const category of Object.keys(taxonomy)){
 const intelligenceSource=fs.readFileSync("prompt-intelligence.js","utf8");
 function readIntelligenceMap(name,nextName){
  const start=intelligenceSource.indexOf("const "+name+"=");
- const end=intelligenceSource.indexOf("\\nconst "+nextName,start);
+ const end=intelligenceSource.indexOf("\nconst "+nextName,start);
  if(start<0||end<0)throw Error("Unable to parse Prompt Intelligence map: "+name);
- const expression=intelligenceSource.slice(start+("const "+name+"=").length,end).replace(/;\\s*$/,"");
+ const expression=intelligenceSource.slice(start+("const "+name+"=").length,end).replace(/;\s*$/,"");
  return vm.runInNewContext("("+expression+")");
 }
 const intelligenceMaps={
@@ -74,6 +74,6 @@ if(unclassified.length)errors.push("Unclassified prompts remain: "+unclassified.
 console.log("Specialist prompt templates: "+repeatedTemplates.length+" repeated skeletons across "+specialistCategories.length+" collections");
 for(const [key,titles] of repeatedTemplates)if(titles.length>1)console.log("TEMPLATE REUSE "+key.split("::")[0]+" ("+titles.length+"): "+titles.join(" | "));
 console.log("Prompt word counts: min="+(promptWordCounts[0]||0)+" / median="+(promptWordCounts[Math.floor(promptWordCounts.length/2)]||0)+" / max="+(promptWordCounts[promptWordCounts.length-1]||0));
-if(warnings.length)console.warn("Warnings ("+warnings.length+"):\\n"+warnings.slice(0,100).join("\\n")+(warnings.length>100?"\\n... truncated":""));
-if(errors.length){console.error("ERRORS:\\n"+errors.join("\\n"));process.exit(1);}
+if(warnings.length)console.warn("Warnings ("+warnings.length+"):\n"+warnings.slice(0,100).join("\n")+(warnings.length>100?"\n... truncated":""));
+if(errors.length){console.error("ERRORS:\n"+errors.join("\n"));process.exit(1);}
 console.log("PASS: no blocking structural errors.");
