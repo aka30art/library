@@ -9,7 +9,8 @@ const materialSubcategory=(raw)=>{
  if(/ferrofluid|magnetic putty|magnetorheological fluid|shear-thickening fluid/.test(n))return "Liquids & Gels";
  if(/liquid metal alloy|nitinol wire fabric|shape-memory alloy mesh/.test(n))return "Metals & Alloys";
  if(/carbon fibre|carbon nanotube composite|granular cork-rubber composite/.test(n))return "Polymers & Composites";
- if(/cork leather|waxed canvas/.test(n))return "Wood & Plant Fibres";
+ if(/cork leather/.test(n))return "Wood & Plant Fibres";
+ if(/waxed canvas|oilskin cotton/.test(n))return "Textiles & Fabrics";
  if(/thermochromic|photochromic|dichroic film|electrochromic glass|smart glass|optical fibre bundles|graphene film|holographic diffraction film|retroreflective microprism|electroluminescent panel|glow-in-the-dark phosphor|phase-change wax|piezoelectric ceramic/.test(n))return "Smart & Functional Materials";
  if(/recycled|reclaimed|sea-glass aggregate|tumbled bottle-glass mosaic|crushed porcelain terrazzo|coffee-ground/.test(n))return "Recycled & Circular Materials";
  if(/kelp-fibre paper|tea-leaf paper|paper|pulp|papier|washi|kozo|lokta|mulberry/.test(n))return "Paper & Cellulose";
