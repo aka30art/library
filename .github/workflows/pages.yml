@@ -33,6 +33,8 @@ jobs:
         run: node scripts/validate-catalogue.cjs
       - name: Test Phase B1 Materials prototype suite
         run: node scripts/test-materials-prototype.cjs
+      - name: Test Materials catalogue architecture v2
+        run: node scripts/test-materials-catalogue.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
 
