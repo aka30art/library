@@ -39,6 +39,10 @@ jobs:
         run: node scripts/test-styles-catalogue.cjs
       - name: Test Textures catalogue architecture v2
         run: node scripts/test-textures-catalogue.cjs
+      - name: Test Effects catalogue architecture v2
+        run: node scripts/test-effects-catalogue.cjs
+      - name: Report Effects quality diagnostics
+        run: node scripts/audit-effects-quality.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
 
@@ -82,6 +86,10 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:8000/
         run: node scripts/styles-browser-smoke-test.cjs
+      - name: Test Effects Explore, Builder and Randomiser integration
+        env:
+          SITE_URL: http://127.0.0.1:8000/
+        run: node scripts/effects-browser-smoke-test.cjs
       - name: Test Textures Explore, Builder and Randomiser integration
         env:
           SITE_URL: http://127.0.0.1:8000/

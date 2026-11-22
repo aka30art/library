@@ -7,6 +7,7 @@ const collections=vm.runInNewContext(app.slice(start+"const collections = ".leng
 const sandbox={window:{}};
 vm.runInNewContext(fs.readFileSync("catalogue-expansion.js","utf8"),sandbox,{timeout:5000});
 vm.runInNewContext(fs.readFileSync('textures-v2.js','utf8'),sandbox,{timeout:20000});
+vm.runInNewContext(fs.readFileSync('effects-v2.js','utf8'),sandbox,{timeout:20000});
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
 const expectedTotal=1521;
 const normalise=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();

@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const s={window:{}};
+vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),s);
+vm.runInContext(fs.readFileSync('textures-v2.js','utf8'),s);
+vm.runInNewContext(fs.readFileSync('effects-v2.js','utf8'),s);
+const e=s.window.AI_PROMPT_EXPANSION.filter(p=>p.category==='effects');
+assert.equal(e.length,125,'preserve all original effects');
+assert.equal(new Set(e.map(p=>p.title)).size,125,'unique titles');
+assert.equal(new Set(e.map(p=>p.prompt)).size,125,'unique prompt bodies');
+assert.ok(e.every(p=>p.prompt.includes('[SUBJECT]')&&p.prompt.includes('[SOURCE IMAGE]')),'source tokens remain');
+assert.ok(e.every(p=>p.prompt.includes('MECHANISM AND CAUSALITY:')&&p.prompt.includes('SOURCE IDENTITY AND STRUCTURE LOCK:')&&p.prompt.includes('FINAL EFFECT-AWARE CHECK:')),'profile sections present');
+assert.equal(Object.keys(s.window.AI_PROMPT_EFFECTS_V2.subcategoryCounts).length,10,'all taxonomy groups represented');
+console.log('Effects v2 structural tests PASS',s.window.AI_PROMPT_EFFECTS_V2.subcategoryCounts);
