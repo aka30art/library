@@ -4,6 +4,7 @@ on:
     paths:
       - 'screenworld-*-v2.json'
       - 'tests/b5-d-catalogue-batches.test.cjs'
+      - 'tests/b5-d-screenworld-integration.test.cjs'
       - '.github/workflows/b5-d-catalogue-qa.yml'
   push:
     branches: [b5-d-screenworld-catalogue-rebuild, main]
