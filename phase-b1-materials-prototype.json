@@ -214,9 +214,9 @@
     },
     {
       "material": "Shape-Memory Alloy Mesh",
-      "subcategory": "Smart & Functional Materials",
+      "subcategory": "Metals & Alloys",
       "sourceSubject": "A collapsible wire-frame lantern with a cylindrical cage, hinged ribs, top ring and base ring.",
-      "physicalSignature": "A thermally responsive alloy wire structure recovers a trained geometry after deformation.",
+      "physicalSignature": "A trained nickel-titanium or comparable shape-memory alloy wire that recovers a programmed geometry after a suitable thermal or mechanical stimulus.",
       "processSignature": "Thin alloy wires are woven or joined into a mesh; joints and wire crossings remain mechanically coherent.",
       "lightSignature": "Metallic highlights follow the wire curvature with a restrained satin alloy reflection.",
       "constraints": "Show a stable recovered state, not a magical morphing sequence; preserve ring alignment and wire continuity.",
@@ -243,6 +243,11 @@
       "material": "Aerogel",
       "currentLikelyIssue": "Aerogel can be silica-based or polymer-based; a name-only classifier may not capture its material family or structural limits.",
       "recommendedAction": "Use an explicit profile type and avoid assuming all aerogels are polymer composites."
+    },
+    {
+      "material": "Shape-Memory Alloy Mesh",
+      "currentLikelyIssue": "The target is a metal alloy and belongs in Metals & Alloys, but its shape-recovery response is a functional behaviour that a broad material label alone does not express.",
+      "recommendedAction": "Keep the catalogue subcategory as Metals & Alloys while preserving an explicit shape-memory functional profile in the target-specific prompt."
     }
   ]
 }
