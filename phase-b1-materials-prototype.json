@@ -237,7 +237,7 @@
     {
       "material": "Ferrofluid",
       "currentLikelyIssue": "The Materials subcategory regex tests Metals & Alloys before Liquids & Gels and includes the token ferrofluid. It may therefore classify a magnetic nanoparticle suspension as a metal even though its bulk behaviour is liquid.",
-      "recommendedAction": "Add an explicit Materials subcategory override to Liquids & Gels before using the taxonomy as a regeneration route.",
+      "recommendedAction": "Assign Ferrofluid to Liquids & Gels: its bulk phase is a contained magnetic nanoparticle suspension. Treat its magnetic field response as a functional behaviour, not evidence that the material is a solid metal.",
       "resolution": "Resolved in Materials architecture v2: runtime catalogue records now carry explicit Liquids & Gels assignments, ahead of broad keyword fallbacks."
     },
     {
