@@ -36,8 +36,7 @@ for(const item of styles){
  const wordCount=prompt.trim().split(/\s+/).filter(Boolean).length;
  check(wordCount>=230,name+': target-specific prompt is too short ('+wordCount+' words)');
  check(!bodies.has(normalise(prompt)),name+': duplicate prompt body');bodies.add(normalise(prompt));
- const escapedName=name.replace(/[.*+?^${}()|[\]\\]/g,'\\ const skeleton=normalise(prompt.replaceAll(name.toLowerCase(),'[STYLE]'));');
- const skeleton=normalise(prompt.replace(new RegExp(escapedName,'gi'),'[STYLE]'));
+ const skeleton=normalise(prompt.split('\n\n').filter(block=>!block.startsWith('STYLE TARGET:')&&!block.startsWith('FINAL STYLE-AWARE CHECK:')).join(' '));
  check(!skeletons.has(skeleton),name+': repeated generic prompt skeleton');skeletons.add(skeleton);
  for(const section of sections.slice(1)){
   const ix=prompt.indexOf(section),next=prompt.indexOf('\n\n',ix);
