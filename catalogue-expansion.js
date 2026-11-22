@@ -495,7 +495,7 @@ for(const item of styles){
  ].concat([row[7]]).join(", ");
  item.kind="style";
  item.difficulty="Professional";
- item.styleArchitectureVersion="2.0";
+
  subcategoryCounts[subcategory]=(subcategoryCounts[subcategory]||0)+1;
 }
 if(missing.length)throw new Error("Styles v2 missing authored profiles: "+missing.join(" | "));
