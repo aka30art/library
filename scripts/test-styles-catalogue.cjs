@@ -50,6 +50,22 @@ check(expectedAudit&&expectedAudit.records===125&&expectedAudit.profiles===125,'
 check(Object.keys(expectedAudit?.subcategoryCounts||{}).length===expectedSubcategories.length,'Runtime Styles v2 audit does not cover all nine subcategories');
 const app=fs.readFileSync('app.js','utf8');
 for(const sub of expectedSubcategories)check(app.includes('"'+sub+'"'),'App taxonomy missing '+sub);
+const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf(";;\\nconst subcategoryOverrides=",taxStart);
+check(taxStart>=0&&taxEnd>taxStart,'Unable to inspect runtime Styles taxonomy');
+if(taxStart>=0&&taxEnd>taxStart){
+ const taxonomy=vm.runInNewContext("("+app.slice(taxStart+"subcategoryTaxonomy=".length,taxEnd).replace(/;+\\s*$/,"")+")");
+ const overrideStart=app.indexOf("const subcategoryOverrides="),overrideEnd=app.indexOf(";\\nfunction subcategoryFor",overrideStart);
+ check(overrideStart>=0&&overrideEnd>overrideStart,'Unable to inspect runtime Styles overrides');
+ if(overrideStart>=0&&overrideEnd>overrideStart){
+  const overrides=vm.runInNewContext("("+app.slice(overrideStart+"const subcategoryOverrides=".length,overrideEnd).replace(/;+\\s*$/,"")+")");
+  const fnStart=app.indexOf("function subcategoryFor(p){"),fnEnd=app.indexOf("\\nprompts.forEach",fnStart);
+  check(fnStart>=0&&fnEnd>fnStart,'Unable to inspect runtime Styles classifier');
+  if(fnStart>=0&&fnEnd>fnStart){
+   const classifier=vm.runInNewContext(app.slice(fnStart,fnEnd)+";subcategoryFor",{subcategoryTaxonomy:taxonomy,subcategoryOverrides:overrides,prompts:all});
+   for(const item of styles)check(classifier(item)===item.subcategory,item.title+': Explore runtime classifier disagrees with Styles v2 profile taxonomy');
+  }
+ }
+}
 if(failures.length){console.error('STYLES CATALOGUE V2 FAILURES ('+failures.length+')\n'+failures.join('\n'));process.exit(1);}
 console.log('PASS: 125 Styles records retain IDs 201–325 and original title order.');
 console.log('PASS: 125 unique target-specific style profiles; eleven complete architecture sections.');
