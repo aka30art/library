@@ -28,7 +28,7 @@ for(const item of styles){
  check(expectedSubcategories.includes(item.subcategory),name+': invalid or missing explicit subcategory '+item.subcategory);
  subcounts[item.subcategory]=(subcounts[item.subcategory]||0)+1;
  check(Array.isArray(item.tags)&&item.tags.includes(item.subcategory),name+': explicit subcategory must be present in tags');
- check(item.styleArchitectureVersion==='2.0',name+': missing Styles architecture version marker');
+ check(prompt.startsWith('STYLE TRANSFORMATION — TARGET-SPECIFIC VISUAL LANGUAGE'),name+': missing Styles v2 compiler output marker');
  check(item.difficulty==='Professional',name+': difficulty not promoted to Professional');
  check(sections.every(section=>prompt.includes(section)),name+': missing one or more required Styles v2 sections');
  check(prompt.includes('STYLE TARGET: '+name),name+': target identity is not explicit in prompt');
