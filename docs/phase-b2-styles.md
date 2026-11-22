@@ -22,6 +22,17 @@
 - Existing catalogue validator and prompt-quality audit retained; Styles was added to specialist-template analysis.
 - PR CI runs Styles catalogue validation and Explore/Builder/Randomiser browser integration in addition to all prior regression suites.
 
+## Final acceptance result
+
+- Catalogue integrity: PASS — 1,521 prompts across 15 collections; 1,521 unique normalised prompt bodies; zero unclassified records.
+- B1 Materials prototype and 200-record architecture regression: PASS.
+- Styles v2 catalogue regression: PASS — original 125 titles and IDs 201–325, nine explicit subcategories, unique authored profiles, all eleven prompt sections, and Explore classifier agreement.
+- Full-site desktop/mobile Playwright suite: PASS.
+- Randomiser mobile interaction regression: PASS.
+- Materials Explore/Builder/Randomiser integration: PASS.
+- Styles Explore/Builder/Randomiser integration: PASS — all nine filters populated, Builder Style Transfer retained, and all eleven sections survived Randomiser synthesis.
+- PR artifact preparation and deployment: SKIPPED by design. No merge or production deployment.
+
 ## Visual-review disclosure
 
 Automated tests cover all 125 records at the structural and integration level. Browser tests inspect the rendered library UI and verify that compiled prompt sections survive Builder and Randomiser use. They do not render 125 independent AI images. Any representative visual spot-check will be reported separately with its exact sample and limitations.
