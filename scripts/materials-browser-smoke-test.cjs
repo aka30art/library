@@ -49,7 +49,17 @@ const BASE = process.env.SITE_URL || 'http://127.0.0.1:8000/';
     await page.locator('#randomiser-page .randomiser-category[data-id="materials"] .randomiser-enabled').check();
     await page.locator('#randomiser-generate').click();
     const composed = await page.locator('.randomiser-composed-text').textContent();
-    check(composed.includes('MATERIAL TRANSFORMATION') && composed.includes('SOURCE IDENTITY LOCK:'), 'Randomiser uses the complete Materials prompt architecture');
+    check(
+      composed.includes('MATERIAL TRANSFORMATION') &&
+      composed.includes('SOURCE IDENTITY LOCK:') &&
+      composed.includes('BULK STRUCTURE AND MICROSTRUCTURE:') &&
+      composed.includes('FORMATION AND MANUFACTURING EVIDENCE:') &&
+      composed.includes('MECHANICAL AND ENVIRONMENTAL BEHAVIOUR:') &&
+      composed.includes('OPTICAL RESPONSE:') &&
+      composed.includes('MATERIAL BOUNDARIES AND EXCLUSIONS:') &&
+      composed.includes('FINAL SOURCE-AWARE CHECK:'),
+      'Randomiser preserves all core Materials profile sections in combined output'
+    );
   } catch (error) {
     failures.push(error.stack || String(error));
   }
