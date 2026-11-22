@@ -53,7 +53,7 @@ for (const item of cases) {
   }
 
   const prompt = String(item.prompt || '');
-  const words = prompt.trim().split(/\\s+/).filter(Boolean);
+  const words = prompt.trim().split(/\s+/).filter(Boolean);
   check(words.length >= 100, `${name}: prompt is too short (${words.length} words; minimum 100).`);
   check(prompt.includes('[SUBJECT]'), `${name}: missing the [SUBJECT] input variable.`);
   check(prompt.toLowerCase().includes(name.toLowerCase()), `${name}: prompt does not explicitly name its selected material.`);
@@ -64,7 +64,7 @@ for (const item of cases) {
 
   const normalized = prompt.toLowerCase()
     .replace(name.toLowerCase(), '[target]')
-    .replace(/\\s+/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
   check(!normalizedPrompts.has(normalized), `${name}: prompt body duplicates another target after masking the target title.`);
   normalizedPrompts.add(normalized);
