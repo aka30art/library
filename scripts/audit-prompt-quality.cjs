@@ -6,6 +6,7 @@ if(start<0||end<0)throw Error("Unable to parse collection definitions");
 const collections=vm.runInNewContext(app.slice(start+"const collections = ".length,end+1));
 const sandbox={window:{}};
 vm.runInNewContext(fs.readFileSync("catalogue-expansion.js","utf8"),sandbox,{timeout:5000});
+vm.runInNewContext(fs.readFileSync('textures-v2.js','utf8'),sandbox,{timeout:20000});
 const prompts=sandbox.window.AI_PROMPT_EXPANSION||[];
 const expectedTotal=1521;
 const normalise=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
@@ -68,7 +69,7 @@ if(tcgPrompts.some(p=>/Pokémon.*(Common|Uncommon|Ultra Rare|Illustration Rare|S
 const unclassified=prompts.filter(p=>classifier(p)==="Other");
 const unclassifiedByCategory={};
 for(const p of unclassified){(unclassifiedByCategory[p.category]??=[]).push(p.title);}
-const specialistCategories=["styles","architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"];
+const specialistCategories=["styles","textures","architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"];
 const templateGroups={};
 for(const p of prompts.filter(p=>specialistCategories.includes(p.category))){
  let skeleton=String(p.prompt||"").toLowerCase();

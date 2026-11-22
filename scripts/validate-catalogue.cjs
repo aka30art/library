@@ -5,6 +5,7 @@ if(start<0||end<0)throw Error('Cannot parse collections');
 const collections=vm.runInNewContext(app.slice(start+'const collections = '.length,end+1));
 const sandbox={window:{}};
 vm.runInNewContext(fs.readFileSync('catalogue-expansion.js','utf8'),sandbox,{timeout:5000});
+vm.runInNewContext(fs.readFileSync('textures-v2.js','utf8'),sandbox,{timeout:20000});
 const all=sandbox.window.AI_PROMPT_EXPANSION;
 const expected=['materials','styles','textures','lighting','effects','composition','rendering','colour-atmosphere','films-shows','toys-collectibles','architecture-spaces','sculpture-3d-objects','graphic-design-layout','photography-camera','product-design'];
 if(collections.length!==15||expected.some((x,i)=>collections[i]?.id!==x))errors.push('Collection taxonomy mismatch');
@@ -34,7 +35,7 @@ for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds']){
 if(!app.includes('const builder=$("#builder-type")'))errors.push('Builder guard missing');
 for(const page of ['index.html','explore.html','builder.html']){
  const html=fs.readFileSync(page,'utf8');
- const assetNames=['catalogue-expansion.js','app.js','styles.css'];for(const asset of assetNames){const re=new RegExp('<script[^>]+src="'+asset+'\\?v=[^"]+"|<link[^>]+href="'+asset+'\\?v=[^"]+"');if(!re.test(html))errors.push(page+' missing or unversioned '+asset);}
+ const assetNames=['catalogue-expansion.js','textures-v2.js','app.js','styles.css'];for(const asset of assetNames){const re=new RegExp('<script[^>]+src="'+asset+'\\?v=[^"]+"|<link[^>]+href="'+asset+'\\?v=[^"]+"');if(!re.test(html))errors.push(page+' missing or unversioned '+asset);}
  for(const id of ['focus-search','menu-toggle','mobile-menu','prompt-dialog','dialog-content','toast'])if(!html.includes('id="'+id+'"'))errors.push(page+' missing '+id);
  if(html.includes('id="dna-builder"'))errors.push(page+' legacy UI');
  if(page==='explore.html'&&(!html.includes('id="subcategory-filter"')||!html.includes('Filter by subcategory')))errors.push('Explore category subcategory filter missing');
@@ -51,11 +52,11 @@ if(!randomiserJs.includes('randomiser-source-list" hidden')||!randomiserJs.inclu
 if(!randomiserCss.includes('#randomiser-page .randomiser-mode-option'))errors.push('Randomiser mobile mode visibility styles missing');
 if(randomiserCss.includes('.randomiser-source-details:not([open]) .randomiser-source-list'))errors.push('Randomiser ingredient accordion uses obsolete details[open] CSS');
 if(!randomiserCss.includes('.randomiser-source-list:not([hidden])'))errors.push('Randomiser ingredient accordion open state CSS missing');
-if(!randomiserHtml.includes('randomiser.js?v=20261122-b2-final-v2'))errors.push('Randomiser cache version is stale');
+if(!randomiserHtml.includes('randomiser.js?v=20261122-b3-textures-v1'))errors.push('Randomiser cache version is stale');
 
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
-if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261122-b2-final-v1'))errors.push('Builder transformation system not loaded');
+if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261122-b3-textures-v1'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
 const specialistTaxonomy={
  'architecture-spaces':['Urban Architecture','Residential Architecture','Interior Architecture','Civic & Institutional','Sacred & Contemplative'],

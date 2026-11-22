@@ -32,6 +32,7 @@ Films & Shows contains five groups: TV Shows, Cartoons, Films, Anime, and Other 
 - **Universal collections:** a single integrated prompt per element. Avoid splitting one element into repetitive attribute variants.
 - **Neutral creative cores:** subject-specific output requirements, framing, camera, lighting, rendering, and technical specifications should be supplied by the Builder, not hard-coded into universal prompt entries.
 - **Transformation prompts:** preserve source identity and structure unless the target transformation specifically requires a change.
+- **Textures v2:** define a target-specific surface system, including physical or image-forming origin, microstructure, scale, distribution, tactile response, optics and substrate boundaries.
 - **Photography Post-Edits:** treat the supplied photo as the fixed source; adjust the photographic finish rather than inventing a new capture setup or scene.
 - **Specialist collections:** use domain-aware design logic (architecture, sculptural form, graphic hierarchy, photography, product function) rather than generic style language.
 - **Films & Shows:** transform the supplied subject into a target world's visual language without replacing it with an existing character or copying protected logos.
@@ -61,11 +62,12 @@ Run the catalogue validator, prompt-quality audit and browser/randomiser smoke t
 ```bash
 node scripts/validate-catalogue.cjs
 node scripts/audit-prompt-quality.cjs
+node scripts/test-textures-catalogue.cjs
 node scripts/browser-smoke-test.cjs
 node scripts/randomiser-smoke-test.cjs
 ```
 
-The structural validator checks record counts, unique IDs, required fields, subject placeholders, valid categories, screen-world and specialist subcategory distribution, transformation architectures and page asset wiring. The prompt-quality audit checks every record's completeness, title duplication, prompt length, subcategory coverage and unclassified routing. It reports category and subcategory counts and highlights repeated specialist prompt skeletons for review. The quality audit checks every record's completeness, title duplication, prompt length, taxonomy coverage and unclassified routing. Exact duplicate detection is structural and does not claim full semantic uniqueness.
+The structural validator checks record counts, unique IDs, required fields, subject placeholders, valid categories, screen-world and specialist subcategory distribution, transformation architectures and page asset wiring. Dedicated Materials, Styles and Textures v2 suites validate their target-specific profiles and Explore/Builder/Randomiser integration. The prompt-quality audit checks every record's completeness, title duplication, prompt length, subcategory coverage and unclassified routing. It reports category and subcategory counts and highlights repeated specialist prompt skeletons for review. The quality audit checks every record's completeness, title duplication, prompt length, taxonomy coverage and unclassified routing. Exact duplicate detection is structural and does not claim full semantic uniqueness.
 
 The Randomiser uses domain-aware compatibility scoring across all fifteen collections, penalises conflicting combinations in Smart mode, and reports remaining warnings. Its synthesis assigns selected modules to creative roles, prioritises source identity and functional constraints, reconciles visual treatments, and carries selected negative constraints into the final prompt.
 
