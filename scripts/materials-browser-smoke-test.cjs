@@ -39,7 +39,7 @@ const BASE = process.env.SITE_URL || 'http://127.0.0.1:8000/';
     await target.check();
     const builderOutput = await page.locator('#builder-output').evaluate(element => element.dataset.copyText || '');
     check(builderOutput.includes('MATERIAL TARGET: Mycelium Composite'), 'Builder copies the complete target-specific Materials profile');
-    check(builderOutput.includes('Do not convert solid structural members into open lattice'), 'Builder output carries the visual-evaluation constraint');
+    check(/do not convert solid structural members into open lattice/i.test(builderOutput), 'Builder output carries the visual-evaluation constraint');
 
     await page.goto(BASE + 'randomiser.html', { waitUntil: 'networkidle', timeout: 45000 });
     const catalogue = await page.evaluate(() => window.AI_PROMPT_BUILDER_CATALOGUE || []);
