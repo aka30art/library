@@ -80,7 +80,13 @@ check(Array.isArray(data.framework?.materialPhysics) && data.framework.materialP
 check(Array.isArray(data.framework?.executionOrder) && data.framework.executionOrder.length >= 5, 'Shared execution order is incomplete.');
 
 const ferrofluidReview = (data.knownTaxonomyReview || []).find(x => x.material === 'Ferrofluid');
+const ferrofluidCase = cases.find(x => String(x.material).toLowerCase() === 'ferrofluid');
 check(!!ferrofluidReview && /Liquids & Gels/.test(ferrofluidReview.recommendedAction || ''), 'Ferrofluid subcategory conflict must be recorded for correction.');
+check(ferrofluidCase?.subcategory === 'Liquids & Gels', 'Ferrofluid prototype must be classified as Liquids & Gels.');
+const aerogelCase = cases.find(x => String(x.material).toLowerCase() === 'aerogel');
+check(aerogelCase?.subcategory === 'Polymers & Composites', 'Aerogel prototype must use the stable Polymers & Composites catalogue route.');
+const shapeMemoryCase = cases.find(x => /shape-memory alloy/i.test(x.material || ''));
+check(!!shapeMemoryCase && /stable|recovered|trained/i.test(shapeMemoryCase.prompt || ''), 'Shape-memory alloy prototype must specify a stable trained/recovered state.');
 
 if (failures.length) {
   console.error('FAIL Materials prototype checks');
