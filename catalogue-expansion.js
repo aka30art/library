@@ -117,7 +117,7 @@ function getMaterialProfile(name){
  return {subcategory,identity,micro,process,behaviour,optics,limits,modifier:modifier?modifier[1]:"Make the target's named structure and process visible in the actual construction, not merely through colour or surface noise."};
 }
 function buildMaterialPrompt(name,p){
- const targetName=name.replace(/\\b\\w/g,c=>c.toUpperCase());
+ const targetName=name.replace(/\b\w/g,c=>c.toUpperCase());
  return [
   "MATERIAL TRANSFORMATION — TARGET-SPECIFIC CONSTRUCTION",
   "SOURCE: [SUBJECT]",
