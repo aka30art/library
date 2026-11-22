@@ -38,5 +38,5 @@ return [
 "FINAL CHECK: The result must read as a genuine reconstruction of the source as if designed, animated, filmed or physically produced inside "+input.target+"."
 ].join("\n\n");
 }
-root.ScreenworldEngine={version:"1.0-prototype",sources:SOURCES,worlds:WORLDS,compile};
+root.ScreenworldEngine={version:"1.0-prototype",sources:SOURCES,worlds:WORLDS,compile};\nif(typeof module!=="undefined"&&module.exports)module.exports={ScreenworldEngine:root.ScreenworldEngine};
 })(typeof window!=="undefined"?window:globalThis);
