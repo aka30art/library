@@ -42,7 +42,8 @@
     const isMaterial=item.prompt.category==="materials"||/MATERIAL TRANSFORMATION — TARGET-SPECIFIC CONSTRUCTION/i.test(raw);
     const isStyle=item.prompt.category==="styles"||/STYLE TRANSFORMATION — TARGET-SPECIFIC VISUAL LANGUAGE/i.test(raw);
     const isTexture=item.prompt.category==="textures"||/TEXTURE TRANSFORMATION — TARGET-SPECIFIC SURFACE SYSTEM/i.test(raw);
-    const isEffect=item.prompt.category==="effects"||/EFFECT TRANSFORMATION — TARGET-SPECIFIC EFFECT SYSTEM/i.test(raw);\n    const preferred=isMaterial?[
+    const isEffect=item.prompt.category==="effects"||/EFFECT TRANSFORMATION — TARGET-SPECIFIC EFFECT SYSTEM/i.test(raw);
+    const preferred=isMaterial?[
       "MATERIAL TRANSFORMATION","SOURCE: [SUBJECT]","MATERIAL TARGET:","SOURCE IDENTITY LOCK:",
       "MATERIAL IDENTITY:","BULK STRUCTURE AND MICROSTRUCTURE:","FORMATION AND MANUFACTURING EVIDENCE:",
       "MECHANICAL AND ENVIRONMENTAL BEHAVIOUR:","OPTICAL RESPONSE:","TARGET MODIFIER:",
