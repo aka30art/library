@@ -108,6 +108,13 @@ check(textiles?.subcategory === 'Textiles & Fabrics', 'Waxed canvas must be trea
 const corkLeather = get('Cork Leather');
 check(corkLeather?.subcategory === 'Wood & Plant Fibres', 'Cork leather must be treated as plant-derived, not animal hide.');
 
+const bismuth = get('Bismuth Crystal');
+check(bismuth?.subcategory === 'Metals & Alloys', 'Bismuth crystal must be classified as a crystalline metal.');
+const bronzeFoam = get('Sintered Bronze Foam');
+check(bronzeFoam?.subcategory === 'Metals & Alloys' && /powder compaction and sintering/i.test(bronzeFoam?.prompt || ''), 'Sintered bronze foam must retain metallic cellular structure and powder-metallurgy process.');
+const aluminiumFoam = get('Open-Cell Aluminium Foam');
+check(aluminiumFoam?.subcategory === 'Metals & Alloys' && /metallic cellular solid/i.test(aluminiumFoam?.prompt || ''), 'Open-cell aluminium foam must be treated as a metallic cellular solid.');
+
 const promptIds = all.map(item => String(item.id));
 check(new Set(promptIds).size === promptIds.length, 'Full catalogue contains duplicate IDs after Materials generation.');
 
