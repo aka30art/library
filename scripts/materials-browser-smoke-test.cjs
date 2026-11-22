@@ -27,7 +27,7 @@ const BASE = process.env.SITE_URL || 'http://127.0.0.1:8000/';
     await page.locator('#prompt-dialog .dialog-close').click();
 
     await page.locator('#subcategory-filter').selectOption('Polymers & Composites');
-    await page.locator('#prompt-grid .prompt-card').filter({ hasText: 'Aerogel' }).click();
+    await page.locator('#prompt-grid .prompt-card[aria-label="Open Aerogel"]').click();
     const aerogelText = await page.locator('#detail-prompt').textContent();
     check(aerogelText.includes('silica aerogel') && aerogelText.includes('polymeric chemistry'), 'Aerogel detail differentiates silica and polymer chemistries');
     await page.locator('#prompt-dialog .dialog-close').click();
