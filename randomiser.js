@@ -41,11 +41,17 @@
     const blocks=raw.split(/\n\s*\n/).map(x=>x.replace(/\s+/g," ").trim()).filter(Boolean);
     const isMaterial=item.prompt.category==="materials"||/MATERIAL TRANSFORMATION — TARGET-SPECIFIC CONSTRUCTION/i.test(raw);
     const isStyle=item.prompt.category==="styles"||/STYLE TRANSFORMATION — TARGET-SPECIFIC VISUAL LANGUAGE/i.test(raw);
+    const isTexture=item.prompt.category==="textures"||/TEXTURE TRANSFORMATION — TARGET-SPECIFIC SURFACE SYSTEM/i.test(raw);
     const preferred=isMaterial?[
       "MATERIAL TRANSFORMATION","SOURCE: [SUBJECT]","MATERIAL TARGET:","SOURCE IDENTITY LOCK:",
       "MATERIAL IDENTITY:","BULK STRUCTURE AND MICROSTRUCTURE:","FORMATION AND MANUFACTURING EVIDENCE:",
       "MECHANICAL AND ENVIRONMENTAL BEHAVIOUR:","OPTICAL RESPONSE:","TARGET MODIFIER:",
       "MATERIAL BOUNDARIES AND EXCLUSIONS:","FINAL SOURCE-AWARE CHECK:"
+    ]:isTexture?[
+      "TEXTURE TRANSFORMATION — TARGET-SPECIFIC SURFACE SYSTEM","SOURCE: [SUBJECT] / [SOURCE IMAGE].","TEXTURE TARGET:",
+      "SOURCE IDENTITY & GEOMETRY LOCK:","TEXTURE IDENTITY & FORMATION:","MICROSTRUCTURE & SCALE:",
+      "TOPOGRAPHY, DIRECTION & DISTRIBUTION:","TACTILE / MECHANICAL CHARACTER:","LIGHT & OPTICAL RESPONSE:",
+      "SOURCE INTEGRATION & COVERAGE:","BOUNDARIES & EXCLUSIONS:","FINAL TEXTURE-AWARE CHECK:"
     ]:isStyle?[
       "STYLE TRANSFORMATION — TARGET-SPECIFIC VISUAL LANGUAGE","SOURCE: [SUBJECT] / [SOURCE IMAGE].","STYLE TARGET:",
       "SOURCE IDENTITY LOCK:","STYLE IDENTITY AND INTENT:","FORM GRAMMAR AND SHAPE LANGUAGE:",
@@ -61,11 +67,11 @@
     for(const label of preferred){
       const found=blocks.find(x=>x.toUpperCase().startsWith(label));
       if(found&&!selected.includes(found))selected.push(found);
-      if(selected.join(" ").length>(isMaterial?6000:isStyle?8000:1050))break;
+      if(selected.join(" ").length>(isMaterial?6000:(isStyle||isTexture)?4800:1050))break;
     }
-    let text=selected.length&&(isMaterial||isStyle||/DESIGN INTENT:|SUBJECT RE-CREATION|WORLD AND ENVIRONMENT TRANSFORMATION|UNIFIED ART DIRECTION|SCENE CONTROL/i.test(raw))?selected.join(" "):raw;
+    let text=selected.length&&(isMaterial||isStyle||isTexture||/DESIGN INTENT:|SUBJECT RE-CREATION|WORLD AND ENVIRONMENT TRANSFORMATION|UNIFIED ART DIRECTION|SCENE CONTROL/i.test(raw))?selected.join(" "):raw;
     text=text.replace(/\s+/g," ").trim();
-    const maxLength=isMaterial?6000:isStyle?4800:1050;
+    const maxLength=isMaterial?6000:(isStyle||isTexture)?4800:1050;
     if(text.length>maxLength){
       const cut=text.slice(0,maxLength);
       const boundary=Math.max(cut.lastIndexOf(". "),cut.lastIndexOf("; "));
