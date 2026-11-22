@@ -20,3 +20,4 @@ jobs:
         with:
           node-version: 20
       - run: node tests/b5-d-catalogue-batches.test.cjs
+      - run: node tests/b5-d-screenworld-integration.test.cjs
