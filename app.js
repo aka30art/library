@@ -88,7 +88,8 @@ function updateSubcategoryOptions(category){
  const options=subcategoryTaxonomy[category]||[];
  if(category==="all"||!options.length){select.hidden=true;select.innerHTML='<option value="all">All subcategories</option>';select.value="all";return;}
  const counts=new Map();prompts.filter(p=>p.category===category).forEach(p=>{const key=subcategoryFor(p);counts.set(key,(counts.get(key)||0)+1);});
- select.innerHTML='<option value="all">All subcategories ('+prompts.filter(p=>p.category===category).length+')</option>'+options.map(([name])=>'<option value="'+name.replace(/&/g,'&amp;')+'">'+name+' ('+(counts.get(name)||0)+')</option>').join('')+'<option value="Other">Other ('+(counts.get("Other")||0)+')</option>';
+ const otherCount=counts.get("Other")||0;
+ select.innerHTML='<option value="all">All subcategories ('+prompts.filter(p=>p.category===category).length+')</option>'+options.map(([name])=>'<option value="'+name.replace(/&/g,'&amp;')+'">'+name+' ('+(counts.get(name)||0)+')</option>').join('')+(otherCount?'<option value="Other">Other ('+otherCount+')</option>':'');
  select.hidden=false;select.value="all";
 }
 
