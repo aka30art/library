@@ -1,0 +1,24 @@
+name: B5-D TV Shows Batch QA
+on:
+  pull_request:
+    paths:
+      - 'screenworld-tvshows-v2.json'
+      - 'tests/b5-d-tvshows-batch.test.cjs'
+      - '.github/workflows/b5-d-tvshows-qa.yml'
+  push:
+    branches:
+      - b5-d-screenworld-catalogue-rebuild
+    - main
+    paths:
+      - 'screenworld-tvshows-v2.json'
+      - 'tests/b5-d-tvshows-batch.test.cjs'
+      - '.github/workflows/b5-d-tvshows-qa.yml'
+jobs:
+  tv-shows-batch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tests/b5-d-tvshows-batch.test.cjs

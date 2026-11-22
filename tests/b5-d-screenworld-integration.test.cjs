@@ -1,0 +1,15 @@
+const fs=require('fs'),assert=require('assert'),vm=require('vm');
+const batches=['screenworld-tvshows-v2.json','screenworld-cartoons-v2.json','screenworld-films-v2.json','screenworld-anime-v2.json','screenworld-other-v2.json'].flatMap(f=>JSON.parse(fs.readFileSync(f,'utf8')));
+const context={window:{AI_PROMPT_EXPANSION:[{id:'legacy-sw',category:'films-shows'},{id:'keep-material',category:'materials'}]}};
+vm.runInNewContext(fs.readFileSync('screenworlds-v2.js','utf8'),context);
+const final=context.window.AI_PROMPT_EXPANSION;
+assert.equal(final.length,126,'125 new screenworld entries plus retained non-screenworld item');
+assert(!final.some(x=>x.id==='legacy-sw'),'legacy screenworld prompts should be replaced');
+assert(final.some(x=>x.id==='keep-material'),'non-screenworld catalogue entries retained');
+const added=final.filter(x=>x.category==='films-shows');assert.equal(added.length,125);
+assert.equal(new Set(added.map(x=>x.id)).size,125);
+assert.equal(new Set(added.map(x=>x.title)).size,125);
+for(const sub of ['TV Shows','Cartoons','Films','Anime','Other Screen Worlds'])assert.equal(added.filter(x=>x.subcategory===sub).length,25,sub+' should have 25 entries');
+assert.equal(context.window.AI_PROMPT_SCREENWORLDS_V2_AUDIT.records,125);
+assert(added.every(x=>x.tags.includes('Screenworld v2')&&x.kind==='style'));
+console.log('B5-D runtime integration test PASS: legacy replaced, 125 curated prompts registered, existing unrelated entries retained.');
