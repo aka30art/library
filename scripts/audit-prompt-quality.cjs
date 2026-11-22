@@ -68,7 +68,7 @@ if(tcgPrompts.some(p=>/Pokémon.*(Common|Uncommon|Ultra Rare|Illustration Rare|S
 const unclassified=prompts.filter(p=>classifier(p)==="Other");
 const unclassifiedByCategory={};
 for(const p of unclassified){(unclassifiedByCategory[p.category]??=[]).push(p.title);}
-const specialistCategories=["architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"];
+const specialistCategories=["styles","architecture-spaces","sculpture-3d-objects","graphic-design-layout","photography-camera","product-design"];
 const templateGroups={};
 for(const p of prompts.filter(p=>specialistCategories.includes(p.category))){
  let skeleton=String(p.prompt||"").toLowerCase();

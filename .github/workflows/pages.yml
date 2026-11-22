@@ -35,6 +35,8 @@ jobs:
         run: node scripts/test-materials-prototype.cjs
       - name: Test Materials catalogue architecture v2
         run: node scripts/test-materials-catalogue.cjs
+      - name: Test Styles catalogue architecture v2
+        run: node scripts/test-styles-catalogue.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
 
@@ -74,6 +76,10 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:8000/
         run: node scripts/materials-browser-smoke-test.cjs
+      - name: Test Styles Explore, Builder and Randomiser integration
+        env:
+          SITE_URL: http://127.0.0.1:8000/
+        run: node scripts/styles-browser-smoke-test.cjs
 
   # Separate artifact preparation from deployment to avoid the intermittent
   # artifact-registration race between upload-pages-artifact and deploy-pages.

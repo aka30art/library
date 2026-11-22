@@ -46,7 +46,7 @@ const subcategoryOverrides={
   "Magnetorheological Fluid":"Liquids & Gels","Graphene Film":"Smart & Functional Materials","Graphite Crystal":"Stone & Minerals","Fibreglass Roving":"Polymers & Composites","Basalt Fibre":"Polymers & Composites","Carbon Fibre":"Polymers & Composites","Ceramic Fibre":"Textiles & Fabrics","Bone China":"Glass & Ceramics","Hempcrete":"Construction & Earth","Oilskin Cotton":"Textiles & Fabrics","Waxed Canvas":"Textiles & Fabrics","Phase-Change Wax Composite":"Smart & Functional Materials","Granular Cork-Rubber Composite":"Polymers & Composites"
  },
  "styles":{
-  "Pop Art":"Art Movements","Op Art":"Art Movements","Wiener Werkstätte":"Art Movements","Vienna Secession":"Art Movements","Arts And Crafts Movement":"Art Movements","Light And Space":"Art Movements","Gothic Revival":"Art Movements","Pattern And Decoration":"Art Movements","Minjung Woodcut Aesthetic":"Art Movements","Woodcut Printmaking":"Illustration & Drawing",
+  "Pop Art":"Art Movements","Op Art":"Art Movements","Wiener Werkstätte":"Art Movements","Vienna Secession":"Art Movements","Arts And Crafts Movement":"Folk & Traditional","Light And Space":"Art Movements","Gothic Revival":"Art Movements","Pattern And Decoration":"Art Movements","Minjung Woodcut Aesthetic":"Graphic Design & Typography","Woodcut Printmaking":"Graphic Design & Typography",
   "Retrofuturism":"Futurism & Speculative","Atompunk Illustration":"Futurism & Speculative","Neo-Folk Ornament":"Folk & Traditional","Folk Horror Visualism":"Folk & Traditional",
   "Webcore Collage":"Digital & Generative","Weirdcore Collage":"Pop & Subculture","Kidcore Maximalism":"Pop & Subculture"
  },
@@ -88,7 +88,8 @@ function updateSubcategoryOptions(category){
  const options=subcategoryTaxonomy[category]||[];
  if(category==="all"||!options.length){select.hidden=true;select.innerHTML='<option value="all">All subcategories</option>';select.value="all";return;}
  const counts=new Map();prompts.filter(p=>p.category===category).forEach(p=>{const key=subcategoryFor(p);counts.set(key,(counts.get(key)||0)+1);});
- select.innerHTML='<option value="all">All subcategories ('+prompts.filter(p=>p.category===category).length+')</option>'+options.map(([name])=>'<option value="'+name.replace(/&/g,'&amp;')+'">'+name+' ('+(counts.get(name)||0)+')</option>').join('')+'<option value="Other">Other ('+(counts.get("Other")||0)+')</option>';
+ const otherCount=counts.get("Other")||0;
+ select.innerHTML='<option value="all">All subcategories ('+prompts.filter(p=>p.category===category).length+')</option>'+options.map(([name])=>'<option value="'+name.replace(/&/g,'&amp;')+'">'+name+' ('+(counts.get(name)||0)+')</option>').join('')+(otherCount?'<option value="Other">Other ('+otherCount+')</option>':'');
  select.hidden=false;select.value="all";
 }
 
