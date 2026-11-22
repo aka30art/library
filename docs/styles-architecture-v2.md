@@ -1,10 +1,10 @@
 # Styles Architecture v2.0 — Phase B2
 
-**Status:** implemented on the isolated B2 branch; subject to CI and browser acceptance.
+**Status: APPROVED.** Final catalogue and browser acceptance passed on head `bfdcae02c9d6c1065acb555e215a096b980b0035` in [CI run 44979679495](https://github.com/aka30art/library/actions/runs/44979679495).
 
 ## Scope and preservation contract
 
-Phase B2 upgrades the existing 125 records in the Styles collection. It does not add or remove prompts. The original IDs (201–325), title order, collection membership, record shape, supported model metadata and `[SUBJECT]` source contract remain stable.
+Phase B2 upgrades the existing 125 records in the Styles collection. It does not add or remove prompts. The original IDs (201–325), title order, collection membership, supported model metadata and `[SUBJECT]` source contract remain stable. The only deliberate catalogue field extension is the supported `subcategory` field, mirrored into `tags`, so all nine Styles groups are explicit and filterable; no version-specific per-record metadata was added.
 
 Each record now has an explicit Styles subcategory and an authored style profile. The profile is not a generic prompt with a style name substituted into a shared sentence. It defines the visual logic that distinguishes the named style and gives the compiler target-specific constraints.
 
