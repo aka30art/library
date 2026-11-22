@@ -31,6 +31,10 @@ jobs:
           node-version: 22
       - name: Verify catalogue integrity
         run: node scripts/validate-catalogue.cjs
+      - name: Test Phase B1 Materials prototype suite
+        run: node scripts/test-materials-prototype.cjs
+      - name: Test Materials catalogue architecture v2
+        run: node scripts/test-materials-catalogue.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
 
@@ -66,6 +70,10 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:8000/
         run: node scripts/randomiser-smoke-test.cjs
+      - name: Test Materials Explore, Builder and Randomiser integration
+        env:
+          SITE_URL: http://127.0.0.1:8000/
+        run: node scripts/materials-browser-smoke-test.cjs
 
   # Separate artifact preparation from deployment to avoid the intermittent
   # artifact-registration race between upload-pages-artifact and deploy-pages.
