@@ -39,7 +39,13 @@
     const raw=String(item.prompt.prompt||item.prompt.desc||"").trim();
     if(!raw)return "";
     const blocks=raw.split(/\n\s*\n/).map(x=>x.replace(/\s+/g," ").trim()).filter(Boolean);
-    const preferred=[
+    const isMaterial=item.prompt.category==="materials"||/MATERIAL TRANSFORMATION — TARGET-SPECIFIC CONSTRUCTION/i.test(raw);
+    const preferred=isMaterial?[
+      "MATERIAL TRANSFORMATION","SOURCE: [SUBJECT]","MATERIAL TARGET:","SOURCE IDENTITY LOCK:",
+      "MATERIAL IDENTITY:","BULK STRUCTURE AND MICROSTRUCTURE:","FORMATION AND MANUFACTURING EVIDENCE:",
+      "MECHANICAL AND ENVIRONMENTAL BEHAVIOUR:","OPTICAL RESPONSE:","TARGET MODIFIER:",
+      "MATERIAL BOUNDARIES AND EXCLUSIONS:","FINAL SOURCE-AWARE CHECK:"
+    ]:[
       "DESIGN INTENT:","SUBCATEGORY METHOD:","DOMAIN-SPECIFIC EXECUTION:","MODULE-SPECIFIC FOCUS:",
       "SUBJECT RE-CREATION","WORLD AND ENVIRONMENT TRANSFORMATION","UNIFIED ART DIRECTION","SCENE CONTROL",
       "SOURCE INPUT:","TARGET ELEMENT:"
@@ -48,14 +54,15 @@
     for(const label of preferred){
       const found=blocks.find(x=>x.toUpperCase().startsWith(label));
       if(found&&!selected.includes(found))selected.push(found);
-      if(selected.join(" ").length>1050)break;
+      if(selected.join(" ").length>(isMaterial?3200:1050))break;
     }
-    let text=selected.length&&( /DESIGN INTENT:|SUBJECT RE-CREATION|WORLD AND ENVIRONMENT TRANSFORMATION|UNIFIED ART DIRECTION|SCENE CONTROL/i.test(raw) )?selected.join(" "):raw;
+    let text=selected.length&&(isMaterial||/DESIGN INTENT:|SUBJECT RE-CREATION|WORLD AND ENVIRONMENT TRANSFORMATION|UNIFIED ART DIRECTION|SCENE CONTROL/i.test(raw))?selected.join(" "):raw;
     text=text.replace(/\s+/g," ").trim();
-    if(text.length>1050){
-      const cut=text.slice(0,1050);
+    const maxLength=isMaterial?3200:1050;
+    if(text.length>maxLength){
+      const cut=text.slice(0,maxLength);
       const boundary=Math.max(cut.lastIndexOf(". "),cut.lastIndexOf("; "));
-      text=boundary>650?cut.slice(0,boundary+1):cut.slice(0,1047)+"…";
+      text=boundary>Math.floor(maxLength*.62)?cut.slice(0,boundary+1):cut.slice(0,maxLength-3)+"…";
     }
     return text;
   }
