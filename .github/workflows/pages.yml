@@ -31,6 +31,8 @@ jobs:
           node-version: 22
       - name: Verify catalogue integrity
         run: node scripts/validate-catalogue.cjs
+      - name: Test Phase B1 Materials prototype suite
+        run: node scripts/test-materials-prototype.cjs
       - name: Report prompt-quality diagnostics
         run: node scripts/audit-prompt-quality.cjs
 
