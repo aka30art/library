@@ -55,7 +55,7 @@ if(!randomiserHtml.includes('randomiser-v9'))errors.push('Randomiser cache versi
 
 const transformation=fs.readFileSync('transformation-system.js','utf8');
 for(const term of ['material','surface','texture','style-transfer','hybrid'])if(!transformation.includes(term))errors.push('Missing UTP architecture '+term);
-if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261118-tcg-single-subcategory-v1'))errors.push('Builder transformation system not loaded');
+if(!fs.readFileSync('builder.html','utf8').includes('transformation-system.js?v=20261122-styles-v2'))errors.push('Builder transformation system not loaded');
 if(fs.readFileSync('explore.html','utf8').includes('Eight universal collections, each containing 125'))errors.push('Stale collection count text');
 const specialistTaxonomy={
  'architecture-spaces':['Urban Architecture','Residential Architecture','Interior Architecture','Civic & Institutional','Sacred & Contemplative'],
