@@ -16,7 +16,10 @@ const categories=[
 ["Exposure & Camera",/exposure|shutter|flash|photographic|camera|solargraph|photogram|film|negative|instant|contact.sheet|sprocket/i]
 ];
 const tally={};
-function classify(title){for(const [name,rx] of categories)if(rx.test(title))return name;return "Spatial Distortion";}
+function classify(title){
+ if(/liquid chrome|inflatable object|rubber.hose|claymation fingerprint|paper.tear dimensional|liquid emulsion lift|film burn|soap.film|oil.film|glass.block/i.test(title))return "Material & Physical";
+ for(const [name,rx] of categories)if(rx.test(title))return name;return "Spatial Distortion";
+}
 function mechanism(title){const n=title.toLowerCase();
 if(/chromatic aberration/.test(n))return "Separate wavelength-dependent fringes along high-contrast edges; keep central alignment and restrain fringe width.";
 if(/lens flare|anamorphic streak|diffraction starburst/.test(n))return "Build a directional, source-driven optical streak or flare tied to bright emitters and optics.";
