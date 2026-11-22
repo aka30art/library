@@ -50,15 +50,15 @@ check(expectedAudit&&expectedAudit.records===125&&expectedAudit.profiles===125,'
 check(Object.keys(expectedAudit?.subcategoryCounts||{}).length===expectedSubcategories.length,'Runtime Styles v2 audit does not cover all nine subcategories');
 const app=fs.readFileSync('app.js','utf8');
 for(const sub of expectedSubcategories)check(app.includes('"'+sub+'"'),'App taxonomy missing '+sub);
-const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf(";;\\nconst subcategoryOverrides=",taxStart);
+const taxStart=app.indexOf("subcategoryTaxonomy="),taxEnd=app.indexOf(";;\nconst subcategoryOverrides=",taxStart);
 check(taxStart>=0&&taxEnd>taxStart,'Unable to inspect runtime Styles taxonomy');
 if(taxStart>=0&&taxEnd>taxStart){
- const taxonomy=vm.runInNewContext("("+app.slice(taxStart+"subcategoryTaxonomy=".length,taxEnd).replace(/;+\\s*$/,"")+")");
- const overrideStart=app.indexOf("const subcategoryOverrides="),overrideEnd=app.indexOf(";\\nfunction subcategoryFor",overrideStart);
+ const taxonomy=vm.runInNewContext("("+app.slice(taxStart+"subcategoryTaxonomy=".length,taxEnd).replace(/;+\s*$/,"")+")");
+ const overrideStart=app.indexOf("const subcategoryOverrides="),overrideEnd=app.indexOf(";\nfunction subcategoryFor",overrideStart);
  check(overrideStart>=0&&overrideEnd>overrideStart,'Unable to inspect runtime Styles overrides');
  if(overrideStart>=0&&overrideEnd>overrideStart){
-  const overrides=vm.runInNewContext("("+app.slice(overrideStart+"const subcategoryOverrides=".length,overrideEnd).replace(/;+\\s*$/,"")+")");
-  const fnStart=app.indexOf("function subcategoryFor(p){"),fnEnd=app.indexOf("\\nprompts.forEach",fnStart);
+  const overrides=vm.runInNewContext("("+app.slice(overrideStart+"const subcategoryOverrides=".length,overrideEnd).replace(/;+\s*$/,"")+")");
+  const fnStart=app.indexOf("function subcategoryFor(p){"),fnEnd=app.indexOf("\nprompts.forEach",fnStart);
   check(fnStart>=0&&fnEnd>fnStart,'Unable to inspect runtime Styles classifier');
   if(fnStart>=0&&fnEnd>fnStart){
    const classifier=vm.runInNewContext(app.slice(fnStart,fnEnd)+";subcategoryFor",{subcategoryTaxonomy:taxonomy,subcategoryOverrides:overrides,prompts:all});
