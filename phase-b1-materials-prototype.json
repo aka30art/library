@@ -204,7 +204,7 @@
     },
     {
       "material": "Ferrofluid",
-      "subcategory": "Metals & Alloys",
+      "subcategory": "Liquids & Gels",
       "sourceSubject": "A circular magnetic desk sculpture with a shallow dish, central magnetic core and radial raised details.",
       "physicalSignature": "A stable magnetic nanoparticle suspension forms field-aligned peaks and lobes while remaining a contained liquid.",
       "processSignature": "The fluid gathers around a magnetic field gradient; peak scale and orientation follow pole geometry and surface tension.",
@@ -237,7 +237,8 @@
     {
       "material": "Ferrofluid",
       "currentLikelyIssue": "The Materials subcategory regex tests Metals & Alloys before Liquids & Gels and includes the token ferrofluid. It may therefore classify a magnetic nanoparticle suspension as a metal even though its bulk behaviour is liquid.",
-      "recommendedAction": "Add an explicit Materials subcategory override to Liquids & Gels before using the taxonomy as a regeneration route."
+      "recommendedAction": "Add an explicit Materials subcategory override to Liquids & Gels before using the taxonomy as a regeneration route.",
+      "resolution": "Resolved in Materials architecture v2: runtime catalogue records now carry explicit Liquids & Gels assignments, ahead of broad keyword fallbacks."
     },
     {
       "material": "Aerogel",
