@@ -1,75 +1,79 @@
-# Phase B1 — Materials: prototype and QA gate
+# Phase B1 — Materials: refined architecture and 200-prompt rollout
 
-**Status:** prototype suite only. The live catalogue has not been edited and none of the 200 Materials prompts have been replaced.
+**Branch state:** the Materials v2 prompt compiler is now wired into all 200 Materials records on PR #16. This is an isolated branch change only. It has not been merged to `main` or deployed.
 
-## Entry gate
+**Approval state:** the architecture is not signed off yet. The first full-catalogue CI attempt exposed test/compiler mismatches; these are being corrected. Automated browser QA and actual image-to-image output review remain required before the quality gate can be approved.
 
-Phase A was accepted for this workstream after the current PR #15 head passed its own validation and browser checks:
+## Scope and source baseline
 
-- PR #15 head: `c2f2f921bf6bee1fcca8930e6a85517d07f49a0e`
-- Current workflow run: `44960662207` (attempt 2)
-- Catalogue validation, calibration, audit generation and artifact upload: passed
-- Local browser QA: desktop/mobile site interactions passed
-- Randomiser mobile interactions: passed
-- PR #15 remains a draft, open, mergeable, unmerged and undeployed
+- PR: [#16](https://github.com/aka30art/library/pull/16)
+- Branch: `batch-02-phase-b1-materials-prototype`
+- Base: `568e34188f1a250de6fb29956f09c5fc2f321606`
+- Phase A evidence: PR #15 validation run `44960662207` (attempt 2)
+- Production baseline, PR #15 and deployed GitHub Pages remain untouched.
 
-The earlier run `44923688992` was cancelled. It was superseded by the successful run on the current PR head; it is not counted as a pass.
+The Materials collection remains 200 records across the 15 existing subcategories. IDs, titles, collection membership, `[SUBJECT]` input contract, record shape, Builder selection and Randomiser catalogue loading are preserved.
 
-## What is in this prototype
+## Refined prompt architecture
 
-`phase-b1-materials-prototype.json` contains 20 representative, target-specific material prompts covering all 15 Materials subcategories currently exposed by the catalogue taxonomy. Each case includes:
+The former one-paragraph element substitution has been replaced on this branch by a target-aware material compiler in `catalogue-expansion.js`.
 
-- A deliberately difficult source-subject fixture.
-- A physical signature describing the material's bulk or surface behaviour.
-- A forming, finishing or manufacturing signature.
-- The relevant optical and lighting response.
-- Explicit constraints against common visual or physical misinterpretations.
-- A complete prompt using the existing `[SUBJECT]` input convention.
+Each generated Materials prompt resolves:
 
-The sample set includes materially dissimilar cases: brushed metal, anisotropic wood, fused wax layers, grown mycelium, nacreous structural colour, recycled polymer, electrochromic glazing, tempered chocolate, labradorite, etched glass, aramid weave, elastomer, handmade cellulose paper, shear-thickening fluid and rammed earth. Additional stress cases cover aerogel, thermochromic pigment, ferrofluid, shape-memory alloy mesh and spider silk.
+1. **Source identity lock:** subject identity, silhouette, proportions, pose, component count, viewpoint, crop, apertures, controls, labels, joints and functional clearances.
+2. **Material identity:** chemistry or material class, including distinctions between substrate, coating, reinforcement and bulk body.
+3. **Bulk structure and microstructure:** grain, pores, fibres, weave, layers, crystals, inclusions, cellular networks or continuous liquid phase.
+4. **Formation and manufacturing:** casting, forming, machining, weaving, lamination, mould growth, firing, curing, pressing, sintering, coating or other target-appropriate process.
+5. **Mechanical and environmental behaviour:** stiffness, density, brittleness, flexibility, viscosity, gravity, load paths, moisture, thermal response and containment.
+6. **Optical response:** reflectance, roughness, transmission, refraction, scattering, absorption, anisotropy, subsurface response and structural colour.
+7. **Target modifiers and exclusions:** material-specific constraints to prevent false analogies, visual shortcuts and impossible physics.
+8. **Source-aware verification:** final silhouette, countable parts, functional openings, attachment continuity, scale and material plausibility.
 
-## Prompt architecture
+The compiler uses 15 family-level profiles, explicit target-specific overrides for high-risk materials, and modifier rules for processes such as brushing, polishing, oxidation, lamination, weaving, compression, frosting, iridescence, recycling and charring. It does not force every material into one fixed scene or rendering style.
 
-The redesigned family is not a single generic paragraph with the target name substituted. Each target prompt must resolve five linked layers:
+## Taxonomy corrections and stress cases
 
-1. **Source lock:** retain identity, silhouette, proportions, pose, component count, camera, crop, functional features and identifying details.
-2. **Material physics:** define the actual structure and mechanical behaviour rather than relying on colour adjectives.
-3. **Process evidence:** show how the material is grown, cast, moulded, machined, woven, laminated, fused, compressed or otherwise formed.
-4. **Optical response:** specify physically appropriate reflection, roughness, transmission, scattering, absorption, anisotropy or structural colour.
-5. **Limits and exclusions:** prevent impossible geometry, misleading material analogies, excess effects and loss of source legibility.
+The branch explicitly resolves the known boundary cases:
 
-The prompt must adapt these behaviours to the source's actual geometry. It must not force every material into one fixed scene, product format or rendering style.
+- **Ferrofluid:** Liquids & Gels. It is a contained magnetic nanoparticle suspension, not a bulk solid metal.
+- **Aerogel:** Polymers & Composites as the catalogue route. Its prompt names silica aerogel as the default and recognises polymeric variants without silently changing chemistry.
+- **Shape-memory alloy mesh:** Metals & Alloys. Its trained/programmed recovery is a separate functional behaviour and the prompt requests one stable recovered state.
+- **Nitinol wire fabric:** Metals & Alloys. It is a metallic wire textile, not an ordinary yarn fabric.
+- **Carbon fibre:** Polymers & Composites. The prompt distinguishes continuous carbon reinforcement from its resin matrix and requires lay-up direction.
+- **Waxed canvas:** Textiles & Fabrics. The substrate remains a textile with a wax finish, not a bulk wax object.
+- **Cork leather:** Wood & Plant Fibres. Its plant-derived structure is not animal hide.
 
-## Regression checks
+## Automated quality gates
 
-Run:
+The PR workflow runs these checks before browser QA:
 
 ```sh
+node scripts/validate-catalogue.cjs
 node scripts/test-materials-prototype.cjs
+node scripts/test-materials-catalogue.cjs
+node scripts/audit-prompt-quality.cjs
 ```
 
-The test verifies the 20-case suite, coverage of all 15 subcategories, unique targets and prompt bodies, minimum prompt completeness, source-variable compatibility, target mention, explicit preservation language, light-response logic, and material-specific exclusions.
+The prototype test checks the 20 difficult cases and all 15 subcategories. The catalogue test checks all 200 records for explicit category assignment, unique IDs and titles, prompt depth, source-variable compatibility, eight required prompt-architecture sections, target-specific negative constraints, and key material-specific behaviours. It also verifies that all 15 subcategories are represented and that the full catalogue retains unique IDs.
 
-The test is added to the PR validation workflow. It is a structural regression test, not proof that an image model will render every instruction correctly.
+The first current catalogue test attempt identified two concrete defects:
+- The test expected title-cased headings while the compiler was emitting raw catalogue casing.
+- The shape-memory alloy profile did not state the programmed geometry and stable recovered state using the test's required wording.
 
-## Taxonomy findings to resolve before scaling
+These are being corrected at the compiler/profile level, not by weakening the checks.
 
-The prototype records two important taxonomy risks:
+## Browser and visual acceptance
 
-- **Ferrofluid:** the current Materials regex can classify it as a metal because the Metals & Alloys rule is evaluated before Liquids & Gels. Its dominant bulk behaviour is a magnetic nanoparticle suspension. Add an explicit override to Liquids & Gels before relying on taxonomy-driven generation.
-- **Aerogel:** the name alone does not identify the chemistry. Silica aerogel and polymeric aerogel have different material families and constraints. The target profile must state the aerogel type when known, rather than treating the word as a complete chemical specification.
+A green structural test is not image-model validation. Final approval requires:
 
-The stress-case list also demonstrates why functional materials need an explicit material profile even when their subcategory is broad. A shape-memory alloy is still an alloy, but its trained-shape recovery must be represented as a distinct functional behaviour.
+- Desktop browser QA of catalogue navigation, Materials filtering, prompt detail and copy actions.
+- Mobile browser QA of the same paths.
+- Builder selection and generated output using at least one Materials record.
+- Randomiser single-collection and mixed-collection runs to confirm Materials remain composable without category leakage.
+- Actual source-to-output visual review using representative difficult fixtures.
 
-## Acceptance gate before the 200-prompt rollout
+Visual review must score source identity, physical plausibility, process evidence, optical fidelity, geometry/scale and constraint compliance. The current PR has not yet passed this visual gate. Do not infer a visual pass from prompt text or browser QA.
 
-Do not generate or replace all 200 records until the representative set has passed both forms of review:
+## Rollout and isolation
 
-- **Structural review:** the automated test passes with no duplicate prompt bodies or missing subcategory coverage.
-- **Visual review:** render representative prompts against their stated difficult source fixtures, then score source identity, physical plausibility, process evidence, optical fidelity, geometry/scale and constraint compliance. Revise the family architecture where an image fails for a repeatable reason.
-
-Only after that gate should the 200 Materials records be regenerated in place, preserving IDs, titles, collection membership, tool compatibility, Randomiser behaviour and the existing `[SUBJECT]` substitution contract.
-
-## Isolation
-
-This work is on `batch-02-phase-b1-materials-prototype`, based on the unchanged production baseline commit `568e34188f1a250de6fb29956f09c5fc2f321606`. The Phase A audit findings are referenced as input evidence; no Phase A code is imported. PR #15 remains separately open and in draft. This branch does not modify PR #15, `main`, the deployed site or the live catalogue. No merge or deployment is included in this phase increment.
+All 200 records are generated on the PR branch using the refined compiler. The production catalogue is unaffected until a later, separately authorised merge. PR #16 remains draft, open, unmerged and undeployed. No production deployment is part of Phase B1.
