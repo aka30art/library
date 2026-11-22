@@ -1,6 +1,6 @@
 # Materials Architecture v2.0 — Phase B1
 
-**Status:** architecture refinement implemented on the isolated Phase B1 branch; approval is conditional on the new catalogue and browser regression gates passing.
+**Status: APPROVED.** The refined profile compiler is applied to all 200 Materials records on the isolated PR branch. Structural, catalogue, prompt-quality, desktop/mobile browser, Builder and Randomiser checks passed on commit `c29fedf68b2336529df56be74792353f1d173c76` in [CI run 44977292975](https://github.com/aka30art/library/actions/runs/44977292975).
 
 ## Architectural decision
 
@@ -30,7 +30,7 @@ Every generated Materials record includes:
 - material-aware negative constraints;
 - the existing supported image-model metadata and visual card metadata.
 
-No new collection or front-end control is required. The existing catalogue, Explore filter, Builder and Randomiser continue to consume the same prompt record shape.
+The original Materials ID range (1–200), titles, category membership, record shape, supported model metadata and existing app integrations are preserved. No new collection or front-end control is required. The catalogue, Explore filter, Builder and Randomiser continue to consume the same prompt record shape.
 
 ## Taxonomy corrections
 
@@ -38,6 +38,7 @@ Material subcategories are explicitly assigned at generation time, avoiding depe
 
 - **Ferrofluid** → Liquids & Gels. A magnetic nanoparticle suspension is not a bulk metal.
 - **Shape-memory alloy mesh** and **Nitinol wire fabric** → Metals & Alloys. The wire is metallic even where it is assembled as an open mesh or textile.
+- **Bismuth crystal**, **sintered bronze foam** and **open-cell aluminium foam** → Metals & Alloys. Their crystalline or cellular structures remain metallic.
 - **Aerogel** → Polymers & Composites as the catalogue's stable broad class; the prompt defaults to silica aerogel and acknowledges polymeric chemistry only when specified.
 - **Carbon fibre** → Polymers & Composites, with continuous reinforcement filaments and resin-matrix lay-up.
 - **Bone china** → Glass & Ceramics.
@@ -59,18 +60,19 @@ A comparative source-based visual pass used six deliberately different source su
 | Nacre / moth | Wing silhouette and antennae remained legible; angle-dependent pearlescence was strong | Retain lamellar microstructure and local, directional structural colour |
 | Recycled ocean plastic / shoe | Shoe identity and major component boundaries remained; embedded recovered fragments were visible | Retain a continuous polymer matrix; distinguish flexible upper and wear-bearing sole; prohibit loose litter props |
 
-This was a directional visual architecture test, not a claim that all 200 prompts have been individually rendered or that image-model output is deterministic. The new regression suite checks the actual generated 200-record catalogue structurally, while the visual findings above inform the profile constraints.
+This was a directional visual architecture test, not a claim that all 200 prompts have been individually rendered or that image-model output is deterministic. The visual findings informed the profile constraints; the regression suite checks the actual generated 200-record catalogue structurally.
 
-## Approval gate
+## Approval and regression record
 
-The architecture can be approved only when all of the following are green:
+The approval gate passed on [CI run 44977292975](https://github.com/aka30art/library/actions/runs/44977292975), head `c29fedf68b2336529df56be74792353f1d173c76`.
 
-- the 200-record Materials architecture test;
-- existing full catalogue validation (1,521 records, stable IDs and collection totals);
-- prototype regression suite;
-- prompt-quality audit with no blocking errors;
-- desktop and mobile browser smoke tests;
-- targeted Materials filter and Builder integration checks;
-- Randomiser single/multi-module regression and combined-prompt checks.
+- Catalogue integrity: **PASS** — 1,521 records, 15 collections, expected totals and unique IDs.
+- Materials prototype: **PASS** — 20 difficult cases across all 15 Materials subcategories.
+- Materials architecture v2: **PASS** — 200 records, stable IDs 1–200, all 15 subcategories populated, profile completeness and material-specific edge cases.
+- Prompt-quality audit: **PASS** — 1,521/1,521 unique prompt bodies, zero unclassified records, no blocking audit errors.
+- Desktop and mobile browser QA: **PASS**.
+- Builder integration: **PASS** — target-specific Materials prompt is selectable and copied intact.
+- Randomiser mobile and combined-prompt regression: **PASS** — material identity, microstructure, process, mechanical behaviour, optical response, exclusions and final source-aware check are retained.
+- Targeted Materials Explore / Builder / Randomiser browser checks: **PASS**.
 
-Mass generation does not alter the existing 200 record titles or ID sequence. No merge, deployment, or production change is part of Phase B1.
+The PR remains open and in draft. This approval applies to the Phase B1 Materials architecture and 200-record branch implementation; it does not authorise merge, deployment or production changes.
