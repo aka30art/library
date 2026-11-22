@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "phase": "B1",
+  "family": "Materials",
+  "status": "prototype-only; not wired into the live catalogue",
+  "sourceAudit": {
+    "pullRequest": 15,
+    "headSha": "c2f2f921bf6bee1fcca8930e6a85517d07f49a0e",
+    "workflowRun": 44960662207,
+    "artifactId": 14729830322,
+    "auditedPrompts": 200
+  },
+  "framework": {
+    "sourceLock": [
+      "Preserve the supplied subject's identity, silhouette, proportions, pose, component count, camera, crop and defining geometry.",
+      "Preserve functional apertures, joints, text, labels, controls and small identifying details unless the requested material necessarily changes their appearance.",
+      "Do not invent a new scene, narrative, prop, product redesign or subject substitution."
+    ],
+    "materialPhysics": [
+      "Specify the material's actual structure and dominant physical behaviour, not just its colour or mood.",
+      "Translate the forming, finishing, joining or manufacturing process into geometry, edges, seams, layers and contact behaviour.",
+      "Define how light interacts with the material: reflection, roughness, transmission, scattering, absorption, anisotropy or structural colour as applicable.",
+      "Scale microstructure to the source; distinguish surface finish from bulk material and preserve material-specific limits.",
+      "State exclusions that prevent common false analogies, impossible physics and loss of source legibility."
+    ],
+    "executionOrder": [
+      "Lock the source subject and identify the surfaces or components being transformed.",
+      "Establish bulk structure, material class and mechanical behaviour.",
+      "Resolve process evidence: forming, joining, layering, machining, weaving, moulding or growth.",
+      "Resolve optical response and microstructure at source-appropriate scale.",
+      "Apply target-specific exclusions and verify identity, functionality and legibility."
+    ]
+  },
+  "cases": [
+    {
+      "material": "Brushed Aluminium",
+      "subcategory": "Metals & Alloys",
+      "sourceSubject": "A vintage rotary telephone with a numbered dial, recessed finger holes, receiver, cord and small printed markings.",
+      "physicalSignature": "A dense, non-ferrous metal with a fine directional satin grain and anisotropic highlights.",
+      "processSignature": "Directional abrasion and machining marks follow each formed surface; edges catch brighter polished traces while recesses retain darker grain.",
+      "lightSignature": "Broad highlights stretch along the brushing direction; reflections remain controlled and diffuse rather than mirror-like.",
+      "constraints": "Never turn the finish into polished chrome, painted silver or uniform grey plastic; keep dial numbers and openings legible.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Brushed Aluminium\n\nTransform the supplied subject so its actual visible construction reads as brushed aluminium, not as an aluminium-coloured coating. Preserve its recognisable identity, silhouette, proportions, pose, component count, camera viewpoint, spatial relationships, apertures, controls, printed information and defining details. Do not invent a new object, scene or accessory.\n\nResolve a dense non-ferrous metal body with a fine satin surface. Establish directional micro-abrasion that follows each surface's geometry: grain may bend around curved housings, change direction at separate panels and terminate cleanly at joints. Let machining and forming logic determine seams, folded returns, chamfers, fastener seats and edge thickness. Exposed edges may carry slightly brighter burnished traces; recessed areas should retain deeper, less reflective grain. Use anisotropic reflection: elongated highlights must align with the local brushing direction and shift coherently as surfaces turn. Keep the base response metallic but restrained, with no mirror-like chrome reflections.\n\nAdapt grain scale to the actual object: never enlarge the abrasion until it becomes deep grooves or a separate texture layer. Preserve all source markings and fine mechanical features. Avoid silver paint, plastic gloss, random scratches, uniform noise and fabricated manufacturing details unsupported by the form."
+    },
+    {
+      "material": "Natural Timber",
+      "subcategory": "Wood & Plant Fibres",
+      "sourceSubject": "A detailed anatomical hand sculpture with individual fingers, nails, knuckles and articulated joints.",
+      "physicalSignature": "An anisotropic cellular material with longitudinal grain, pores, growth structure and distinct end grain.",
+      "processSignature": "Sawing, carving, turning or sanding follows the fibre direction; end-grain cuts expose compacted vessel structure.",
+      "lightSignature": "Mostly diffuse warm reflectance with pore-level shadowing and restrained highlights from finish or burnishing.",
+      "constraints": "Do not apply a tiled wood photograph; grain must follow the actual anatomy and never erase joints or fingernails.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Natural Timber\n\nReconstruct the supplied subject as an object genuinely carved or assembled from natural timber while preserving its exact identity, anatomy, pose, silhouette, proportions, viewpoint and defining details. Keep the number, placement and separation of all parts unchanged. Do not add branches, leaves, furniture, forest scenery or decorative wood knots.\n\nTreat timber as an anisotropic cellular solid. Run the grain along the structural direction of each part, bending it naturally around curves and changing orientation only where a real component, cut or join would require it. Use long-fibre grain on the main forms, tighter end-grain detail on cut faces and small pores or vessel marks at a scale appropriate to the object. Show believable carving, planing or sanding transitions: tool direction should follow the material, edges should reveal fibre continuity, and joints should read as cut or assembled timber rather than painted seams. Introduce restrained tonal variation from heartwood, sapwood and natural growth, without inventing dramatic knots on every surface.\n\nLight should reveal shallow grain relief through soft directional shadowing and a mostly diffuse response; any sheen must come from a plausible oil, wax or clear finish, not plastic gloss. Keep fingers, nails, knuckles and joint separations readable. Avoid repeated digital grain, printed wood veneer, impossible grain crossings, bark-like crust and generic brown colouring."
+    },
+    {
+      "material": "Encaustic Wax",
+      "subcategory": "Resins & Waxes",
+      "sourceSubject": "A sharply folded origami crane with thin wings, precise creases and a recognisable paper-folded silhouette.",
+      "physicalSignature": "Pigmented wax with translucent depth, soft thermal flow and a low-to-medium satin sheen.",
+      "processSignature": "Layered wax is heated, fused and selectively scraped; edges round slightly and pigment can pool in shallow depressions.",
+      "lightSignature": "Soft internal colour depth with broad waxy highlights and gentle subsurface transmission at thin edges.",
+      "constraints": "Keep folds structurally crisp; do not melt the crane into drips or turn it into a candle.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Encaustic Wax\n\nTranslate the supplied subject into a coherent encaustic-wax construction. Preserve the exact subject identity, folded silhouette, proportions, pose, crease layout, camera angle and all defining structural relationships. The material must replace the source construction rather than sit on top as a coloured filter. Do not alter the object into a candle, wax pool or unrelated sculpture.\n\nBuild the surface from successive pigmented wax layers that have been warmed and fused. Colour should have slight depth beneath the surface, with subtle variation where layers overlap, are scraped back or collect in shallow folds. The wax should feel firm at room temperature: broad planes remain stable, edges are gently softened rather than liquid, and fine thermal flow is restricted to shallow transitions or naturally heated contact zones. Let the original folds govern where wax accumulates; retain crisp structural creases and thin sheet-like edges so the crane remains immediately recognisable. Use a restrained satin response with soft, broad highlights, mild translucency at thin edges and no hard metallic reflections.\n\nShow evidence of a fused, worked surface through minute layered transitions rather than brush-painted strokes. Avoid long drips, uncontrolled melting, oily puddles, high-gloss plastic, excessive translucency and any change to the source geometry."
+    },
+    {
+      "material": "Mycelium Composite",
+      "subcategory": "Flora & Fungi",
+      "sourceSubject": "A compact consumer drone with four arms, propeller guards, camera gimbal, vents and visible assembly joints.",
+      "physicalSignature": "A low-density bio-composite formed from interwoven fungal hyphae binding particulate agricultural substrate.",
+      "processSignature": "Grown in a mould, compressed and dried; cut sections reveal a fibrous porous interior and mould-defined transitions.",
+      "lightSignature": "Matte diffuse scattering with soft pore shadows and little specular reflection.",
+      "constraints": "No mushrooms or fruiting bodies; do not block vents, moving clearances, camera apertures or propeller geometry.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Mycelium Composite\n\nRebuild the supplied subject as a mould-grown mycelium composite while preserving its recognisable identity, silhouette, dimensions, pose, component count, camera perspective, functional openings and assembly logic. Apply the material to the existing parts; do not redesign the product or add mushrooms, caps, stems, forest matter or decorative fungal growth.\n\nExpress a network of fine fungal hyphae binding visible plant-derived particles into a low-density solid. The surface should show a subtle interlaced fibrous matrix with local differences in compaction: broad moulded faces are relatively even, cut or exposed edges reveal a coarser porous cross-section, and compression points appear denser than sheltered regions. Make the moulding process legible through restrained parting lines, rounded internal corners and material continuity across low-stress transitions. The material is lightweight and comparatively brittle, so preserve existing ribs and supports rather than implying it can form impossibly thin, load-bearing blades.\n\nUse a matte, diffuse response. Light should scatter softly through the fine pores and create restrained micro-shadows, not glossy highlights. Maintain clearances around propellers, gimbal movement, vents and controls. Avoid foam-like synthetic uniformity, sponge bubbles, wet organic slime, visible mushrooms, random fibre clumps and unsupported structural claims."
+    },
+    {
+      "material": "Nacre",
+      "subcategory": "Fauna & Animal-derived",
+      "sourceSubject": "A moth with delicate wing scales, antennae, segmented body and clearly separated wing surfaces.",
+      "physicalSignature": "Layered aragonite platelets and organic matrix producing angle-dependent structural colour.",
+      "processSignature": "Overlapping lamellae follow the curved shell-like surface; growth bands and plate orientation vary gradually.",
+      "lightSignature": "Directional iridescence shifts with viewing angle while the base remains pearly and softly reflective.",
+      "constraints": "Do not apply a uniform rainbow gradient or turn the moth into a shell; preserve wing venation and scale structure.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Nacre\n\nTransform the supplied subject into a nacre-built interpretation while retaining its exact silhouette, anatomy, wing span, antennae, body segmentation, pose, perspective and defining detail. Preserve the existing surface boundaries and do not add shell forms or ornamental motifs. The subject must remain identifiable as itself, not become an unrelated mollusc shell.\n\nRepresent nacre as tightly layered aragonite platelets held in an organic matrix. Build fine overlapping lamellae that follow each curved surface and respect the direction of the source's wing structure. Introduce subtle growth bands and local changes in platelet orientation, with a dense pearly base rather than a painted metallic coating. The optical signature is structural: colour shifts between restrained blue, green, rose and warm pearl only where the viewing angle and light direction support interference. Keep the effect local and directional; not every plane should display the full spectrum at once. Fine wing venation and scale boundaries must remain legible beneath the nacreous response.\n\nUse soft specular highlights over diffuse milky depth. Avoid a uniform rainbow gradient, glitter, holographic foil, chrome, plastic gloss, oversized shell ridges and any new biological anatomy."
+    },
+    {
+      "material": "Recycled Ocean Plastic",
+      "subcategory": "Recycled & Circular Materials",
+      "sourceSubject": "A modern running shoe with separate upper, sole, tread, lace eyelets, seams and heel counter.",
+      "physicalSignature": "Reprocessed polymer containing irregularly distributed recovered flakes, fibres and colour inclusions.",
+      "processSignature": "Shredding, melt filtration, extrusion or moulding leaves subtle flow lines, flecks and batch variation.",
+      "lightSignature": "A polymer-dependent satin or semi-matte response with local differences between fused inclusions and the continuous matrix.",
+      "constraints": "Do not glue literal rubbish to the shoe; preserve tread, openings, seams and functional component boundaries.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Recycled Ocean Plastic\n\nReconstruct the supplied subject from reprocessed ocean-recovered polymer while preserving its exact identity, overall silhouette, proportions, pose, component count, construction boundaries and functional details. Keep the shoe recognisable and wearable. Do not attach fishing nets, bottles, shells or floating rubbish as decorative props.\n\nMake the recycled origin visible within the material itself. Show small, irregularly distributed polymer flakes or coloured fragments fused into a continuous matrix, with variation in fragment size, density and colour that suggests sorting and reprocessing rather than random litter. Let the likely manufacturing route shape the form: injection- or compression-moulded areas may show subtle flow direction, restrained parting lines and softened radii; extruded or woven regions should retain their own directional structure. Keep the upper, sole, tread, heel counter and eyelet zones materially coherent but functionally distinct. The sole must remain dense and wear-resistant, while flexible upper sections may show a more compliant polymer response.\n\nUse a controlled satin or semi-matte polymer reflection with small highlights on smoother moulded zones. Avoid pristine virgin-plastic uniformity, loose debris, glued-on waste, impossible colour speckling, blocked tread and invented construction seams."
+    },
+    {
+      "material": "Electrochromic Glass",
+      "subcategory": "Smart & Functional Materials",
+      "sourceSubject": "A modern smartphone with a glass front, display, camera apertures, metal frame, buttons and fine screen interface.",
+      "physicalSignature": "An electrically switchable glazing stack whose optical transmittance or tint changes while the glass remains a coherent transparent solid.",
+      "processSignature": "Thin functional layers sit within a laminated glass assembly with sealed edges and controlled transitions.",
+      "lightSignature": "Tint changes alter transmission and reflections; the surface retains glass-like specular highlights and visible depth.",
+      "constraints": "Do not show neon emission or make the whole phone opaque; preserve the display, camera holes and controls.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Electrochromic Glass\n\nTransform only the glass components of the supplied subject into electrochromic glass, preserving the phone's identity, dimensions, frame, camera apertures, display layout, buttons, text, interface content and viewpoint. Keep non-glass components materially distinct. Do not redesign the device or cover its controls.\n\nRepresent a laminated electrochromic glazing stack with a thin active layer and credible edge encapsulation. Show a controlled change in optical transmittance or tint across the glass: the state may be evenly tinted or vary by a clearly defined functional zone, but transitions must be deliberate and physically contained. The glass remains a continuous transparent solid with real thickness at edges and crisp boundaries around apertures. A darker state should reduce transmitted light while preserving surface reflections and readable underlying forms where transmission permits; it must not become a flat opaque colour fill.\n\nLight should produce restrained glass reflections, internal depth and a coherent tint-dependent transmission response. The material does not emit light. Avoid neon glow, LED effects, liquid transitions, arbitrary gradients, fractured glass, fake holograms and tint changes on metal or plastic components."
+    },
+    {
+      "material": "Dark Couverture Chocolate",
+      "subcategory": "Organic & Food-Derived Materials",
+      "sourceSubject": "A grand piano with curved body, keyboard, legs, pedals, lid and clearly defined mechanical components.",
+      "physicalSignature": "Tempered cocoa-butter crystal structure with a dense solid body, controlled gloss and fine fracture behaviour.",
+      "processSignature": "Moulded and polished surfaces with crisp cast edges; thin break edges reveal a dense, slightly granular interior.",
+      "lightSignature": "Deep brown specular gloss with broad highlights and subtle cocoa warmth, not wet liquid reflection.",
+      "constraints": "Keep the piano structurally intact; do not melt it, add food props or obscure the keys.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Dark Couverture Chocolate\n\nRebuild the supplied subject as a solid dark-couverture-chocolate object while preserving its identity, exact piano silhouette, keyboard, legs, pedals, lid geometry, component relationships and camera viewpoint. The material must form the object, not merely coat a conventional piano. Keep keys and mechanical divisions readable, with the source's geometry intact.\n\nTreat the chocolate as properly tempered couverture with a stable cocoa-butter crystal structure. Broad moulded or hand-finished planes should be dense, smooth and richly dark, with a controlled polished sheen rather than a wet liquid surface. Corners and thin edges may show minute crispness or a fine brittle fracture where the geometry plausibly exposes a break, while thicker sections remain visually solid. Use subtle cocoa-brown variation across planes and recesses without adding crumbs or decorative food details. The material should hold the piano's large structural forms; do not imply it is melting or softening under ordinary studio lighting.\n\nHighlights should be broad and deep, revealing a tempered chocolate gloss with restrained warm undertones. Preserve the keyboard's individual keys and the piano's functional structure. Avoid dripping chocolate, liquid pools, sprinkles, wrappers, food styling, plastic shine and altered proportions."
+    },
+    {
+      "material": "Labradorite",
+      "subcategory": "Stone & Minerals",
+      "sourceSubject": "A sculptural raven with layered feather relief, beak, claws and a sharply defined wing silhouette.",
+      "physicalSignature": "A feldspar stone with a dark mineral body and localized lamellar labradorescence.",
+      "processSignature": "Cut and polished planes reveal cleavage and internal plate-like structure; edges remain stone-dense and brittle.",
+      "lightSignature": "Blue, green or gold flashes appear only at select angles and regions, against a comparatively subdued dark base.",
+      "constraints": "Do not colour every surface with rainbow iridescence; preserve feather relief and stone mass.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Labradorite\n\nReconstruct the supplied subject as a carved labradorite stone form while preserving the raven's exact silhouette, beak, claws, wing shape, feather relief, pose, perspective and recognisable anatomy. The material must read as feldspar stone throughout the visible volume, not as a thin iridescent skin.\n\nEstablish a dense dark grey mineral body with believable polished and naturally fractured regions. Use the stone's internal lamellar structure to create localized labradorescence: blue, green or occasional gold flashes should appear only on planes whose orientation catches the incoming light. Let adjacent planes remain quiet, smoky and comparatively neutral. The flashes should shift with viewing angle and be strongest across selected cleavage-aligned surfaces, not uniformly across every feather. Carved edges should remain hard and mineral-dense, while exposed fractured faces may reveal granular crystalline structure. Retain the source's fine sculptural relief; do not replace feathers with generic scales or crystal spikes.\n\nUse restrained stone reflections and sharp, controlled optical flashes. Avoid a full-spectrum rainbow coating, glitter, glowing veins, glass transparency, liquid metal, excessive crystal growth and altered anatomy."
+    },
+    {
+      "material": "Frosted Glass",
+      "subcategory": "Glass & Ceramics",
+      "sourceSubject": "A detailed anatomical heart model with vessels, chambers, surface grooves and translucent tissue-like forms.",
+      "physicalSignature": "A glass volume whose surface micro-roughness scatters transmitted light while retaining transparency and edge thickness.",
+      "processSignature": "Acid etching or fine abrasive blasting creates a uniform or locally masked matte surface without changing the underlying geometry.",
+      "lightSignature": "Soft diffuse transmission, blurred internal detail and brighter edge scatter with controlled specular highlights.",
+      "constraints": "Do not make the glass opaque, snowy or crystalline; preserve chambers and vessel openings.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Frosted Glass\n\nTransform the supplied subject into a solid frosted-glass construction while preserving its exact silhouette, anatomical chambers, vessels, grooves, openings, proportions, pose and viewpoint. Keep all major internal forms and boundaries in their original positions. Do not replace the subject with ice, snow, crystal or an opaque ceramic object.\n\nRetain a continuous glass volume with believable thickness, but create fine surface micro-roughness through acid etching or controlled abrasive blasting. This surface scatters light and softens the visibility of internal detail without eliminating transmission. Broad areas should read as translucent and softly diffusing; edges, thinner sections and openings may transmit more clearly and gather brighter refracted highlights. The internal heart structure should remain discernible as softened shapes through the glass, not disappear behind a white matte fill. Keep the etched texture extremely fine and scale-appropriate, with no large frost crystals or granular snow deposits.\n\nLight should bloom softly through the volume, produce subtle edge scatter and retain a restrained glass specular response. Preserve every vessel opening and chamber relationship. Avoid opacity, ice formation, crystalline facets, milky plastic, surface condensation and invented anatomical parts."
+    },
+    {
+      "material": "Kevlar Weave",
+      "subcategory": "Textiles & Fabrics",
+      "sourceSubject": "A technical motorcycle helmet with visor, vents, chin guard, shell curve, fasteners and layered protective construction.",
+      "physicalSignature": "High-strength aramid yarns arranged in a tightly controlled woven reinforcement structure.",
+      "processSignature": "Woven reinforcement is laid, tensioned and consolidated in resin; cut edges expose directional fibres and layer boundaries.",
+      "lightSignature": "Low-sheen fibre response with fine alternating highlights across yarn crowns and darker interlaced valleys.",
+      "constraints": "Do not turn the helmet into chainmail or exposed loose ropes; keep visor, vents and impact geometry intact.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Kevlar Weave\n\nRebuild the supplied helmet as a Kevlar-reinforced woven composite while preserving its exact protective silhouette, visor opening, vents, chin guard, fastening points, proportions and construction layers. Do not alter its safety geometry or convert it into chainmail, armour plating or loose rope.\n\nShow aramid yarns in a tight, regular weave with clear over-under interlacing. Scale the weave to the helmet's real dimensions: individual bundles should be visible at close range but resolve into a coherent reinforcement pattern at normal viewing distance. The weave must follow compound curvature without stretching into impossible spacing; at edges and apertures, show plausible cut fibre termination and a small number of consolidated layer transitions. A thin resin matrix may bind the yarns and create subtle surface smoothness, but fibres must remain visually legible beneath it. Maintain directional continuity across shell panels and change orientation only where a real layup seam or reinforcement patch would occur.\n\nLighting should reveal a matte, low-satin aramid response, with fine highlights on yarn crowns and shadow in the interlaced valleys. Keep the visor transparent and all vents open. Avoid metallic mesh, loose fraying everywhere, oversized weave, carbon-fibre checkerboard, glossy plastic and invented seams."
+    },
+    {
+      "material": "Silicone Rubber",
+      "subcategory": "Polymers & Composites",
+      "sourceSubject": "A precision game controller with grips, buttons, thumb sticks, triggers, seams, speaker slots and charging port.",
+      "physicalSignature": "A compliant elastomer with high elastic recovery, low surface energy and a soft matte-to-satin response.",
+      "processSignature": "Moulded parts show parting lines, gates or bonded overmould zones; flexible areas deform under contact and recover smoothly.",
+      "lightSignature": "Broad low-intensity highlights with little sharp specular response; fine surface texture remains visible.",
+      "constraints": "Preserve button travel, ports, seams and controller geometry; do not turn the object into liquid slime.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Silicone Rubber\n\nTransform the supplied controller into a silicone-rubber-bodied object while preserving its exact silhouette, grips, button positions, thumb sticks, triggers, seams, speaker slots, charging port and camera viewpoint. Keep all controls functional and separated. Do not soften the entire device into an amorphous blob.\n\nResolve a compliant elastomer with smooth elastic recovery and a low-energy surface. Broad grip zones should feel slightly yielding, with subtle local compression where the hands contact the form; unsupported areas retain their original shape. Use moulded parting lines and credible overmould boundaries where separate rigid and flexible components meet. The rubber may wrap around compound curves without wrinkling excessively, and small ribs or texture can appear only where the source already provides grip surfaces. Preserve button travel and port edges with clean tolerance gaps. Avoid claiming that every rigid internal part has become soft rubber: maintain local differences where function requires them.\n\nLight should create broad, soft highlights over a matte-to-satin surface with fine microtexture and no hard metallic sparkle. Keep apertures open and markings legible. Avoid wet slime, melted plastic, balloon-like inflation, deep random creases, sticky residue and altered control layout."
+    },
+    {
+      "material": "Washi Paper",
+      "subcategory": "Paper & Cellulose",
+      "sourceSubject": "A detailed red fox in a curled resting pose with pointed ears, layered tail, muzzle and visible paws.",
+      "physicalSignature": "A handmade sheet formed from long kozo fibres, unevenly distributed through thin translucent cellulose layers.",
+      "processSignature": "Wet-laid fibres create directional interlocking, subtle sheet layering and naturally irregular cut or deckled edges.",
+      "lightSignature": "Diffuse paper reflectance with variable translucency where fibres thin; no plastic-like surface reflection.",
+      "constraints": "The fox remains the same animal and pose; no extra paper sheets, origami redesign or flat printed illustration.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Washi Paper\n\nReconstruct the supplied fox as a finely formed washi-paper object while preserving its exact animal identity, curled pose, ears, muzzle, paws, tail silhouette, proportions, perspective and defining anatomy. The result must remain a three-dimensional fox, not a flat print or a new origami design.\n\nBuild the material from handmade kozo-fibre sheets. Show long, interlocking cellulose fibres embedded through thin layers, with restrained directional variation and slight density changes. Let paper construction follow the animal's anatomy: broad body areas may use continuous formed sheets, while ears, paws and tail transitions reveal subtle layered edges and fibre alignment. Thin sections can transmit a little light and become more translucent where the sheet naturally tapers; thicker folded or layered regions remain more opaque. Preserve the source's volume and fine features without adding separate sheets or decorative paper seams that do not support the form.\n\nUse a soft, diffuse, low-reflectance surface with visible long-fibre detail at close range. The paper should feel light but structurally shaped, not fabric-like or plastic-coated. Avoid origami creases, printed ink imagery, excessive deckling, torn edges everywhere, flat graphic rendering and altered anatomy."
+    },
+    {
+      "material": "Shear-Thickening Fluid",
+      "subcategory": "Liquids & Gels",
+      "sourceSubject": "A precision glass hourglass with two bulbs, a narrow neck and a stable quantity of granular material.",
+      "physicalSignature": "A dense suspension that flows under low shear but temporarily stiffens under rapid deformation or impact.",
+      "processSignature": "The material redistributes through constrictions and forms transient jammed regions at high-shear boundaries.",
+      "lightSignature": "A dense, opaque or semi-opaque fluid body with wet highlights and visible internal granular density.",
+      "constraints": "Keep the hourglass glass geometry fixed; show gravity-consistent flow and a localized jam, not a solid block or explosive splash.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Shear-Thickening Fluid\n\nReplace the hourglass contents with a shear-thickening suspension while preserving the glass bulbs, narrow neck, proportions, orientation, camera viewpoint and surrounding object geometry. Keep the material contained by the existing vessel; do not break the glass, add props or invent an explosive event.\n\nShow a dense suspension that behaves differently under different shear conditions. In the broad, slowly moving regions it remains fluid and settles under gravity; at the narrow neck, where flow accelerates and particles crowd, create a localized jammed or temporarily stiffened zone. The transition must follow the actual flow path and constriction, with a believable interface between mobile material and the compacted region. Use a fine particulate body within a continuous liquid phase, with density variation and restrained pooling that reveals the suspension's rheology. The fluid must not behave like dry sand, concrete or a permanently solid block.\n\nUse wet but controlled highlights across the fluid surface, with subtle opacity and granular depth. Preserve a physically plausible fill level and gravity direction. Avoid levitating material, uniform solidification, violent splashes, cracked glass, foam bubbles and arbitrary motion trails."
+    },
+    {
+      "material": "Rammed Earth",
+      "subcategory": "Construction & Earth",
+      "sourceSubject": "A compact modernist pavilion with thick walls, a recessed entrance, roof slab, window openings and crisp massing.",
+      "physicalSignature": "Compacted soil with graded aggregates, clay-rich binding and visible horizontal lift strata.",
+      "processSignature": "Successive earth lifts are tamped in formwork; strata bands, subtle compression lines and form-tie traces follow the build sequence.",
+      "lightSignature": "Dry matte diffuse response with granular shadowing and restrained mineral colour variation.",
+      "constraints": "Maintain structural openings and massing; do not add brick courses, concrete gloss or desert scenery.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Rammed Earth\n\nRebuild the pavilion as a rammed-earth structure while preserving its exact massing, wall thickness, roof slab, recessed entrance, window openings, proportions, viewpoint and architectural relationships. Keep every opening and edge in its original position. Do not add a desert landscape, adobe bricks, stone cladding or concrete panels.\n\nExpress compacted soil built in successive formwork lifts. Use horizontal strata bands with fine changes in aggregate size, density and mineral tone; the bands should remain coherent across each wall and wrap around corners according to the actual construction sequence. Show subtle tamping compression, occasional formwork impressions and compacted edges. The material should feel dense and load-bearing but granular, with small stones and clay-rich fines embedded in the matrix. Openings require believable reveals and clean compacted returns; unsupported thin edges should not be invented.\n\nUse a dry matte response with soft mineral variation and granular micro-shadows. The surface absorbs light rather than producing concrete-like gloss. Preserve all windows and doorways. Avoid brick mortar lines, poured-concrete sheen, random rubble, decorative erosion, vegetation and changes to the architecture."
+    },
+    {
+      "material": "Aerogel",
+      "subcategory": "Polymers & Composites",
+      "sourceSubject": "A delicate geometric chandelier with a central hub, branching arms, fine ribs and suspended elements.",
+      "physicalSignature": "An ultra-low-density nanoporous solid with extremely high void fraction and diffuse optical scattering.",
+      "processSignature": "A fragile silica or polymeric skeletal network retains the source's macro-shape only where supported by coherent ribs and junctions.",
+      "lightSignature": "Pale translucent volume with strong diffuse scattering, weak surface reflection and softly visible depth.",
+      "constraints": "Do not make it a solid glass block or imply unsupported heavy load-bearing spans; preserve major arm layout.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Aerogel\n\nReinterpret the supplied chandelier as an aerogel-built structure while preserving its recognisable silhouette, hub, arm count, branching layout, proportions, viewpoint and key junctions. Maintain the original spatial arrangement; do not add a new lighting scene or convert the form into a solid glass sculpture.\n\nRepresent an ultra-low-density nanoporous solid with a delicate skeletal network and an exceptionally high void fraction. The material should read as a tenuous, pale volume rather than a dense block: fine internal pores and interconnected struts create a soft, almost weightless body. Keep the chandelier's main arms coherent through continuous ribs and junctions, but allow thin sections to look fragile and lightly supported by the existing geometry. Do not suggest that aerogel can carry heavy unsupported spans without structural continuity. Surface edges should be soft and slightly diffuse, while internal depth remains visible through scattering.\n\nUse a restrained pale translucence with strong diffuse light scattering, very weak surface reflection and subtle internal glow caused by transmitted light, not emission. Avoid crystal facets, wet glass, opaque foam, heavy metal supports, dramatic breakage and unrealistic load-bearing claims."
+    },
+    {
+      "material": "Thermochromic Pigment",
+      "subcategory": "Smart & Functional Materials",
+      "sourceSubject": "A ceramic travel mug with a handle, lid, printed logo, tapered body and a visible hot-liquid fill line.",
+      "physicalSignature": "A reversible pigment system changes colour across a temperature-dependent activation range.",
+      "processSignature": "A thin pigment layer is applied to selected surface zones while the substrate's geometry and base material remain intact.",
+      "lightSignature": "Matte or satin pigment response; transitions are caused by thermal state, not illumination or emission.",
+      "constraints": "Keep logo and mug geometry legible; do not use arbitrary rainbow gradients, glow or LEDs.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Thermochromic Pigment\n\nApply thermochromic pigment as the active surface material on the supplied mug while preserving its exact silhouette, handle, lid, taper, logo, fill line and viewpoint. Keep the ceramic substrate and all functional details intact. This is a temperature-responsive pigment treatment, not a new lighting effect or an emissive screen.\n\nCreate a believable reversible colour transition across a clearly defined thermal map. The warmest region should occur where the hot contents transfer heat through the mug wall; cooler areas should remain in the alternate pigment state. The transition boundary may be gradual or slightly mottled according to the coating and heat distribution, but it must follow plausible conduction through the ceramic body rather than arbitrary decorative bands. Keep the pigment layer thin and evenly bonded, with its own matte-to-satin finish, while retaining the ceramic form beneath it. The printed logo must remain legible and should only change if it is explicitly part of the active coating.\n\nUse the same surface lighting before and after the colour transition: temperature changes pigment colour, not the direction of highlights. Avoid neon emission, LEDs, glow, rainbow gradients, liquid melting, random colour patches and altered mug geometry."
+    },
+    {
+      "material": "Ferrofluid",
+      "subcategory": "Metals & Alloys",
+      "sourceSubject": "A circular magnetic desk sculpture with a shallow dish, central magnetic core and radial raised details.",
+      "physicalSignature": "A stable magnetic nanoparticle suspension forms field-aligned peaks and lobes while remaining a contained liquid.",
+      "processSignature": "The fluid gathers around a magnetic field gradient; peak scale and orientation follow pole geometry and surface tension.",
+      "lightSignature": "Near-black glossy liquid with sharp highlights tracing curved peaks and troughs.",
+      "constraints": "Contained, gravity-consistent and tied to the magnetic core; no floating spikes or solid metal needles.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Ferrofluid\n\nRebuild the visible active material of the supplied sculpture as contained ferrofluid while preserving the dish, central magnetic core, radial layout, proportions and viewpoint. The fluid must remain within the existing vessel and respond to the existing magnetic geometry; do not add levitating parts, metal needles or a new laboratory scene.\n\nRepresent a dense suspension of magnetic nanoparticles in a carrier liquid. Form sharp but continuous field-aligned peaks and curved lobes where the magnetic field gradient is strongest, with peak direction and spacing governed by the central core and surrounding pole geometry. The fluid's surface tension should round the transitions between peaks and troughs, and the liquid should settle at the vessel base under gravity. Keep the pattern physically connected to the field source: no isolated spikes, unsupported floating droplets or perfectly repeated decorative cones. Preserve the original radial arrangement while allowing the surface to deform locally in response to the magnetic field.\n\nUse a near-black, high-gloss liquid response with crisp highlights that trace the curved surface and reveal depth. Avoid solid metal, metallic paint, dry sand, black plastic, smoke, random spikes and any material outside the vessel."
+    },
+    {
+      "material": "Shape-Memory Alloy Mesh",
+      "subcategory": "Metals & Alloys",
+      "sourceSubject": "A collapsible wire-frame lantern with a cylindrical cage, hinged ribs, top ring and base ring.",
+      "physicalSignature": "A trained nickel-titanium or comparable shape-memory alloy wire that recovers a programmed geometry after a suitable thermal or mechanical stimulus.",
+      "processSignature": "Thin alloy wires are woven or joined into a mesh; joints and wire crossings remain mechanically coherent.",
+      "lightSignature": "Metallic highlights follow the wire curvature with a restrained satin alloy reflection.",
+      "constraints": "Show a stable recovered state, not a magical morphing sequence; preserve ring alignment and wire continuity.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Shape-Memory Alloy Mesh\n\nTransform the lantern's existing wire structure into shape-memory alloy mesh while preserving its cylindrical silhouette, rib count, top and base rings, hinge positions, spacing and viewpoint. Keep the lantern in one stable, recovered configuration; do not depict a transformation sequence or invent moving components.\n\nUse fine, continuous alloy wires with a trained geometry and elastic recovery behaviour. Each rib should maintain its intended arc, and wire crossings should form a coherent woven or joined network with credible contact points. Subtle evidence of spring recovery may appear as consistent curvature and controlled tension, not as exaggerated coils or impossible self-assembly. Preserve open spaces between wires and the existing mechanical hinges; do not fill the mesh with a solid metal sheet. Keep wire diameter consistent and proportionate to the frame's scale.\n\nUse a restrained satin metallic response with thin highlights following wire curvature and slightly darker joints where wires overlap. The material is an alloy, not a luminous technology effect. Avoid glowing wires, floating strands, chaotic spring shapes, exaggerated reflections and any change to the lantern's geometry."
+    },
+    {
+      "material": "Spider-Silk Filament",
+      "subcategory": "Fauna & Animal-derived",
+      "sourceSubject": "A miniature suspension bridge model with two towers, a deck, anchor points and multiple fine tension cables.",
+      "physicalSignature": "Extremely fine protein filaments with high tensile strength, slight elasticity and a subtle natural lustre.",
+      "processSignature": "Continuous strands form aligned bundles and knots at anchor points; load paths remain taut and mechanically legible.",
+      "lightSignature": "Very fine highlights along filaments with translucent edge glints and minimal diffuse mass.",
+      "constraints": "Do not add spider webs or spiders; keep cables connected, correctly tensioned and visually distinct.",
+      "prompt": "SOURCE: [SUBJECT]   MATERIAL TARGET: Spider-Silk Filament\n\nRebuild the bridge's cable system using spider-silk filament while preserving the tower positions, deck shape, anchor points, cable count, overall proportions and camera viewpoint. Keep the bridge model recognisable and structurally coherent. Do not add spiders, webs, websheets or unrelated biological detail.\n\nRepresent continuous protein filaments with exceptional tensile strength and slight elastic compliance. Fine strands should gather into aligned bundles where the source requires greater load capacity, then separate into individual filaments near anchor points and knots. Maintain believable tension paths between towers and deck; cables must remain connected, taut and correctly oriented. The filament diameter should be extremely fine relative to the bridge, but remain visible through delicate edge highlights and small grouped bundles. Avoid making the material read as thick rope, nylon cord or metallic wire.\n\nUse a subtle natural lustre with narrow highlights along the filaments and minimal diffuse mass. Keep the structure airy and transparent, with no opaque web-like sheets. Avoid random webbing, loose tangles, glowing threads, oversized fibre bundles and changes to the bridge's engineering layout."
+    }
+  ],
+  "knownTaxonomyReview": [
+    {
+      "material": "Ferrofluid",
+      "currentLikelyIssue": "The Materials subcategory regex tests Metals & Alloys before Liquids & Gels and includes the token ferrofluid. It may therefore classify a magnetic nanoparticle suspension as a metal even though its bulk behaviour is liquid.",
+      "recommendedAction": "Add an explicit Materials subcategory override to Liquids & Gels before using the taxonomy as a regeneration route."
+    },
+    {
+      "material": "Aerogel",
+      "currentLikelyIssue": "Aerogel can be silica-based or polymer-based; a name-only classifier may not capture its material family or structural limits.",
+      "recommendedAction": "Use an explicit profile type and avoid assuming all aerogels are polymer composites."
+    },
+    {
+      "material": "Shape-Memory Alloy Mesh",
+      "currentLikelyIssue": "The target is a metal alloy and belongs in Metals & Alloys, but its shape-recovery response is a functional behaviour that a broad material label alone does not express.",
+      "recommendedAction": "Keep the catalogue subcategory as Metals & Alloys while preserving an explicit shape-memory functional profile in the target-specific prompt."
+    }
+  ]
+}
