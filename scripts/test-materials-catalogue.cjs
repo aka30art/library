@@ -29,6 +29,7 @@ const requiredSubcategories = [
 ];
 
 check(materials.length === 200, 'Expected exactly 200 Materials records; received ' + materials.length + '.');
+check(materials.every((item, index) => String(item.id) === String(index + 1)), 'Materials record ID sequence 1–200 must remain unchanged.');
 const ids = new Set();
 const titles = new Set();
 const bodies = new Set();
