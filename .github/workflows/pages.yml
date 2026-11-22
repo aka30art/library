@@ -94,6 +94,10 @@ jobs:
         env:
           SITE_URL: http://127.0.0.1:8000/
         run: node scripts/textures-browser-smoke-test.cjs
+      - name: Test Films & Shows Explore, Builder and Randomiser integration
+        env:
+          SITE_URL: http://127.0.0.1:8000/
+        run: node scripts/films-shows-browser-smoke-test.cjs
 
   # Separate artifact preparation from deployment to avoid the intermittent
   # artifact-registration race between upload-pages-artifact and deploy-pages.
