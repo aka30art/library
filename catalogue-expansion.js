@@ -7,22 +7,21 @@ const negatives="Unrequested subject changes, invented objects, unrelated scener
 const materialSubcategory=(raw)=>{
  const n=raw.toLowerCase();
  if(/ferrofluid|magnetic putty|magnetorheological fluid|shear-thickening fluid/.test(n))return "Liquids & Gels";
+ if(/liquid metal alloy/.test(n))return "Metals & Alloys";
  if(/thermochromic|photochromic|dichroic film|electrochromic glass|smart glass|optical fibre bundles|graphene film|holographic diffraction film|retroreflective microprism|electroluminescent panel|glow-in-the-dark phosphor|phase-change wax|piezoelectric ceramic/.test(n))return "Smart & Functional Materials";
- if(/recycled|reclaimed|sea-glass aggregate|tumbled bottle-glass mosaic|crushed porcelain terrazzo/.test(n))return "Recycled & Circular Materials";
- if(/mycelium|mushroom|kombucha|bacterial cellulose|seaweed bioplastic|reindeer lichen|moss resin|pressed flower|pollen-enriched|spent-grain/.test(n))return "Flora & Fungi";
- if(/nacre|abalone|mother-of-pearl|shagreen|stingray|fish leather|eel skin|parchment|vellum|leather|silk|wool|alpaca|mohair|cashmere|feather|quill|eggshell|ostrich|bone china|chitin|cocoon|spider-silk|beetle|butterfly|cicada|sea-urchin/.test(n))return "Fauna & Animal-derived";
+ if(/recycled|reclaimed|sea-glass aggregate|tumbled bottle-glass mosaic|crushed porcelain terrazzo|coffee-ground|granular cork-rubber/.test(n))return "Recycled & Circular Materials";
+ if(/kelp-fibre paper|tea-leaf paper|paper|pulp|papier|washi|kozo|lokta|mulberry/.test(n))return "Paper & Cellulose";
+ if(/bone china|sugar glass|translucent glass|frosted glass|glazed ceramic|unglazed porcelain|porcelain stoneware|dichroic glass|celadon glaze|raku-fired ceramic|pearl-lustre ceramic|piezoelectric ceramic/.test(n))return "Glass & Ceramics";
+ if(/hempcrete|tadelakt|limewash|rammed earth|adobe earth|compressed earth block|raw concrete|weathered concrete|raw earth/.test(n))return "Construction & Earth";
  if(/amber|copal|shellac|resin|wax/.test(n))return "Resins & Waxes";
- if(/chocolate|sugar glass|spun sugar|caramelised sugar|gelatin gel|agar gel|alginate gel|casein plastic|milk-protein/.test(n))return "Organic & Food-Derived Materials";
+ if(/mycelium|mushroom|kombucha|bacterial cellulose|seaweed bioplastic|reindeer lichen|pressed flower|spent-grain/.test(n))return "Flora & Fungi";
+ if(/nacre|abalone|mother-of-pearl|shagreen|stingray|fish leather|eel skin|parchment|vellum|leather|silk|wool|alpaca|mohair|cashmere|feather|quill|eggshell|ostrich|chitin|cocoon|spider-silk|beetle|butterfly|cicada|sea-urchin/.test(n))return "Fauna & Animal-derived";
+ if(/chocolate|caramelised sugar|spun sugar|gelatin gel|agar gel|alginate gel|casein plastic|milk-protein/.test(n))return "Organic & Food-Derived Materials";
  if(/marble|travertine|basalt|slate|onyx|obsidian|sandstone|soapstone|granite|jet stone|labradorite|moonstone|malachite|lapis|turquoise|rhodochrosite|fluorite|bismuth crystal|graphite crystal|mica sheets|pumice|diatomaceous earth|gypsum|alabaster|salt crystal/.test(n))return "Stone & Minerals";
- if(/glass|ceramic|porcelain|glaze|sea-glass|bottle-glass|eggshell mosaic|piezoelectric ceramic/.test(n))return "Glass & Ceramics";
- if(/paper|pulp|papier|washi|kozo|lokta|mulberry|cellulose|kelp-fibre paper|tea-leaf paper/.test(n))return "Paper & Cellulose";
+ if(/wood|timber|bamboo|cork|rattan|hemp(?!crete)|banana fibre|pineapple leaf|coir|kapok|ramie|abaca|sisal/.test(n))return "Wood & Plant Fibres";
  if(/woven|linen|cotton|nylon|felt|suede|denim|fleece|yarn|knit|bouclé|chenille|velvet|corduroy|tweed|brocade|organza|tulle|tyvek|aramid|kevlar|fibre|fiber|weave|canvas|oilskin|rope|textile|tire-cord/.test(n))return "Textiles & Fabrics";
- if(/wood|timber|bamboo|cork|rattan|hemp|banana fibre|pineapple leaf|coir|kapok|ramie|abaca|sisal/.test(n))return "Wood & Plant Fibres";
- if(/concrete|hempcrete|plaster|tadelakt|limewash|rammed earth|adobe|earth block|raw earth/.test(n))return "Construction & Earth";
- if(/fluid|gel|liquid|putty/.test(n))return "Liquids & Gels";
- if(/polymer|plastic|rubber|silicone|composite|aerogel|carbon fibre|carbon nanotube|fibreglass|foam|ptfe|elastomer|ebonite|graphene/.test(n))return "Polymers & Composites";
+ if(/aerogel|carbon fibre|carbon nanotube|fibreglass|foam|ptfe|elastomer|ebonite|graphene|polymer|plastic|rubber|silicone|composite/.test(n))return "Polymers & Composites";
  if(/stone|mineral|metal|aluminium|aluminum|chrome|copper|titanium|iron|steel|brass|bronze|pewter|tungsten|alloy|gallium|nitinol|sintered/.test(n))return "Metals & Alloys";
- if(/recycled paper|pressed pulp/.test(n))return "Paper & Cellulose";
  return "Polymers & Composites";
 };
 const familyProfiles={
