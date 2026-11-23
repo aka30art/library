@@ -22,10 +22,10 @@ const BASE=process.env.SITE_URL||'http://127.0.0.1:8000/';
   }
   await page.locator('#subcategory-filter').selectOption('TV Shows');
   const first=page.locator('#prompt-grid .prompt-card').first();
-  const title=(await first.innerText()).trim().split('\n')[0];
+  const title=(await first.locator('h3').innerText()).trim();
   await first.click();
   const detail=await page.locator('#detail-prompt').textContent();
-  check(detail.includes('DESTINATION DNA:')&&detail.includes('SOURCE IDENTITY LOCK:')&&detail.includes('QUALITY GATE:'),'Prompt detail displays complete standalone Screenworld transformation structure');
+  check(detail.includes('DESTINATION WORLD:')&&detail.includes('SOURCE ANALYSIS & IDENTITY LOCK:')&&detail.includes('QUALITY CONTROL:'),'Prompt detail displays complete standalone Screenworld transformation structure');
   check(detail.includes(title),'Prompt detail corresponds to the selected TV Shows card');
   await page.locator('#prompt-dialog .dialog-close').click();
 
@@ -35,7 +35,7 @@ const BASE=process.env.SITE_URL||'http://127.0.0.1:8000/';
   check(await module.count()===1,'Builder finds selected Films & Shows v2 prompt');
   await module.check();
   const output=await page.locator('#builder-output').evaluate(el=>el.dataset.copyText||el.textContent||'');
-  check(output.includes('DESTINATION DNA:')&&output.includes('SOURCE IDENTITY LOCK:')&&output.includes(title),'Builder combines the full Screenworld prompt with target identity');
+  check(output.includes('DESTINATION WORLD:')&&output.includes('SOURCE ANALYSIS & IDENTITY LOCK:')&&output.includes(title),'Builder combines the full Screenworld prompt with target identity');
 
   await page.goto(BASE+'randomiser.html',{waitUntil:'networkidle',timeout:45000});
   const tvRow=page.locator('#randomiser-page .randomiser-category[data-id="films-tv"]');
@@ -45,7 +45,7 @@ const BASE=process.env.SITE_URL||'http://127.0.0.1:8000/';
   const generated=page.locator('.randomiser-composed-text');
   await page.locator('.randomiser-prompt-toggle').click();
   const combined=await generated.textContent();
-  check(combined.includes('SCREEN-WORLD DIRECTION:')&&combined.includes('DESTINATION DNA:'),'Randomiser output incorporates Screenworld transformation directives');
+  check(combined.includes('SCREEN-WORLD DIRECTION:')&&combined.includes('TV-WORLD TRANSFORMATION:'),'Randomiser output incorporates Screenworld transformation directives');
   const sourceDetails=page.locator('.randomiser-source-prompt');
   check(await sourceDetails.count()===1,'Randomiser generated one TV Shows ingredient');
   check((await sourceDetails.first().innerText()).includes(title),'Randomiser source prompt is from the rebuilt catalogue');
